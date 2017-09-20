@@ -5,6 +5,10 @@
 #'
 #' @param x vector of tree DBHs in cm (metric)
 #'
+#' @param total logical, indicating whether to sum the
+#'
+#' @param ... additional arguments passed to \code{\link[base]{sum}}
+#'
 #' @return
 #' Numeric total basal area per unit:
 #'
@@ -18,9 +22,13 @@
 #'
 #' @export
 #' @rdname basal_area
-`basal_area` <- function(x, ...){       # x is in centimeters
-     ba_vec <- pi / 4 / 10000 * (x^2)   # 10000 cm^2 per m^2
-     sum(ba_vec, ...)                   # metric basal area (m^2)
+`basal_area` <- function(x, total=FALSE, ...){ # x units are cm
+     ba_vec <- pi / 4 / 10000 * (x^2) # 10000 cm^2 per m^2
+     if(sumvec){
+          sum(ba_vec, ...)    # TOTAL basal area (m^2) in x vector
+     }else{
+          ba_vec              # INDIVIDUAL basal area (m^2)
+     }
 }
 
 
