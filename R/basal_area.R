@@ -24,37 +24,9 @@
 #' @rdname basal_area
 `basal_area` <- function(x, total=FALSE, ...){ # x units are cm
      ba_vec <- pi / 4 / 10000 * (x^2) # 10000 cm^2 per m^2
-     if(sumvec){
+     if(total){
           sum(ba_vec, ...)    # TOTAL basal area (m^2) in x vector
      }else{
           ba_vec              # INDIVIDUAL basal area (m^2)
      }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
