@@ -4,10 +4,14 @@
 \alias{basal_area}
 \title{Tree basal area}
 \usage{
-basal_area(x, ...)
+basal_area(x, total = FALSE, ...)
 }
 \arguments{
 \item{x}{vector of tree DBHs in cm (metric)}
+
+\item{total}{logical, indicating whether to sum the}
+
+\item{...}{additional arguments passed to \code{\link[base]{sum}}}
 }
 \value{
 Numeric total basal area per unit:
