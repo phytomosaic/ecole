@@ -11,6 +11,8 @@
 #' @param buff  multiplier for buffer at tail ends, expressed as
 #'     proportion of total data range; default is 0.1
 #'
+#' @param ...  other arguments passed to statistics functions such as na.rm
+#'
 #' @return Numeric value for coefficient of overlap
 #'
 #' @details Overlap is calculated as two times the area under the
@@ -28,7 +30,7 @@
 #'
 #' @seealso \link{https://stats.stackexchange.com/questions/97596/}
 #' @export
-`overlap` <- function(a, b, buff=0.1){
+`overlap` <- function(a, b, buff=0.1, ...){
 
      require(sfsmisc)
 
@@ -38,21 +40,21 @@
      }
 
      # define limits of a common grid, w buffer so tails aren't cut
-     bf <- diff(range(c(a, b)))*buff
-     lower <- min(c(a, b)) - bf
-     upper <- max(c(a, b)) + bf
+     bf <- diff(range(c(a, b), ...))*buff
+     lower <- min(c(a, b), ...) - bf
+     upper <- max(c(a, b), ...) + bf
 
      # estimate kernel densities
-     da <- density(a, from=lower, to=upper)
-     db <- density(b, from=lower, to=upper)
+     da <- density(a, from=lower, to=upper, ...)
+     db <- density(b, from=lower, to=upper, ...)
      d  <- data.frame(x=da$x, a=da$y, b=db$y)
 
      # calculate intersection of densities
      d$w <- pmin(d$a, d$b)
 
      # integrate areas under curves
-     total    <- integrate.xy(d$x, d$a) + integrate.xy(d$x, d$b)
-     intersxn <- integrate.xy(d$x, d$w)
+     total    <- sfsmisc::integrate.xy(d$x, d$a) + sfsmisc::integrate.xy(d$x, d$b)
+     intersxn <- sfsmisc::integrate.xy(d$x, d$w)
 
      # calc overlap coefficient (is effectively Sorenson similarity)
      ovlp  <- 2 * intersxn / total
