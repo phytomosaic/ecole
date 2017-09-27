@@ -1,15 +1,19 @@
 Package: ecole
-Title: School of Ecology
-Version: 0.4-2017
+Title: ecole: School of Ecology
+Version: 0.5-2017
 Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
 Description: Teaching ecological tasks, algorithms and
-          model fitting.
-Depends: R (>= 3.3.1)
+            model fitting.
+Depends: R (>= 3.4.1)
 License: CC BY-NC-ND 4.0
 Encoding: UTF-8
 LazyData: true
+Date: 2017-09-26
 Author: 'Robert J Smith' <smithr2@oregonstate.edu>
 Creator: 'Robert J Smith' <smithr2@oregonstate.edu>
+Maintainer: 'Robert J Smith' <smithr2@oregonstate.edu>
+Imports: stats, graphics, e1071, vegan, sfsmisc, ggplot2
+Suggests: viridis
 Citation: Smith, Robert J. 2017. ecole: Algorithms for the
-          School of Ecology. Unpublished R package.
+           School of Ecology. Unpublished R package in development.
 RoxygenNote: 6.0.1

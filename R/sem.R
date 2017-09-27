@@ -4,6 +4,8 @@
 #'
 #' @param x  vector of values to evaluate
 #'
+#' @param ... further arguments passed to other methods
+#'
 #' @return
 #' Numeric value which is the sample standard error
 #'
@@ -16,4 +18,6 @@
 #'
 #' @seealso \code{\link[base]{sd}}
 #' @export
-`sem` <- function(x, ...) sd(x, na.rm=T) / sqrt(length(na.omit(x))-1)
+`sem` <- function(x, ...) {
+     sd(x, ...) / sqrt(length(na.omit(x))-1)
+}

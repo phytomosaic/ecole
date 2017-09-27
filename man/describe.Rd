@@ -2,9 +2,12 @@
 % Please edit documentation in R/describe.R
 \name{describe}
 \alias{describe}
+\alias{mom}
 \title{Describe}
 \usage{
 describe(x, na.rm = TRUE, digits = 2, type = 1, ...)
+
+mom(x, na.rm = TRUE, digits = 2, type = 1, ...)
 }
 \arguments{
 \item{x}{vector of values to be summarized}
@@ -16,9 +19,11 @@ describe(x, na.rm = TRUE, digits = 2, type = 1, ...)
 \item{type}{default=1, an integer between 1 and 3 selecting one of
 the algorithms for computing skewness detailed in
 \code{\link[e1071]{kurtosis}}}
+
+\item{...}{further arguments passed to other methods}
 }
 \value{
-List with 4 moments: \itemize{
+For \code{describe}, a list with descriptive statistics: \itemize{
   \item mean = mean
   \item sd = standard deviation
   \item var  = variance
@@ -28,10 +33,17 @@ List with 4 moments: \itemize{
   \item NAs = count of NA elements
   \item skw = skewness
   \item krt = kurtosis
-  }
+  }\cr
+
+For \code{mom}, a list with 4 moments:\itemize{
+  \item mean = mean
+  \item var  = variance
+  \item skew = skewness
+  \item kurt = kurtosis
+ }
 }
 \description{
-Descriptive summary statistics
+Descriptive summary statistics, by method-of-moments.
 }
 \details{
 Method-of-moments summaries for first 4 moments.  \itemize{
@@ -43,14 +55,12 @@ Method-of-moments summaries for first 4 moments.  \itemize{
   }
 }
 \examples{
-# require(e1071)
-n <- 99
-x <- c(rnorm(n, 0.1), NA)
+x <- c(rnorm(99, 0.1), NA)
 describe(x)
+mom(x)
 
 }
 \seealso{
-\code{\link[ecole]{mom}},
 \code{\link[e1071]{kurtosis}},
 \code{\link[e1071]{skewness}}
 }

@@ -10,72 +10,79 @@
 #'     standardization step?  If TRUE, then use abundance weighted
 #'     trait AVGS, if FALSE, then use abundance weighted trait TOTALS.
 #'
-#' @param stand standardize each trait by its "minmax" (default),
-#'     "deviates", or "none"
+#' @param stdz standardize each trait by its 'minmax' (default),
+#'     'deviates', or 'none'
+#'
+#' @param ... further arguments passed to other methods
 #'
 #' @return
-#' A community-weighted traits matrix (techically a data frame), where
-#'    rows=SUs and cols=traits
+#' A community-weighted traits matrix (actually a data frame), where
+#'    rows=SUs and cols=traits.
 #'
 #' @details
-#' Emulates PC-ORD; see also McCune and Grace (2002). Recommend not
-#' changing default wa and stand settings, as these create the CWM
-#' matrix that is most sensible for other analyses.
+#' Behavior emulates PC-ORD; see also McCune and Grace (2002).
+#' Recommend not changing default wa and stdz settings, as these
+#' create the CWM matrix that is sensible for most other analyses.
 #'
 #' @examples
-#' # first generate test data
-#' require(copula)
-#' cc <- normalCopula(param=c(0.4,0.2,-0.8), dim=3, dispstr="un")
-#' dd <- mvdc(copula=cc, margins=c("gamma", "beta", "t"),
-#'               paramMargins=list(list(shape=2, scale=1),
-#'                                list(shape1=2, shape2=2),
-#'                                 list(df=5)) )
-#' spp <- rMvdc(999, dd)
-#' spp <- abs(spp) # force positive
-#' colnames(spp) <- c("sp1", "sp2", "sp1")
-#' trt <- spp + rnorm(999, 1) * spp^2
-#' trt <- t(trt)
-#' # following McCune unpubl table:
+#' # following Fig. 2 in McCune (2015):
+#' A <- data.frame(t(matrix(c(4,0,0,2,1,1,1,5,2,0,3,4),
+#'                          nrow=3, ncol=4)))
+#' dimnames(A)[[1]] <- paste0('Plot',1:4)
+#' dimnames(A)[[2]] <- c('maple', 'oak', 'pine')
+#' S <- data.frame(t(matrix(c(10,1,2,1,1,0),
+#'                          nrow=2, ncol=3)))
+#' dimnames(S)[[1]] <- c('maple', 'oak', 'pine')
+#' dimnames(S)[[2]] <- c('shadetol', 'hardwood')
 #' # trts standardized by none, abund-weighted totals
-#' c1  <- makecwm(spp, trt, wa=F, stand="none")
+#' c1  <- makecwm(A, S, wa=F, stdz='none')
 #' # traits standardized by minmax, abund-weighted totals
-#' c2  <- makecwm(spp, trt, wa=F, stand="minmax")
+#' c2  <- makecwm(A, S, wa=F, stdz='minmax')
 #' # traits standardized by std deviates, abund-weighted totals
-#' c3  <- makecwm(spp, trt, wa=F, stand="deviates")
+#' c3  <- makecwm(A, S, wa=F, stdz='deviates')
 #' # traits standardized by none, abund-weighted averages
-#' c4  <- makecwm(spp, trt, wa=T, stand="none")
+#' c4  <- makecwm(A, S, wa=T, stdz='none')
 #' # traits standardized by minmax, abund-weighted averages
-#' c5  <- makecwm(spp, trt, wa=T, stand="minmax")       # PREFERRED
+#' c5  <- makecwm(A, S, wa=T, stdz='minmax')       # PREFERRED!
 #' # traits standardized by std deviates, abund-weighted averages
-#' c6  <- makecwm(spp, trt, wa=T, stand="deviates")
-#' # compare:
-#' i <- 80
-#' pairs(data.frame(c1[,i], c2[,i], c3[,i], c4[,i], c5[,i], c6[,i]),
-#'      upper.panel=NULL, oma=c(2,2,0,0), cex=0.7, las=1)
+#' c6  <- makecwm(A, S, wa=T, stdz='deviates')
+#' # print values
+#' list(c1,c2,c3,c4,c5,c6)
 #'
-#' @references
-#' McCune, B., and J. B. Grace. 2002. Analysis of Ecological
-#'     Communities. MjM Software, Gleneden Beach, Oregon, USA. 304 pp.
+#' @references McCune, B., and J. B. Grace. 2002. Analysis of
+#' Ecological Communities. MjM Software, Gleneden Beach, Oregon, USA.
+#' 304 pp.
+#'
+#' McCune, B. 2015. The front door to the fourth corner: variations on
+#'     the sample unit × trait matrix in community ecology. Community
+#'     Ecology 16:267-271.
+#'
 #' @export
+#' @rdname makecwm
 `makecwm` <- function(spp, trait, wa=TRUE,
-                      stand=c("minmax", "deviates", "none"), ...){
+                      stdz=c('minmax', 'deviates', 'none'), ...){
      spp   <- as.matrix(spp)
      trait <- as.matrix(trait)
      # standardizing traits
-     stand <- match.arg(stand)
-     if(stand=="minmax"){     # by minmax of traits columns
-          normalize <- function(x, ...){
+     stdz <- match.arg(stdz)
+     if(stdz=='minmax'){     # by minmax of traits columns
+          `normalize` <- function(x, ...){
                (x - min(x, ...)) / (max(x, ...) - min(x, ...))
           }
           trait <- apply(trait, MARGIN=2, FUN=normalize)
      }
-     if(stand=="deviates"){   # by standard deviates of traits cols
-          trait <- apply(trait, MARGIN=2, FUN=scale)
+     if(stdz=='deviates'){   # by standard deviates of traits cols
+          `zscore` <- function(x, ...){
+               (x - mean(x, ...)) /
+                    (sd(x, ...)*sqrt((length(x)-1)/(length(x))))
+          }
+          # trait <- apply(trait, MARGIN=2, FUN=scale) # uses n-1
+          trait <- apply(trait, MARGIN=2, FUN=zscore)
      }
      # weighted averaging
      awt   <- spp %*% trait      # matrix multiplication
      if(wa) {
-          out <- awt/rowSums(spp)# abund weighted trait AVGS
+          out <- awt/rowSums(spp, ...)# abund weighted trait AVGS
      }else{
           out <- awt             # abund weighted trait TOTALS
      }
