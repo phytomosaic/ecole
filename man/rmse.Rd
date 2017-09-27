@@ -11,23 +11,25 @@ rmse(y, ypred, ...)
 are measured}
 
 \item{ypred}{vector of 'predicted' or 'sampled' values to evaluate,
-of same length as \code{x}}
+of same length as \code{y}}
+
+\item{...}{further arguments passed to other methods}
 }
 \value{
 Numeric value, which is the root mean square error (RMSE).
 }
 \description{
-Calculate root mean square error (RMSE) given reference and predicted
-  values
+Calculate root mean square error (RMSE) given
+reference and predicted values
 }
 \details{
 This is one way to assess prediction accuracy.
 }
 \examples{
 n <- 99
-x <- c(1:n)
-y <- x + rnorm(n, 0.1)
-rmse(x, y)
+y <- c(1:n)
+ypred <- x + rnorm(n, 0.1)
+rmse(y, ypred)
 
 }
 \seealso{

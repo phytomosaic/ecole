@@ -8,6 +8,8 @@ sem(x, ...)
 }
 \arguments{
 \item{x}{vector of values to evaluate}
+
+\item{...}{further arguments passed to other methods}
 }
 \value{
 Numeric value which is the sample standard error

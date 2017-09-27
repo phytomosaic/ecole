@@ -1,10 +1,11 @@
 #' Diversity of a species matrix
 #'
-#' Calculate diversity properties of a species matrix:
+#' Calculate diversity properties of a species abundance matrix:
 #'     Gamma, Alpha, Beta, Halfchanges, Dust Bunny Index, others.
 #'
-#' @param x
-#' array of species data, where rows = SUs and cols = species
+#' @param x array of species data, where rows = SUs and cols = species
+#'
+#' @param ... further arguments passed to other methods
 #'
 #' @return
 #' Dataframe with 8 numeric values: \itemize{
@@ -28,8 +29,8 @@
 #' # species abundance data
 #' set.seed(1917)
 #' spe <- data.frame(matrix(rnorm(30, 10, 50), 10, 3))
-#' spe[spe<0] <- 0
-#' colnames(spe) <- c('Acer rubrum','Acer saccharum','Acer saccharinum')
+#' spe[spe < 0] <- 0
+#' colnames(spe) <- c('Acer rubrum','Acer saccharum','Acer negundo')
 #' spe
 #' mx_diversity(spe)
 #'
@@ -46,22 +47,23 @@
 #'     Evolution 8(1): 68-74.
 #'
 #' @export
+#' @rdname mx_diversity
 `mx_diversity` <- function(x, ...){
 
-     require(vegan)
-
-     # function to calculate propn of noshare sites
+     # function: calculate propn of noshare sites
      `noshare` <- function(x){
           z <- vegan::no.shared(x)
           length(z[z==TRUE]) / length(z)
      }
 
-     # Dust Bunny Index, McCune and Root (2015)
+     # function: Dust Bunny Index, McCune and Root (2015)
      `dbi` <- function(x, method, ...){
           x <- as.matrix(x)
           method <- match.arg(method, c('propzero', 'dbi'))
           if(method == 'dbi'){
-               DBI <- 1 - mean(as.matrix(decostand(x, method='max')))
+               DBI <- 1 - mean(as.matrix(
+                    vegan::decostand(x, method='max'))
+               )
                out <- DBI
           }else{
                dims  <- nrow(x)*ncol(x)
@@ -84,13 +86,13 @@
      }
 
      out <- data.frame(
-          gamma = length(which(colSums(x) > 0)),
-          alpha = mean(apply(x > 0, MARGIN=1, sum)),
-          beta  = length(which(colSums(x) > 0)) /
-               mean(apply(x > 0, MARGIN=1, sum)) - 1,
+          gamma       = length(which(colSums(x) > 0)),
+          alpha       = mean(apply(x > 0, MARGIN=1, sum)),
+          beta        = length(which(colSums(x) > 0)) /
+                            mean(apply(x > 0, MARGIN=1, sum)) - 1,
           halfchanges = hc(x),
-          dbi = dbi(x, 'dbi'),
-          prop0 = dbi(x, 'propzero'),
+          dbi         = dbi(x, 'dbi'),
+          prop0       = dbi(x, 'propzero'),
           propnoshare = noshare(x),
           N = nrow(x)
      )

@@ -8,6 +8,8 @@ mx_diversity(x, ...)
 }
 \arguments{
 \item{x}{array of species data, where rows = SUs and cols = species}
+
+\item{...}{further arguments passed to other methods}
 }
 \value{
 Dataframe with 8 numeric values: \itemize{
@@ -24,7 +26,7 @@ Dataframe with 8 numeric values: \itemize{
   }
 }
 \description{
-Calculate diversity properties of a species matrix:
+Calculate diversity properties of a species abundance matrix:
     Gamma, Alpha, Beta, Halfchanges, Dust Bunny Index, others.
 }
 \details{
@@ -35,8 +37,8 @@ Calculates eight measures of diversity in the matrix. For an
 # species abundance data
 set.seed(1917)
 spe <- data.frame(matrix(rnorm(30, 10, 50), 10, 3))
-spe[spe<0] <- 0
-colnames(spe) <- c('Acer rubrum','Acer saccharum','Acer saccharinum')
+spe[spe < 0] <- 0
+colnames(spe) <- c('Acer rubrum','Acer saccharum','Acer negundo')
 spe
 mx_diversity(spe)
 

@@ -15,8 +15,8 @@ length than \code{a}}
 \item{buff}{multiplier for buffer at tail ends, expressed as
 proportion of total data range; default is 0.1}
 
-\item{...}{other arguments passed to statistics functions such as na.rm}
-}  
+\item{...}{further arguments passed to additional methods}
+}
 \value{
 Numeric value for coefficient of overlap
 }
@@ -36,7 +36,7 @@ x2 <- rnorm(N+99, 2) # lengths allowed to differ
 plot(density(x1, from=-5, to=5), xlab='x', main='', las=1, bty='l')
 lines(density(x2, from=-5, to=5), lty=2)
 overlap(x1,x2)
-text(1, .1, round(overlap(x1,x2),2))#'
+text(1, .1, round(overlap(x1,x2),2))
 
 }
 \seealso{
