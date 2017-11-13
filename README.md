@@ -1,2 +1,2 @@
 # ecole
-Ecological algorithms, model fitting and miscellaneous tasks.
+Teaching ecological tasks, algorithms and model fitting.
