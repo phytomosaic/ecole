@@ -21,7 +21,7 @@
 #' d <- expand.grid(lon=seq(-125.5, -110.0, by=0.2),
 #'                  lat=seq(40.5, 49.5, by=0.2))
 #' d$z <- rnorm(nrow(d), 30, .2) * d$lat * d$lon
-#' res <- reshape_p(d)
+#' res <- reshape_w(d)
 #' image(res)
 #' contour(res, add=T, lwd=2, nlevels=12)
 #' persp(res, theta=0, phi=45)
@@ -32,8 +32,8 @@
 #' \code{\link[labdsv]{matrify}}
 #'
 #' @export
-#' @rdname utils_reshape
-`utils_reshape` <- function(data, ...){
+#' @rdname reshape_w
+`reshape_w` <- function(data, ...){
      if(!is.data.frame(data)) stop('must be dataframe')
      if (ncol(data) != 3) stop('must have 3-column format')
      x <- data[, 1]
