@@ -43,17 +43,17 @@ S <- data.frame(t(matrix(c(10,1,2,1,1,0),
 dimnames(S)[[1]] <- c('maple', 'oak', 'pine')
 dimnames(S)[[2]] <- c('shadetol', 'hardwood')
 # trts standardized by none, abund-weighted totals
-c1  <- makecwm(A, S, wa=FALSE, stdz='none')
+c1  <- makecwm(A, S, wa=F, stdz='none')
 # traits standardized by minmax, abund-weighted totals
-c2  <- makecwm(A, S, wa=FALSE, stdz='minmax')
+c2  <- makecwm(A, S, wa=F, stdz='minmax')
 # traits standardized by std deviates, abund-weighted totals
-c3  <- makecwm(A, S, wa=FALSE, stdz='deviates')
+c3  <- makecwm(A, S, wa=F, stdz='deviates')
 # traits standardized by none, abund-weighted averages
-c4  <- makecwm(A, S, wa=TRUE, stdz='none')
+c4  <- makecwm(A, S, wa=T, stdz='none')
 # traits standardized by minmax, abund-weighted averages
-c5  <- makecwm(A, S, wa=TRUE, stdz='minmax')       # PREFERRED!
+c5  <- makecwm(A, S, wa=T, stdz='minmax')       # PREFERRED!
 # traits standardized by std deviates, abund-weighted averages
-c6  <- makecwm(A, S, wa=TRUE, stdz='deviates')
+c6  <- makecwm(A, S, wa=T, stdz='deviates')
 # print values
 list(c1,c2,c3,c4,c5,c6)
 
