@@ -46,7 +46,7 @@
           n <- nlevels(x)
      }
      if(!require(viridis) & missing(pal)){
-          pal <- rainbow(n=n, alpha=alpha, ...)
+          pal <- grDevices::rainbow(n=n, alpha=alpha, ...)
      } else {
           if(missing(pal)){
                pal <- viridis::inferno(n=n, alpha=alpha, begin=begin,
@@ -60,7 +60,7 @@
 `surfcol` <- function(x, ngrid, alpha=0.6, begin=0.2, end=0.9,  dir=1,
                       pal, ...){
      if(!require(viridis) & missing(pal)){
-          pal <- rainbow(n=ngrid, alpha=alpha, ...)
+          pal <- grDevices::rainbow(n=ngrid, alpha=alpha, ...)
      } else {
           if(missing(pal)){
                pal <- viridis::inferno(n=ngrid, alpha=alpha,

@@ -76,5 +76,5 @@ rmse(xx, xx+rnorm(length(xx)), na.rm=T) # 1.033994
 
 }
 \seealso{
-\code{\link[base]{sd}}
+\code{\link[stats]{sd}}
 }

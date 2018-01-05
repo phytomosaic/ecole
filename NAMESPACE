@@ -2,6 +2,7 @@
 
 export(asin_sqrt)
 export(basal_area)
+export(bray0)
 export(colvec)
 export(cv)
 export(describe)
