@@ -16,6 +16,8 @@ file already exists then a timestamp is added}
 \item{outdir}{string, directory to which file will be written}
 
 \item{header}{logical, add a PC-ORD header?}
+
+\item{...}{further arguments passed to other methods}
 }
 \value{
 .xls file (optionally an R object) with automatic PC-ORD header
@@ -49,7 +51,7 @@ env <- data.frame(soil = c("A","B","D"),
 r_pcord(env, filename="env_example", outdir=lookin)
 
 # header not strictly required
-r_pcord(env, filename="env_example", outdir=lookin, header=F)
+r_pcord(env, filename="env_example", outdir=lookin, header=FALSE)
 
 # allows no element to be empty or NA
 env[2,3] <- NA

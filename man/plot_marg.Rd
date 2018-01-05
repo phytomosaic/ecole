@@ -25,6 +25,8 @@ plot_marg(d, x, y, over, xlab, ylab, ovlab, marg = "dens", alpha = 1, ...)
    \code{'dens'} for density plots,
 or \code{'ortho'} for orthogonal fitlines}
 
+\item{alpha}{alpha level of fill colors}
+
 \item{...}{further arguments passed to other methods}
 }
 \value{

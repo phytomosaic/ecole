@@ -10,6 +10,8 @@ outlier_uni(x, mult = 1.5, ...)
 \item{x}{vector of numeric values to query}
 
 \item{mult}{IQR threshold for 'outliers'; default is 1.5 times the IQR}
+
+\item{...}{further arguments passed to other methods}
 }
 \value{
 List of with 4 elements: threshold values (\code{lwrlim},
@@ -24,7 +26,7 @@ Given a vector, finds indices of values exceeding an IQR threshold.
 }
 \examples{
 set.seed(19)
-x <- data.frame(xx=seq(1:10), yy=c(rnorm(6,1),rnorm(2,-9),rnorm(2,9)))
+x <- data.frame(x=seq(1:10),y=c(rnorm(6,1),rnorm(2,-9),rnorm(2,9)))
 (outs <- outlier_uni(x$yy))
 plot(x)
 points(x[outs$lower,], col=2, pch=19)

@@ -23,6 +23,8 @@ default is 3 times the SD}
 \item{perc}{numeric, returns outlier values beyond the specified percentile}
 
 \item{pick}{numeric, returns this number of most extreme outliers}
+
+\item{...}{further arguments passed to other methods}
 }
 \value{
 A data frame with plot identifiers, calculated distances, and
@@ -41,7 +43,7 @@ require(vegan)
 data(dune)
 set.seed(19)
 spe <- rbind(dune, runif(ncol(dune),0,1000)) # add an outlier row
-outlier_multi(spe, mult=3, plot=F)
+outlier_multi(spe, mult=3, plot=FALSE)
 outlier_multi(spe, mult=3)
 outlier_multi(spe, perc=5)
 outlier_multi(spe, pick=5)

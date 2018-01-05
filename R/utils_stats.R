@@ -24,7 +24,7 @@
 #' Results of \code{geom_mean} and \code{harm_mean} are always 0 by
 #' definition, unless \code{zero.rm=TRUE}.
 #'
-#' Like \code{\link[base]{sd}}, \code{sem} uses \emph{n-1} in
+#' Like \code{\link[stats]{sd}}, \code{sem} uses \emph{n-1} in
 #' denominator to correct for small-sample bias.
 #'
 #' \code{rmse} is one way to assess prediction accuracy.

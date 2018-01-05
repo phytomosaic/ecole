@@ -16,6 +16,9 @@
 #' @param header
 #' logical, add a PC-ORD header?
 #'
+#' @param ...
+#' further arguments passed to other methods
+#'
 #' @return
 #' .xls file (optionally an R object) with automatic PC-ORD header
 #'
@@ -45,7 +48,7 @@
 #' r_pcord(env, filename="env_example", outdir=lookin)
 #'
 #' # header not strictly required
-#' r_pcord(env, filename="env_example", outdir=lookin, header=F)
+#' r_pcord(env, filename="env_example", outdir=lookin, header=FALSE)
 #'
 #' # allows no element to be empty or NA
 #' env[2,3] <- NA

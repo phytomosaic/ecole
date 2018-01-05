@@ -30,7 +30,11 @@
 #'        \code{'dens'} for density plots,
 #'     or \code{'ortho'} for orthogonal fitlines
 #'
-#' @param ... further arguments passed to other methods
+#' @param alpha
+#' alpha level of fill colors
+#'
+#' @param ...
+#' further arguments passed to other methods
 #'
 #' @return
 #' A plot object
@@ -51,7 +55,6 @@
                        marg='dens', alpha=1, ...){
      stopifnot(is.data.frame(d))
      if(!is.data.frame(d)) stop('\n`d` must be data.frame')
-     # on.exit(par(mfrow=c(1,1)))
      if(missing(xlab)) xlab <- x
      if(missing(ylab)) ylab <- y
      x <- d[,x]

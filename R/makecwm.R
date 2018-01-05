@@ -35,26 +35,27 @@
 #' dimnames(S)[[1]] <- c('maple', 'oak', 'pine')
 #' dimnames(S)[[2]] <- c('shadetol', 'hardwood')
 #' # trts standardized by none, abund-weighted totals
-#' c1  <- makecwm(A, S, wa=F, stdz='none')
+#' c1  <- makecwm(A, S, wa=FALSE, stdz='none')
 #' # traits standardized by minmax, abund-weighted totals
-#' c2  <- makecwm(A, S, wa=F, stdz='minmax')
+#' c2  <- makecwm(A, S, wa=FALSE, stdz='minmax')
 #' # traits standardized by std deviates, abund-weighted totals
-#' c3  <- makecwm(A, S, wa=F, stdz='deviates')
+#' c3  <- makecwm(A, S, wa=FALSE, stdz='deviates')
 #' # traits standardized by none, abund-weighted averages
-#' c4  <- makecwm(A, S, wa=T, stdz='none')
+#' c4  <- makecwm(A, S, wa=TRUE, stdz='none')
 #' # traits standardized by minmax, abund-weighted averages
-#' c5  <- makecwm(A, S, wa=T, stdz='minmax')       # PREFERRED!
+#' c5  <- makecwm(A, S, wa=TRUE, stdz='minmax')       # PREFERRED!
 #' # traits standardized by std deviates, abund-weighted averages
-#' c6  <- makecwm(A, S, wa=T, stdz='deviates')
+#' c6  <- makecwm(A, S, wa=TRUE, stdz='deviates')
 #' # print values
 #' list(c1,c2,c3,c4,c5,c6)
 #'
-#' @references McCune, B., and J. B. Grace. 2002. Analysis of
-#' Ecological Communities. MjM Software, Gleneden Beach, Oregon, USA.
-#' 304 pp.
+#' @references
+#' McCune, B., and J. B. Grace. 2002. Analysis of Ecological
+#'     Communities. MjM Software, Gleneden Beach, Oregon, USA.
+#'     304 pp.
 #'
 #' McCune, B. 2015. The front door to the fourth corner: variations on
-#'     the sample unit × trait matrix in community ecology. Community
+#'     the sample unit x trait matrix in community ecology. Community
 #'     Ecology 16:267-271.
 #'
 #' @export
