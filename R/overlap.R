@@ -28,9 +28,7 @@
 #' overlap(x1,x2)
 #' text(1, .1, round(overlap(x1,x2),2))
 #'
-#' @seealso
-#' \url{https://stats.stackexchange.com/questions/97596/}
-#'
+#' @seealso \link{https://stats.stackexchange.com/questions/97596/}
 #' @export
 `overlap` <- function(a, b, buff=0.1, ...){
 

@@ -40,5 +40,5 @@ text(1, .1, round(overlap(x1,x2),2))
 
 }
 \seealso{
-\url{https://stats.stackexchange.com/questions/97596/}
+\link{https://stats.stackexchange.com/questions/97596/}
 }

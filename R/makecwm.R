@@ -2,23 +2,18 @@
 #'
 #' Community-weighted means traits matrix (SU x traits)
 #'
-#' @param spp
-#' array of species data, where rows=SUs, cols=species
+#' @param spp  array of species data, where rows=SUs, cols=species
 #'
-#' @param trait
-#' array of traits data, where rows=species, cols=traits
+#' @param trait  array of traits data, where rows=species, cols=traits
 #'
-#' @param wa
-#' logical, should weighted averaging step follow standardization
-#'     step?  If TRUE, then use abundance weighted trait AVGS, if
-#'     FALSE, then use abundance weighted trait TOTALS.
+#' @param wa logical, should weighted averaging step follow
+#'     standardization step?  If TRUE, then use abundance weighted
+#'     trait AVGS, if FALSE, then use abundance weighted trait TOTALS.
 #'
-#' @param stdz
-#' standardize each trait by its 'minmax' (default), 'deviates', or
-#'     'none'
+#' @param stdz standardize each trait by its 'minmax' (default),
+#'     'deviates', or 'none'
 #'
-#' @param ...
-#' further arguments passed to other methods
+#' @param ... further arguments passed to other methods
 #'
 #' @return
 #' A community-weighted traits matrix (actually a data frame), where

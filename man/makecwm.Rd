@@ -11,12 +11,12 @@ makecwm(spp, trait, wa = TRUE, stdz = c("minmax", "deviates", "none"), ...)
 
 \item{trait}{array of traits data, where rows=species, cols=traits}
 
-\item{wa}{logical, should weighted averaging step follow standardization
-step?  If TRUE, then use abundance weighted trait AVGS, if
-FALSE, then use abundance weighted trait TOTALS.}
+\item{wa}{logical, should weighted averaging step follow
+standardization step?  If TRUE, then use abundance weighted
+trait AVGS, if FALSE, then use abundance weighted trait TOTALS.}
 
-\item{stdz}{standardize each trait by its 'minmax' (default), 'deviates', or
-'none'}
+\item{stdz}{standardize each trait by its 'minmax' (default),
+'deviates', or 'none'}
 
 \item{...}{further arguments passed to other methods}
 }

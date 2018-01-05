@@ -48,19 +48,19 @@ slopes  <- c(10, 0.1, 34)
 aspects <- c(12, 146, 240)
 
 foldasp(aspects)
-htld(lats, slopes, aspects, lognat=FALSE)
-pdir(lats, slopes, aspects, lognat=FALSE)
+htld(lats, slopes, aspects, lognat=F)
+pdir(lats, slopes, aspects, lognat=F)
 
 
 # from Table 2 in McCune & Keon (2002):
-htld(lat=40, slo=30, asp=0,   lognat=TRUE)
-htld(lat=40, slo=30, asp=180, lognat=TRUE)
-htld(lat=40, slo=0,  asp=0,   lognat=TRUE)
+htld(lat=40, slo=30, asp=0,   lognat=T)
+htld(lat=40, slo=30, asp=180, lognat=T)
+htld(lat=40, slo=0,  asp=0,   lognat=T)
 
 # from Table 2 in McCune & Keon (2002):
-pdir(lat=40, slo=30, asp=0,   lognat=TRUE)     # expect -0.889
-pdir(lat=40, slo=30, asp=180, lognat=TRUE)     # expect -0.005
-pdir(lat=40, slo=0,  asp=0,   lognat=TRUE)     # expect -0.202
+pdir(lat=40, slo=30, asp=0,   lognat=T)     # expect -0.889
+pdir(lat=40, slo=30, asp=180, lognat=T)     # expect -0.005
+pdir(lat=40, slo=0,  asp=0,   lognat=T)     # expect -0.202
 
 }
 \references{
