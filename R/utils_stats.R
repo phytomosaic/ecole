@@ -55,7 +55,7 @@
 #' set.seed(23)
 #' rmse(xx, xx+rnorm(length(xx)), na.rm=T) # 1.033994
 #'
-#' @seealso \code{\link[base]{sd}}
+#' @seealso \code{\link[stats]{sd}}
 #'
 #' @export
 #' @rdname utils_stats
