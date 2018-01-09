@@ -54,13 +54,13 @@
      if(missing(col)){
           col <- '#00000080'
      }
-     if(!is.vector(x) | !is.vector(y)){
-          stop('x and y must be vectors')
-     }
      if(dist){
           x <- as.vector(vegan::vegdist(x, 'euc', na.rm=TRUE))
           y <- as.vector(vegan::vegdist(y, 'euc', na.rm=TRUE))
           cat('\nConverting values to interpoint distances')
+     }
+     if(!is.vector(x) | !is.vector(y)){
+          stop('x and y must be vectors')
      }
      pca <- stats::prcomp(~x+y, center=TRUE, scale.=FALSE)
      slp <- with(pca, rotation[2,1] / rotation[1,1])
