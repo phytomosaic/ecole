@@ -45,28 +45,19 @@
      if(is.factor(x)){
           n <- nlevels(x)
      }
-     if(!require(viridis) & missing(pal)){
-          pal <- grDevices::rainbow(n=n, alpha=alpha, ...)
-     } else {
-          if(missing(pal)){
-               pal <- viridis::inferno(n=n, alpha=alpha, begin=begin,
-                                       end=end, direction=dir)
-          }
+     if(missing(pal)){
+          pal <- viridis::inferno(n=n, alpha=alpha, begin=begin,
+                                  end=end, direction=dir)
      }
      pal[cut(as.numeric(x), breaks=length(pal), include.lowest=TRUE)]
 }
 #' @export
 #' @rdname utils_color
-`surfcol` <- function(x, ngrid, alpha=0.6, begin=0.2, end=0.9,  dir=1,
+`surfcol` <- function(x, ngrid, alpha=0.6, begin=0.2, end=0.9, dir=1,
                       pal, ...){
-     if(!require(viridis) & missing(pal)){
-          pal <- grDevices::rainbow(n=ngrid, alpha=alpha, ...)
-     } else {
-          if(missing(pal)){
-               pal <- viridis::inferno(n=ngrid, alpha=alpha,
-                                       begin=begin, end=end,
-                                       direction=dir)
-          }
+     if(missing(pal)){
+          pal <- viridis::inferno(n=ngrid, alpha=alpha, begin=begin,
+                                  end=end, direction=dir)
      }
      xavg <- (x[-1, -1] +
                    x[-1, -(ncol(x) - 1)] +
