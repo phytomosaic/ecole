@@ -54,19 +54,19 @@
      if(missing(col)){
           col <- '#00000080'
      }
-     if(!is.vector(x) | !is.vector(y)){
-          stop('x and y must be vectors')
-     }
      if(dist){
           x <- as.vector(vegan::vegdist(x, 'euc', na.rm=TRUE))
           y <- as.vector(vegan::vegdist(y, 'euc', na.rm=TRUE))
           cat('\nConverting values to interpoint distances')
      }
+     if(!is.vector(x) | !is.vector(y)){
+          stop('x and y must be vectors')
+     }
      pca <- stats::prcomp(~x+y, center=TRUE, scale.=FALSE)
      slp <- with(pca, rotation[2,1] / rotation[1,1])
      int <- with(pca, center[2] - slp*center[1])
-     x0  <- min(x, ...)
-     x1  <- max(x, ...)
+     x0  <- min(x, na.rm=TRUE)
+     x1  <- max(x, na.rm=TRUE)
      y0  <- (slp*x0)+int
      y1  <- (slp*x1)+int
      plot(x, y, pch=16, col=col, las=1, bty='l', asp=1, ...)
@@ -75,7 +75,7 @@
           vexp <- signif(((pca$sdev)^2/sum(pca$sdev^2))[1],2)*100
           z1  <- paste0('Var. expl. = ', vexp,'%')
           z2  <- paste0('Slope = ', signif(slp,2))
-          mtext(z1, 3, 0, outer=F, at=grconvertX(.99,'npc'), adj=1)
-          mtext(z2, 3, 0, outer=F, at=grconvertX(.01,'npc'), adj=0)
+          mtext(z1, 3, 0, outer=F, at=grconvertX(.99,'npc'), adj=1, cex = 0.7)
+          mtext(z2, 3, 0, outer=F, at=grconvertX(.01,'npc'), adj=0, cex = 0.7)
      }
 }
