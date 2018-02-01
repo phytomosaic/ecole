@@ -55,24 +55,26 @@ These functions return NA when NAs present and \code{na.rm=TRUE}.
 xx <- c(-1, 0, 1, 4, 77, NA)
 
 # harmonic mean
-harm_mean(xx, na.rm=T, zero.rm=F)  # 0 by definition
-harm_mean(xx, na.rm=T, zero.rm=T)  # 15.20988
+harm_mean(xx, na.rm=TRUE, zero.rm=FALSE)     # 0 by definition
+harm_mean(xx, na.rm=TRUE, zero.rm=TRUE)      # 15.20988
 
 # geometric mean
-geom_mean(xx, na.rm=T, zero.rm=F)  # should fail for negative values
-xx <- xx[-1]                       # remove negative values
-geom_mean(xx, na.rm=T, zero.rm=F)  # 0 by definition
-geom_mean(xx, na.rm=T, zero.rm=T)  # 6.753313
+### NOT RUN:
+# geom_mean(xx, na.rm=TRUE, zero.rm=FALSE))  # fails for neg vals
+### END NOT RUN
+xx <- xx[-1]                                 # remove negative values
+geom_mean(xx, na.rm=TRUE, zero.rm=FALSE)     # 0 by definition
+geom_mean(xx, na.rm=TRUE, zero.rm=TRUE)      # 6.753313
 
 # standard error of the mean
-sem(xx)                            # 21.76899
+sem(xx)                       # 21.76899
 
 # coefficient of variation
-cv(xx)                             # 183.9268
+cv(xx)                        # 183.9268
 
 # root mean squared error
 set.seed(23)
-rmse(xx, xx+rnorm(length(xx)), na.rm=T) # 1.033994
+rmse(xx, xx+rnorm(length(xx)), na.rm=TRUE)   # 1.033994
 
 }
 \seealso{
