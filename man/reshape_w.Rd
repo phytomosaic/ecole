@@ -30,7 +30,7 @@ d <- expand.grid(lon=seq(-125.5, -110.0, by=0.2),
 d$z <- rnorm(nrow(d), 30, .2) * d$lat * d$lon
 res <- reshape_w(d)
 image(res)
-contour(res, add=T, lwd=2, nlevels=12)
+contour(res, add=TRUE, lwd=2, nlevels=12)
 persp(res, theta=0, phi=45)
 filled.contour(res, color.palette=heat.colors)
 heatmap(res$z)

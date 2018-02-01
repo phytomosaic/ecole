@@ -77,7 +77,6 @@
 
      # halfchanges (pg 31 McCune & Grace 2002)
      `hc` <- function(x, method='bray', na.rm=T, ...){
-          require(vegan)
           D     <- vegan::vegdist(x=x, method=method, na.rm=na.rm)
           Dbar  <- mean(D, na.rm=na.rm)
           betaD <- log( 1 - Dbar ) / log(0.5)

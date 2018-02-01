@@ -32,25 +32,25 @@
 #' Nspp <- Nsite <- 12
 #' (x <- matrix(floor(rbeta((Nspp*Nsite), .2, 10)*100), Nspp, Nsite))
 #' ecole::mx_diversity(x)   # high proportion of no-share SU pairs
-#' d0 <- vegdist(x, 'bray')
+#' d0 <- vegan::vegdist(x, 'bray')
 #' d1 <- bray0(x)
 #' op <- par(mfrow=c(1,3))
-#' ordiplot(cmdscale(d0), type='t')
-#' ordiplot(cmdscale(d1), type='t')
+#' vegan::ordiplot(stats::cmdscale(d0), type='t')
+#' vegan::ordiplot(stats::cmdscale(d1), type='t')
 #' plot(d0,d1) ; abline(0,1) # zero-adj BC 'fans out' dissimilarities
 #' par(op)
 #'
 #' ###   BC and zero-adj BC are ~same when no-share SUs are absent
 #' x <- x+10
 #' ecole::mx_diversity(x)   # zero no-share SU pairs
-#' plot(vegdist(x, 'bray'), bray0(x)) ; abline(0,1)
+#' plot(vegan::vegdist(x, 'bray'), bray0(x)) ; abline(0,1)
 #'
 #' ###   test data from Table 1 of Clarke et al. (2006)
 #' x <- matrix(c(0,0,1,1,0,1,0,0,10,10,0,0,
 #'               0,0,0,0,1,0,0,5,0,20,0,50,
 #'               0,0,0,0,0,1,0,5,0,20,0,50,
 #'               0,0,0,0,0,0,2,0,10,0,50,100), nrow=12, ncol=4)
-#' d0 <- vegdist(x, 'bray')
+#' d0 <- vegan::vegdist(x, 'bray')
 #' d1 <- bray0(x)
 #' s  <- 2:12
 #' # cf. 'B–C dissimilarity' in Table 1:
@@ -60,13 +60,13 @@
 #' # NMS ordinations using each dissimilarity matrix
 #' #     cf. Fig. 1 in Clarke et al. (2006)
 #' d0 <- as.dist(as.matrix(d0)[-c(1:2),-c(1:2)]) # rm depauperate sites
-#' m0 <- metaMDS(d0, try=99)
-#' m1 <- metaMDS(d1, try=99)
-#' scr0 <- scores(m0)*(-1)  # simple reflection
-#' scr1 <- scores(m1)*(-1)
+#' m0 <- vegan::metaMDS(d0, try=99)
+#' m1 <- vegan::metaMDS(d1, try=99)
+#' scr0 <- vegan::scores(m0)*(-1)  # simple reflection
+#' scr1 <- vegan::scores(m1)*(-1)
 #' op <- par(mfrow=c(1,2))
-#' ordiplot(scr0, type='t')
-#' ordiplot(scr1, type='t')
+#' vegan::ordiplot(scr0, type='t')
+#' vegan::ordiplot(scr1, type='t')
 #' par(op)
 #'
 #' @references

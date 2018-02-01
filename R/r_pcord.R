@@ -24,13 +24,13 @@
 #'
 #' @details
 #' Writes a file compatible with PC-ORD (McCune and Mefford 2011), and
-#'     automates the addition of a PC-ORD header. Empty cells not
-#'     allowed.  Column names longer than 10 characters are
-#'     automatically abbreviated to \emph{unique} 10-char names;
-#'     PC-ORD abbreviates but doesn't check for duplicates.
+#' automates the addition of a PC-ORD header. Empty cells not allowed.
+#' Column names longer than 10 characters are automatically
+#' abbreviated to \emph{unique} 10-char names; PC-ORD abbreviates but
+#' doesn't check for duplicates.
 #'
-#'     Call \code{r_pcord(header = TRUE)}, then in PC-ORD do: File >
-#'     Import > Main matrix > Excel spreadsheet (with PC-ORD header).
+#' Call \code{r_pcord(header = TRUE)}, then in PC-ORD do: File >
+#' Import > Main matrix > Excel spreadsheet (with PC-ORD header).
 #'
 #' @examples
 #' # species abundance data
@@ -52,15 +52,20 @@
 #'
 #' # allows no element to be empty or NA
 #' env[2,3] <- NA
-#' r_pcord(env, filename="env_example", outdir=lookin)
+#' ### NOT RUN:
+#' # r_pcord(env, filename="env_example", outdir=lookin)
+#' ### END NOT RUN
 #'
 #' # allows only xls output
-#' r_pcord(env, filename="env_example.csv", outdir=lookin)
+#' ### NOT RUN:
+#' # r_pcord(env, filename="env_example.csv", outdir=lookin)
+#' ### END NOT RUN
 #'
 #' @references
 #' McCune, B., and M. J. Mefford. 2011. PC-ORD. Multivariate Analysis
 #'     of Ecological Data. Version 6. MjM Software Design, Gleneden
 #'     Beach, OR.
+#'
 #' @export
 `r_pcord` <- function(x, filename=NULL, outdir=getwd(), header=TRUE,
                       ... ){
