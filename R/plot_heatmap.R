@@ -30,7 +30,10 @@
 #' plot_heatmap(z, yord=FALSE, yexp=1.7, logbase=10)
 #' plot_heatmap(z, yord=FALSE, yexp=1.7, logbase=10, asp=1)
 #' plot_heatmap(z, xord=FALSE, yord=FALSE, yexp=1.7, logbase=10,
-#'      asp=1)
+#'              asp=1)
+#' r <- colorRampPalette(c("transparent","darkgreen"))(99)
+#' plot_heatmap(z, xord=FALSE, yord=FALSE, yexp=1.7, logbase=10,
+#'              asp=1, col=r)
 #'
 #' @export
 #' @rdname plot_heatmap
