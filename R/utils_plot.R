@@ -14,6 +14,12 @@
 #'
 #' @param bold logical, should panel label be bold?
 #'
+#' @param x numeric, \emph{relative} horizontal position
+#'
+#' @param y numeric, \emph{relative} vertical position
+#'
+#' @param labels character vector of text to plot
+#'
 #' @param ... further arguments passed to other methods (i.e.,
 #'     \code{\link[graphics]{par}})
 #'
@@ -31,6 +37,9 @@
 #' add_label('c')
 #' plot(1:N, 1:N+rnorm(N,0,5), ylim=c(0,2*N), xlab='x', ylab='f(x)')
 #' add_label('d')
+#' add_text(.1, .9, '+item1')
+#' add_text(.5, .5, '+item2')
+#' add_text(.9, .1, '+item3') # extends beyond plot area
 #' par(op)
 #'
 #' @export
@@ -57,4 +66,12 @@
      if(bold) font <- 2 else font <- 1
      text <- paste(LETTERS[letters==char], ')', sep='')
      mtext(text=text, side=3, adj=0, font=font, ...)
+}
+#' @export
+#' @rdname utils_plot
+`add_text` <- function(x, y, labels, bold=FALSE, ...){
+     if (bold)  font <- 2 else font <- 1
+     text(x=graphics::grconvertX(x, from='npc', to='user'),
+          y=graphics::grconvertY(y, from='npc', to='user'),
+          labels=labels, adj=0, font=font, ...)
 }
