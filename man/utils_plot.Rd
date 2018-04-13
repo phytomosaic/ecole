@@ -33,7 +33,8 @@ the maximal plotting region.}
 \item{labels}{character vector of text to plot}
 }
 \value{
-`set_par` sets graphical parameters; `add_label` adds panel label.
+`set_par` sets graphical parameters; `add_label` adds panel label;
+    `add_text` adds text to the plotting area.
 }
 \description{
 Set "neat" graphical parameters suitable for publication, and also

@@ -24,7 +24,8 @@
 #'     \code{\link[graphics]{par}})
 #'
 #' @return
-#' `set_par` sets graphical parameters; `add_label` adds panel label.
+#' `set_par` sets graphical parameters; `add_label` adds panel label;
+#'     `add_text` adds text to the plotting area.
 #'
 #' @examples
 #' N  <- 20
@@ -44,20 +45,34 @@
 #'
 #' @export
 #' @rdname utils_plot
-`set_par` <- function(panels=1, pty='s', ...){
-     mgp <- c(2.5, 0.7, 0)    # margin for axis title, labels, line
-     mar <- c(4, 4, 1.2, 1)   # plot margins
-     oma <- c(0, 0, 0, 0)     # outer margins
+`set_par` <- function (panels = 1, pty = "s", ...) {
+     mgp <- c(2.5, 0.7, 0)
+     mar <- c(4, 4, 1.2, 1)
+     oma <- c(0, 0, 0, 0)
+     `auto_rowcol` <- function(n = panels) {
+          if (n <= 3)
+               c(1, n)
+          else if (n <= 6)
+               c(2, (n + 1)%/%2)
+          else if (n <= 12)
+               c(3, (n + 2)%/%3)
+          else c(ceiling(n/(nr <- ceiling(sqrt(n)))), nr)
+     }
+     mfrow <- auto_rowcol()
+     if(panels > 4) panels <- 4
      switch(as.character(panels),
-            '4' = par(mfrow=c(2,2), mgp=mgp, mar=mar, pty=pty,
-                      oma=oma, bty='L', las=1, cex.lab =1.2, ...),
-            '3' = par(mfrow=c(1,3), mgp=mgp, mar=mar, pty=pty,
-                      oma=oma, bty='L', las=1, cex.lab =1.4,
-                      cex.axis=1.2, ...),
-            '2' = par(mfrow=c(1,2), mgp=mgp, mar=mar, pty=pty,
-                      oma=oma, bty='L', las=1, cex.axis=0.85, ...),
-            '1' = par(mfrow=c(1,1), mgp=mgp, mar=mar, pty=pty,
-                      oma=oma, bty='L', las=1, cex.axis=0.85, ...))
+            `4` = par(mfrow = mfrow, mgp = mgp, mar = mar, pty = pty,
+                      oma = oma,  bty = "L", las = 1, cex.lab = 1.2,
+                      ...),
+            `3` = par(mfrow = mfrow, mgp = mgp, mar = mar, pty = pty,
+                      oma = oma, bty = "L", las = 1, cex.lab = 1.4,
+                      cex.axis = 1.2, ...),
+            `2` = par(mfrow = mfrow, mgp = mgp, mar = mar, pty = pty,
+                      oma = oma, bty = "L", las = 1, cex.axis = 0.85,
+                      ...),
+            `1` = par(mfrow = mfrow, mgp = mgp, mar = mar, pty = pty,
+                      oma = oma, bty = "L", las = 1, cex.axis = 0.85,
+                      ...))
 }
 #' @export
 #' @rdname utils_plot
