@@ -2,7 +2,7 @@
 #'
 #' @description Transformations appropriate for ecological data.
 #'
-#' @param x  vector or matrix of values to transform
+#' @param x  vector or array of values to transform
 #'
 #' @param ... further arguments passed to other methods
 #'
@@ -20,15 +20,15 @@
 #' Preserves original order of magnitudes while accounting for values
 #' = 0 and << 1. Follows pg. 69 of McCune & Grace (2002).
 #'
-#' \code{normalize} = Normalize 0-1:\cr
-#' Relativizes data to 0-1 scale based on min/max values.
+#' \code{standardize} = Range standardize:\cr
+#' Standardizes data to 0-1 scale based on min/max values.
 #'
 #' @examples
 #' set.seed(21)
 #' x  <- rnorm(99, 50, 20)
 #' x1 <- asin_sqrt(x)
 #' x2 <- genlogtrans(x)
-#' x3 <- normalize(x)
+#' x3 <- standardize(x)
 #' par(mfrow=c(1,3))
 #' plot(x, x1)
 #' plot(x, x2)
@@ -48,7 +48,7 @@
      x <- as.matrix(x)             # convert to matrix
      if( any(x > 1) | any(x < 0) ) {
           cat('Range beyond 0-1, normalizing now')
-          x <- (x-min(x, ...))/(max(x, ...)-min(x, ...)) # normalize
+          x <- (x-min(x, ...))/(max(x, ...)-min(x, ...)) # standardize
      }
      out <- (2/pi) * asin(sqrt(x)) # do the transform
      if (wasVector)                # return a vector
@@ -70,10 +70,10 @@
 }
 #' @export
 #' @rdname transforms
-`normalize` <- function(x, ...){
+`standardize` <- function(x, ...){
      wasVector <- is.vector(x)     # takes and returns a vector
      x <- as.matrix(x)             # convert to matrix
-     x <- (x - min(x, ...)) / (max(x, ...) - min(x, ...)) # normalize
+     x <- (x - min(x, ...)) / (max(x, ...) - min(x, ...))# standardize
      if (wasVector)                # return a vector
           x <- as.vector(x)
      x

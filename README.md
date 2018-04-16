@@ -1,2 +1,3 @@
 # ecole
-Teaching ecological tasks, algorithms and model fitting.
+School of ecology package for teaching ecological tasks, algorithms 
+    and model fitting.

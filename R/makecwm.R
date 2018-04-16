@@ -72,10 +72,10 @@
      # standardizing traits
      stdz <- match.arg(stdz)
      if(stdz=='minmax'){     # by minmax of traits columns
-          `normalize` <- function(x, ...){
+          `standardize` <- function(x, ...){
                (x - min(x, ...)) / (max(x, ...) - min(x, ...))
           }
-          trait <- apply(trait, MARGIN=2, FUN=normalize)
+          trait <- apply(trait, MARGIN=2, FUN=standardize)
      }
      if(stdz=='deviates'){   # by standard deviates of traits cols
           `zscore` <- function(x, ...){
