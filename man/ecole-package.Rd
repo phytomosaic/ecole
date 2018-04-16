@@ -4,7 +4,7 @@
 \name{ecole-package}
 \alias{ecole-package}
 \title{School of Ecology Package for Teaching Ecological Tasks,
-    Algorithms and Model Fitting.#' @keywords package}
+    Algorithms and Model Fitting.}
 \description{
 School of ecology package for teaching ecological
     tasks, algorithms and model fitting.
@@ -47,3 +47,4 @@ This package contains functions and utilities for analyses
 
     ...and many others.
 }
+\keyword{package}

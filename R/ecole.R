@@ -40,5 +40,6 @@
 #' @docType package
 #' @name ecole-package
 #' @title School of Ecology Package for Teaching Ecological Tasks,
-#'     Algorithms and Model Fitting.#' @keywords package
+#'     Algorithms and Model Fitting.
+#' @keywords package
 NULL
