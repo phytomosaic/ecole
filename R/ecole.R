@@ -5,7 +5,8 @@
 #'
 #'     Basic functions for forestry and vegetation analysis:\cr
 #'     \code{\link{basal_area}}, \code{\link{p3_to_p2}},
-#'     \code{\link{foldasp}}, \code{\link{htld}}, \code{\link{pdir}}
+#'     \code{\link{foldasp}}, \code{\link{htld}}, \code{\link{pdir}},
+#'     \code{\link{nearestspecies}}
 #'
 #'     Outlier analysis:\cr
 #'     \code{\link{outlier_multi}}, \code{\link{outlier_uni}}
