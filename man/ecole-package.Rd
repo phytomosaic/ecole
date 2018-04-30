@@ -15,7 +15,8 @@ This package contains functions and utilities for analyses
 
     Basic functions for forestry and vegetation analysis:\cr
     \code{\link{basal_area}}, \code{\link{p3_to_p2}},
-    \code{\link{foldasp}}, \code{\link{htld}}, \code{\link{pdir}}
+    \code{\link{foldasp}}, \code{\link{htld}}, \code{\link{pdir}},
+    \code{\link{nearestspecies}}
 
     Outlier analysis:\cr
     \code{\link{outlier_multi}}, \code{\link{outlier_uni}}
@@ -23,10 +24,13 @@ This package contains functions and utilities for analyses
     Niche overlap:\cr
     \code{\link{overlap}}
 
-    Plotting:\cr
+    Plots:\cr
     \code{\link{plot_heatmap}}, \code{\link{plot_joy}},
     \code{\link{plot_loglog}}, \code{\link{plot_marg}},
     \code{\link{plot_ortho}}, \code{utils_*}
+
+    Plot utilities:\cr
+     \code{\link{set_par}}, \code{\link{colvec}} and allies
 
     Matrix manipulation and description:\cr
     \code{\link{mx_collapse}}, \code{\link{mx_diversity}},
@@ -36,11 +40,13 @@ This package contains functions and utilities for analyses
 
     Data transformations:\cr
     \code{\link{asin_sqrt}}, \code{\link{genlogtrans}},
-    \code{\link{standardize}}
+    \code{\link{standardize}}'
 
-    Utilities for color, plotting, basic statistics, and text
-        manipulation:\cr
-    \code{utils_*}
+    Basic statistics:\cr
+    \code{\link{rmse}} and allies
+
+    Handling text and character strings:\cr
+     \code{\link{clean_text}}
 
     Datasets:\cr
     \code{\link{smoky}}

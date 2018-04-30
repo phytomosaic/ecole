@@ -14,10 +14,13 @@
 #'     Niche overlap:\cr
 #'     \code{\link{overlap}}
 #'
-#'     Plotting:\cr
+#'     Plots:\cr
 #'     \code{\link{plot_heatmap}}, \code{\link{plot_joy}},
 #'     \code{\link{plot_loglog}}, \code{\link{plot_marg}},
 #'     \code{\link{plot_ortho}}, \code{utils_*}
+#'
+#'     Plot utilities:\cr
+#'      \code{\link{set_par}}, \code{\link{colvec}} and allies
 #'
 #'     Matrix manipulation and description:\cr
 #'     \code{\link{mx_collapse}}, \code{\link{mx_diversity}},
@@ -27,11 +30,13 @@
 #'
 #'     Data transformations:\cr
 #'     \code{\link{asin_sqrt}}, \code{\link{genlogtrans}},
-#'     \code{\link{standardize}}
+#'     \code{\link{standardize}}'
 #'
-#'     Utilities for color, plotting, basic statistics, and text
-#'         manipulation:\cr
-#'     \code{utils_*}
+#'     Basic statistics:\cr
+#'     \code{\link{rmse}} and allies
+#'
+#'     Handling text and character strings:\cr
+#'      \code{\link{clean_text}}
 #'
 #'     Datasets:\cr
 #'     \code{\link{smoky}}

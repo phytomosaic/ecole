@@ -3,31 +3,37 @@
 #' @description
 #' Vectorized summary statistics, including geometric mean, harmonic
 #' mean, sample standard error (SE), coefficient of variation (CV),
-#' and root mean square error (RMSE).
+#' root mean square error (RMSE),  mean absolute error (MAE), and
+#' sensitivity.
 #'
 #' @param x vector of values to evaluate
 #'
-#' @param xpred vector of 'predicted' values to compare against x
+#' @param y vector of 'predicted' values to compare against \code{x}
 #'
-#' @param na.rm logical indicating whether NA values in x should be
-#' removed before proceeding
+#' @param na.rm logical indicating whether NA values in \code{x}
+#' should be removed before proceeding
 #'
-#' @param zero.rm logical indicating whether zeros in x should be
-#' removed before calculating harmonic or geometric means
+#' @param zero.rm logical indicating whether zeros in \code{x} should
+#' be removed before calculating harmonic or geometric means
+#'
+#' @param stdz logical, standardize output by range of \code{x}?
 #'
 #' @param ... further arguments passed to other methods
 #'
 #' @return
-#' Numeric value
+#' Numeric value.
 #'
 #' @details
-#' Results of \code{geom_mean} and \code{harm_mean} are always 0 by
+#' For vectors including at least one zero, results of
+#' \code{geom_mean} and \code{harm_mean} are always 0 by
 #' definition, unless \code{zero.rm=TRUE}.
 #'
 #' Like \code{\link[stats]{sd}}, \code{sem} uses \emph{n-1} in
 #' denominator to correct for small-sample bias.
 #'
 #' \code{rmse} is one way to assess prediction accuracy.
+#'
+#' \code{mae} gives a measure of sensitivity when \code{stdz=TRUE}.
 #'
 #' These functions return NA when NAs present and \code{na.rm=TRUE}.
 #'
@@ -55,7 +61,17 @@
 #'
 #' # root mean squared error
 #' set.seed(23)
-#' rmse(xx, xx+rnorm(length(xx)), na.rm=TRUE)   # 1.033994
+#' xx <- c(-1, 0, 1, 4, 77, NA)
+#' yy <- xx+rnorm(length(xx), 10)
+#' rmse(xx, yy)                  # 10.71919
+#' rmse(yy, xx)                  # same, order invariant
+#'
+#' # mean absolute error
+#' mae(xx, yy, stdz=FALSE)       # 10.69236
+#'
+#' # range-standardized mean absolute error (aka sensitivity)
+#' mae(xx, yy, stdz=TRUE)        # 0.1370815
+#' mae(yy, xx, stdz=TRUE)        # 0.135684 -- order matters!
 #'
 #' @seealso \code{\link[stats]{sd}}
 #'
@@ -90,6 +106,12 @@
 }
 #' @export
 #' @rdname utils_stats
-`rmse` <- function(x, xpred, na.rm=TRUE, ...){
-     sqrt(mean((x-xpred)^2, na.rm=na.rm))
+`rmse` <- function(x, y, na.rm=TRUE, ...){
+     sqrt(mean((x-y)^2, na.rm=na.rm))
+}
+#' @export
+#' @rdname utils_stats
+`mae` <- function(x, y, stdz=FALSE, na.rm=TRUE, ...){
+     if(stdz) denom <- diff(range(x, na.rm = na.rm)) else denom <- 1
+     mean(abs(x - y), na.rm = na.rm) / denom
 }

@@ -6,6 +6,7 @@
 \alias{sem}
 \alias{cv}
 \alias{rmse}
+\alias{mae}
 \title{Summary statistics utilities}
 \usage{
 geom_mean(x, na.rm = TRUE, zero.rm = FALSE, ...)
@@ -16,37 +17,45 @@ sem(x, na.rm = TRUE, ...)
 
 cv(x, na.rm = TRUE, ...)
 
-rmse(x, xpred, na.rm = TRUE, ...)
+rmse(x, y, na.rm = TRUE, ...)
+
+mae(x, y, stdz = FALSE, na.rm = TRUE, ...)
 }
 \arguments{
 \item{x}{vector of values to evaluate}
 
-\item{na.rm}{logical indicating whether NA values in x should be
-removed before proceeding}
+\item{na.rm}{logical indicating whether NA values in \code{x}
+should be removed before proceeding}
 
-\item{zero.rm}{logical indicating whether zeros in x should be
-removed before calculating harmonic or geometric means}
+\item{zero.rm}{logical indicating whether zeros in \code{x} should
+be removed before calculating harmonic or geometric means}
 
 \item{...}{further arguments passed to other methods}
 
-\item{xpred}{vector of 'predicted' values to compare against x}
+\item{y}{vector of 'predicted' values to compare against \code{x}}
+
+\item{stdz}{logical, standardize output by range of \code{x}?}
 }
 \value{
-Numeric value
+Numeric value.
 }
 \description{
 Vectorized summary statistics, including geometric mean, harmonic
 mean, sample standard error (SE), coefficient of variation (CV),
-and root mean square error (RMSE).
+root mean square error (RMSE),  mean absolute error (MAE), and
+sensitivity.
 }
 \details{
-Results of \code{geom_mean} and \code{harm_mean} are always 0 by
+For vectors including at least one zero, results of
+\code{geom_mean} and \code{harm_mean} are always 0 by
 definition, unless \code{zero.rm=TRUE}.
 
 Like \code{\link[stats]{sd}}, \code{sem} uses \emph{n-1} in
 denominator to correct for small-sample bias.
 
 \code{rmse} is one way to assess prediction accuracy.
+
+\code{mae} gives a measure of sensitivity when \code{stdz=TRUE}.
 
 These functions return NA when NAs present and \code{na.rm=TRUE}.
 }
@@ -74,7 +83,17 @@ cv(xx)                        # 183.9268
 
 # root mean squared error
 set.seed(23)
-rmse(xx, xx+rnorm(length(xx)), na.rm=TRUE)   # 1.033994
+xx <- c(-1, 0, 1, 4, 77, NA)
+yy <- xx+rnorm(length(xx), 10)
+rmse(xx, yy)                  # 10.71919
+rmse(yy, xx)                  # same, order invariant
+
+# mean absolute error
+mae(xx, yy, stdz=FALSE)       # 10.69236
+
+# range-standardized mean absolute error (aka sensitivity)
+mae(xx, yy, stdz=TRUE)        # 0.1370815
+mae(yy, xx, stdz=TRUE)        # 0.135684 -- order matters!
 
 }
 \seealso{
