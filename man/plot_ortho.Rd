@@ -4,18 +4,18 @@
 \alias{plot_ortho}
 \title{Scatterplot with orthogonal fit line}
 \usage{
-plot_ortho(x, y, dist = FALSE, col, ann = TRUE, ...)
+plot_ortho(x, y, col, lcol, ann = TRUE, ...)
 }
 \arguments{
 \item{x}{vector of x-axis values}
 
 \item{y}{vector of y-axis values}
 
-\item{dist}{logical, convert values to interpoint Euclidean distances?}
-
 \item{col}{single value or vector of point colors}
 
-\item{ann}{logical, should annotations be added to top of plot?}
+\item{lcol}{value for line colors}
+
+\item{ann}{logical, should annotation for R2 value be added to top of plot?}
 
 \item{...}{further arguments passed to other methods}
 }
@@ -23,8 +23,7 @@ plot_ortho(x, y, dist = FALSE, col, ann = TRUE, ...)
 A plot object
 }
 \description{
-Scatterplot with orthogonal fit line and annotations.  Also
-permits converting from points to interpoint Euclidean distances.
+Simple scatterplot with orthogonal fit line and optional R2 value.
 }
 \details{
 Uses \code{\link[stats]{prcomp}} to fit orthogonal line. Data are
@@ -32,8 +31,8 @@ first centered but not scaled for PCA step, therefore, consider
 carefully whether unscaled data are meaningful in your use case.
 Plot aspect is fixed at \code{asp=1}.
 
-Converting values to interpoint distances may be useful for
-comparing interpoint distances in e.g., ordination scores.
+Converting values to interpoint distances beforehand may be useful
+for comparing e.g., ordination scores.
 }
 \examples{
 set.seed(23)
@@ -42,11 +41,10 @@ x  <- runif(N,0,1)
 y1 <- x + rnorm(N, 0, .1)
 y2 <- x + rnorm(N, 0, .5)
 y3 <- rnorm(N, 0, x*.3)
-op <- par(mfrow=c(2,2))
+set_par(4)
 plot_ortho(x, y1)
 plot_ortho(x, y2)
 plot_ortho(x, y3)
 plot_ortho(y3, x)
-par(op)
 
 }
