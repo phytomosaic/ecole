@@ -1,0 +1,64 @@
+#' @name braun
+#' @title Emma Lucy Braun forest plots in eastern North America
+#' @aliases braun
+#' @docType data
+#' @description
+#' Relative abundances of tree species for the forest plots described
+#'     in E. Lucy Brauns (1950) book, \emph{Deciduous Forests of
+#'     Eastern North America}, as communicated by Ricklefs (2018).
+#'
+#' @format A list of 2 data.frames:\cr
+#'     - \code{spe} 347 observations of 122 woody plant species,\cr
+#'     - \code{env} 347 observations of 33 environmental variables.
+#'
+#' @details Species matrix values are relative abundances of tree
+#'     species in 347 plots (removing one of Ricklefs which had no
+#'     species abundance information).  Species names follow Ricklefs
+#'     Table 3; those beginning with \code{X_} indicate that no
+#'     species name was provided.\cr
+#'
+#'     Environmental matrix values include plot names, bibliographic
+#'     information, location information and WorldClim climate values
+#'     per Ricklefs (2018).\cr
+#'
+#' @source Ricklefs (2018).
+#'
+#' @references
+#' Braun, E. L. 1950. Deciduous Forests of Eastern North America.
+#'     Hafner, New York.
+#' Ricklefs, R. E. 2018. Emma Lucy Brauns forest plots in eastern
+#'     North America. Ecology 99(2):504.
+#'
+#' @seealso https://en.wikipedia.org/wiki/Emma_Lucy_Braun
+#'
+#' @examples
+#' # split into two data.frames
+#' data(braun)
+#' spe <- braun$spe
+#' env <- braun$env
+#'
+#' # describe the species abundance matrix
+#' mx_diversity(spe) # high beta-diversity
+#'
+#' # remove rare species and depauperate plots
+#' rare <- (colSums((spe>0)*1) < 5)
+#' poor <- (rowSums((spe>0)*1) < 3)
+#' spe <- spe[!poor, !rare]
+#' env <- env[!poor, ]
+#' mx_diversity(spe)
+#' mx_valid(spe)
+#'
+#' # visualize the species abundance matrix
+#' plot_heatmap(spe, logbase=10, labcex=0.5, yexp=1.3)
+#'
+#' # gradient analysis (ordination)
+#' m <- vegan::metaMDS(spe, 'bray') # tune for real usage!
+#' s <- vegan::scores(m)
+#' set_par(4, pch=16)
+#' plot(s, col=colvec(env$bio3), main='Isothermality')
+#' plot(s, col=colvec(env$bio1), main='Mean Ann Temp')
+#' plot(env$lon, env$lat, col='#00000030', main='Plots')
+#' plot(env$lon, env$lat, col=colvec(s[,1]), main='NMS1 scores')
+#'
+#' @keywords datasets
+"braun"

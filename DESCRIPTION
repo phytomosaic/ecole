@@ -1,19 +1,27 @@
 Package: ecole
 Title: ecole: School of Ecology Package
-Version: 0.6-2018
+Version: 0.7-2018
 Authors@R: person("Robert", "Smith", 
     email = "smithr2@oregonstate.edu", role = c("aut", "cre"))
 Description: School of ecology package for teaching ecological tasks, 
     algorithms and model fitting.
-Depends: R (>= 3.4.1)
+Depends: 
+      R (>= 3.4.1),
+      vegan (>= 2.5-1)
 License: CC BY-NC-ND 4.0
 Encoding: UTF-8
 LazyData: true
-Date: 2018-04-16
+Date: 2018-05-07
 Author: 'Robert J Smith' <smithr2@oregonstate.edu>
 Creator: 'Robert J Smith' <smithr2@oregonstate.edu>
 Maintainer: 'Robert J Smith' <smithr2@oregonstate.edu>
-Imports: stats, graphics, e1071, vegan, sfsmisc, viridis
+Imports: 
+      stats,
+      graphics,
+      e1071,
+      sfsmisc,
+      viridis,
+      viridisLite
 Citation: Smith, Robert J. 2018. ecole: School of Ecology Package.
     Unpublished R package in development.
 URL: https://github.com/phytomosaic/ecole
