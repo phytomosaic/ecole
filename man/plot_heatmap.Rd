@@ -10,9 +10,11 @@ plot_heatmap(x, xord = TRUE, yord = FALSE, logbase = FALSE,
 \arguments{
 \item{x}{array of species data, where rows = SUs and cols = species}
 
-\item{xord, yord}{logical, should rows, columns be ordered by mean?}
+\item{xord}{logical, order columns by species weighted averages?}
 
-\item{logbase}{numeric, logarithm base to increase plot contrast}
+\item{yord}{logical, order rows by species (unweighted) averages?}
+
+\item{logbase}{numeric, logarithm base to scale plot contrast}
 
 \item{labcex}{numeric, label expansion factor; defaults to 0.7}
 
@@ -34,13 +36,14 @@ Plots a heatmap to quickly visualize species abundances/occurences.
 \examples{
 data(smoky)
 z <- smoky$spe
-plot_heatmap(z, yord=FALSE, yexp=1.7)
-plot_heatmap(z, yord=FALSE, yexp=1.7, logbase=10)
-plot_heatmap(z, yord=FALSE, yexp=1.7, logbase=10, asp=1)
-plot_heatmap(z, xord=FALSE, yord=FALSE, yexp=1.7, logbase=10,
-             asp=1)
+plot_heatmap(z, yexp=1.7)
+plot_heatmap(z, yexp=1.7, logbase=10)
+plot_heatmap(z, yexp=1.7, logbase=10, asp=1)
+plot_heatmap(z, xord=FALSE, yexp=1.7, logbase=10, asp=1)
 r <- colorRampPalette(c("transparent","darkgreen"))(99)
-plot_heatmap(z, xord=FALSE, yord=FALSE, yexp=1.7, logbase=10,
-             asp=1, col=r)
+plot_heatmap(z, xord=FALSE, yexp=1.7, logbase=10, asp=1, col=r)
 
+}
+\seealso{
+\code{\link[vegan]{tabasco}} for comparison.
 }

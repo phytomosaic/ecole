@@ -5,15 +5,17 @@
 #'
 #' @param x array of species data, where rows = SUs and cols = species
 #'
-#' @param xord,yord logical, should rows, columns be ordered by mean?
+#' @param xord logical, order columns by species weighted averages?
 #'
-#' @param logbase numeric, logarithm base to increase plot contrast
+#' @param yord logical, order rows by species (unweighted) averages?
+#'
+#' @param logbase numeric, logarithm base to scale plot contrast
 #'
 #' @param labcex numeric, label expansion factor; defaults to 0.7
 #'
-#' @param col  vector defining a color palette
+#' @param col vector defining a color palette
 #'
-#' @param xexp,yexp   expansion factor making room for x,y labels
+#' @param xexp,yexp expansion factor making room for x,y labels
 #'
 #' @param ...    further arguments passed to other methods
 #'
@@ -26,14 +28,14 @@
 #' @examples
 #' data(smoky)
 #' z <- smoky$spe
-#' plot_heatmap(z, yord=FALSE, yexp=1.7)
-#' plot_heatmap(z, yord=FALSE, yexp=1.7, logbase=10)
-#' plot_heatmap(z, yord=FALSE, yexp=1.7, logbase=10, asp=1)
-#' plot_heatmap(z, xord=FALSE, yord=FALSE, yexp=1.7, logbase=10,
-#'              asp=1)
+#' plot_heatmap(z, yexp=1.7)
+#' plot_heatmap(z, yexp=1.7, logbase=10)
+#' plot_heatmap(z, yexp=1.7, logbase=10, asp=1)
+#' plot_heatmap(z, xord=FALSE, yexp=1.7, logbase=10, asp=1)
 #' r <- colorRampPalette(c("transparent","darkgreen"))(99)
-#' plot_heatmap(z, xord=FALSE, yord=FALSE, yexp=1.7, logbase=10,
-#'              asp=1, col=r)
+#' plot_heatmap(z, xord=FALSE, yexp=1.7, logbase=10, asp=1, col=r)
+#'
+#' @seealso \code{\link[vegan]{tabasco}} for comparison.
 #'
 #' @export
 #' @rdname plot_heatmap
@@ -48,13 +50,18 @@
             '#F26943','#E85A47','#DE4B4B','#D33C4E','#C1284A',
             '#AF1446','#9E0142')
      if(missing(col)) col <- r
-     if(xord) x <- x[,order(-colMeans(x))]
-     if(yord) x <- x[ order(rowMeans(x)),]
+     if(xord) {
+          wx <- vegan::wascores(1:NROW(x), x)
+          x <- x[, rev(order(wx)) ]
+     }
+     if(yord){
+          x <- x[ order(rowMeans(x)),]
+     }
      if(is.numeric(logbase)){
           x <- log(x+min(x[x!=0], na.rm=TRUE), base=logbase)
      }
      op <- par(mfrow=c(1,1), mar=c(0,2.5*xexp,5*yexp,0)+.3,
-               oma=c(0,0,0,0),font=2)
+               oma=c(0,0,0,0), font=2)
      image(1:ncol(x), 1:nrow(x), t(x), col=col, axes=F, ...)
      axis(3, at=1:ncol(x), labels=colnames(x), las=3, tick=F,
           cex.axis=labcex)
