@@ -4,7 +4,8 @@
 \alias{makecwm}
 \title{Community-weighted means (CWM)}
 \usage{
-makecwm(spp, trait, wa = TRUE, stdz = c("minmax", "deviates", "none"), ...)
+makecwm(spp, trait, wa = TRUE, stdz = c("minmax", "deviates", "none"),
+  ...)
 }
 \arguments{
 \item{spp}{array of species data, where rows=SUs, cols=species}

@@ -58,7 +58,7 @@ mx_diversity(spe)
 mx_valid(spe)
 
 # visualize the species abundance matrix
-plot_heatmap(spe, xord=FALSE, yord=FALSE, logbase=10, yexp=1.7,
+plot_heatmap(spe, xord='wa', yord='wa', logbase=10, yexp=1.7,
     asp=1)
 
 # roughly following Whittaker's Fig. 4, top:

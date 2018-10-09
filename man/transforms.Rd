@@ -54,3 +54,4 @@ par(mfrow=c(1,1))
 McCune, B., and J. B. Grace. 2002. Analysis of Ecological
     Communities. MjM Software, Gleneden Beach, Oregon, USA. 304 pp.
 }
+\concept{transformation functions}

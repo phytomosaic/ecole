@@ -4,8 +4,8 @@
 \alias{outlier_multi}
 \title{Multivariate outliers}
 \usage{
-outlier_multi(x, mult = 3, method = "bray", metric = "SD", plot = TRUE,
-  perc = NULL, pick = NULL, ...)
+outlier_multi(x, mult = 3, method = "bray", metric = "SD",
+  plot = TRUE, perc = NULL, pick = NULL, ...)
 }
 \arguments{
 \item{x}{array of species data}
@@ -58,3 +58,4 @@ McCune, B., and J. B. Grace. 2002. Analysis of Ecological
 
 Other outlier functions: \code{\link{outlier_uni}}
 }
+\concept{outlier functions}

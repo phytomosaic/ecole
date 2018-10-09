@@ -41,3 +41,4 @@ davidrroberts.wordpress.com/2015/08/26/r-code-outlier-function/
 
 Other outlier functions: \code{\link{outlier_multi}}
 }
+\concept{outlier functions}
