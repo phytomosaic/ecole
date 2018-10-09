@@ -4,7 +4,7 @@
 \alias{plot_heatmap}
 \title{Heatmap of species abundance matrix}
 \usage{
-plot_heatmap(x, xord = TRUE, yord = FALSE, logbase = FALSE,
+plot_heatmap(x, xord = "none", yord = "none", logbase = FALSE,
   labcex = 0.7, col, xexp = 1, yexp = 1, ...)
 }
 \arguments{
@@ -36,12 +36,17 @@ Plots a heatmap to quickly visualize species abundances/occurences.
 \examples{
 data(smoky)
 z <- smoky$spe
-plot_heatmap(z, yexp=1.7)
-plot_heatmap(z, yexp=1.7, logbase=10)
-plot_heatmap(z, yexp=1.7, logbase=10, asp=1)
-plot_heatmap(z, xord=FALSE, yexp=1.7, logbase=10, asp=1)
-r <- colorRampPalette(c("transparent","darkgreen"))(99)
-plot_heatmap(z, xord=FALSE, yexp=1.7, logbase=10, asp=1, col=r)
+# basic
+plot_heatmap(z)
+
+# pretty
+r <- colorRampPalette(c('transparent','darkgreen'))(99)
+plot_heatmap(z, yexp=1.7, logbase=10, asp=1, col=r)
+
+# various ways to order
+plot_heatmap(z, xord='wa', yord='none')
+plot_heatmap(z, xord='mean', yord='none')
+plot_heatmap(z, xord='wa', yord='wa')
 
 }
 \seealso{

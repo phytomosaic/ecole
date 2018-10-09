@@ -28,18 +28,23 @@
 #' @examples
 #' data(smoky)
 #' z <- smoky$spe
-#' plot_heatmap(z, yexp=1.7)
-#' plot_heatmap(z, yexp=1.7, logbase=10)
-#' plot_heatmap(z, yexp=1.7, logbase=10, asp=1)
-#' plot_heatmap(z, xord=FALSE, yexp=1.7, logbase=10, asp=1)
-#' r <- colorRampPalette(c("transparent","darkgreen"))(99)
-#' plot_heatmap(z, xord=FALSE, yexp=1.7, logbase=10, asp=1, col=r)
+#' # basic
+#' plot_heatmap(z)
+#'
+#' # pretty
+#' r <- colorRampPalette(c('transparent','darkgreen'))(99)
+#' plot_heatmap(z, yexp=1.7, logbase=10, asp=1, col=r)
+#'
+#' # various ways to order
+#' plot_heatmap(z, xord='wa', yord='none')
+#' plot_heatmap(z, xord='mean', yord='none')
+#' plot_heatmap(z, xord='wa', yord='wa')
 #'
 #' @seealso \code{\link[vegan]{tabasco}} for comparison.
 #'
 #' @export
 #' @rdname plot_heatmap
-`plot_heatmap` <- function(x, xord=TRUE, yord=FALSE, logbase=FALSE,
+`plot_heatmap` <- function(x, xord='none', yord='none', logbase=FALSE,
                            labcex=0.7, col, xexp=1, yexp=1, ...){
      r <- c('transparent',
             '#5E4FA2','#4F61AA','#4173B3','#3386BC','#4198B6',
@@ -50,11 +55,21 @@
             '#F26943','#E85A47','#DE4B4B','#D33C4E','#C1284A',
             '#AF1446','#9E0142')
      if(missing(col)) col <- r
-     if(xord) {
+     w <- c('none', 'wa', 'mean')
+     xord <- w[pmatch(xord, w)]
+     yord <- w[pmatch(yord, w)]
+     if (xord == 'wa') {
           wx <- vegan::wascores(1:NROW(x), x)
           x <- x[, rev(order(wx)) ]
      }
-     if(yord){
+     if (xord == 'mean') {
+          x <- x[, rev(order(colMeans(x))) ]
+     }
+     if (yord == 'wa'){
+          wx <- vegan::wascores(1:NCOL(x), t(x))
+          x <- x[ order(wx),]
+     }
+     if (yord == 'mean'){
           x <- x[ order(rowMeans(x)),]
      }
      if(is.numeric(logbase)){
