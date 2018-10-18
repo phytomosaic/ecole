@@ -4,13 +4,22 @@
 \alias{plot_joy}
 \title{Joy plots}
 \usage{
-plot_joy(m, fcol = rgb(0, 0, 0, 0.5), lcol = "black", lwid = 1,
-  xinc = 0, xexp = 0.2, yinc = ncol(m), yexp = 1.2, ypad = 1,
-  scaled = TRUE, pts = NULL, labcex = 0.5, ...)
+plot_joy(m, w = NULL, scaled = TRUE, excl = 0, fcol = "#00000080",
+  lcol = "#000000", lwid = 1, xinc = 0, xexp = 0.2,
+  yinc = ncol(m), yexp = 1.2, ypad = 1, pts = NULL, labcex = 0.5,
+  ...)
 }
 \arguments{
 \item{m}{matrix or data.frame, where each column vector will have
 its own density polygon}
+
+\item{w}{matrix or data.frame, of same dimensions as \code{m}, with
+non-negative weights (in ecology, this might be species
+abundances)}
+
+\item{scaled}{logical, should polygons be scaled to maximum?}
+
+\item{excl}{numeric, value(s) to exclude from density estimate}
 
 \item{fcol}{polygon fill color(s)}
 
@@ -28,13 +37,11 @@ its own density polygon}
 
 \item{ypad}{vertical padding for entire plot}
 
-\item{scaled}{logical, should polygons be scaled to maximum?}
-
 \item{pts}{optional vector of points to plot onto each row}
 
 \item{labcex}{expansion factor for y-axis text labels}
 
-\item{...}{further arguments passed to other methods}
+\item{...}{further arguments passed to plot function}
 }
 \value{
 None, plots to device.
@@ -52,18 +59,27 @@ to vary freely.  Setting \code{yexp = 1}, \code{ypad = 1} and
 overlap.
 }
 \examples{
+# synthetic example
 set.seed(23)
-N <- 99
-x <- rnorm(N,10,1)
-y <- x^1.2 + rnorm(N,0,1)
-z <- x^1.4 + rnorm(N,0,1)
-m <- data.frame(x,y,z)
-# allow overlap
-plot_joy(m, ypad=1.05, labcex=1, xlab='Gradient X')
-# forbid overlap
-plot_joy(m, yexp = 1, ypad=1, labcex=1, xlab='Gradient X')
-# color vector
-plot_joy(m, fcol=c("#FF000080", "#A020F080", "#0000FF80"),
-         yexp = 1, ypad=1, labcex=1, xlab='Gradient X')
+x <- rnorm(99,10,1)
+m <- data.frame(x = x,
+                y = x^1.2 + rnorm(99,0,1),
+                z = x^1.4 + rnorm(99,0,1))
+plot_joy(m, ypad=1.05, labcex=1)        # allow overlap
+plot_joy(m, yexp=1, ypad=1, labcex=1)   # forbid overlap
+plot_joy(m, yexp=1, ypad=1, labcex=1, fcol=4:6) # color vector
+
+# real example
+data(braun)
+abu <- braun$spe              # species abundances
+abu <- abu[colMeans(abu)>1]   # keep only most dominant species
+env <- braun$env$bio1         # environment
+occ <- abu
+occ[occ>0] <- 1               # binary occurrences matrix
+y   <- occ*env                # matrix of env values at occurrences
+lab <- ' Annual Mean Temperature'
+set_par(2)
+plot_joy(y, w=NULL, xlab=lab) # unweighted
+plot_joy(y, w=abu,  xlab=lab) # abundance-weighted
 
 }
