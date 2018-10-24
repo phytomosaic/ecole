@@ -55,6 +55,7 @@
 #'     Experimental Forests and Associated Research Areas. 107 pgs.
 #'     USDA Forest Service, Pacific Northwest Research Station,
 #'     Anchorage, Alaska.
+#'
 #'  FIA [Forest Inventory and Analysis Program]. 2016. Field
 #'     Instructions for the Annual Inventory of Coastal Alaska 2016.
 #'     420 pgs. USDA Forest Service, Pacific Northwest Research

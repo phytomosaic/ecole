@@ -33,6 +33,8 @@
 #'     if \code{ties = TRUE}, then unique values are not enforced, so
 #'     any sample unit in \code{spe1} may be picked repeatedly.
 #'
+#'     Example of first use is in Smith and Gray (2018).
+#'
 #' @examples
 #' # two candidate datasets, full and partial
 #' set.seed(181)
@@ -48,6 +50,12 @@
 #' # default is to break ties
 #' nearestspecies(full, part, ties=FALSE)
 #' nearestspecies(full, part, ties=TRUE)
+#'
+#' @references
+#' Smith, R. J., and A. N. Gray. 2018. Combining potentially
+#'      incompatible community datasets when harmonizing forest
+#'      inventories in subarctic Alaska. Journal of Vegetation
+#'      Science: accepted.
 #'
 #' @export
 #' @rdname nearestspecies

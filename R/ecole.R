@@ -1,5 +1,6 @@
 #' @description School of ecology package for teaching ecological
 #'     tasks, algorithms and model fitting.
+#'
 #' @details This package contains functions and utilities for analyses
 #'     in ecology and biogeography, including:
 #'
@@ -39,7 +40,7 @@
 #'      \code{\link{clean_text}}
 #'
 #'     Datasets:\cr
-#'     \code{\link{smoky}}
+#'     \code{\link{smoky}}, \code{\link{braun}}
 #'
 #'     ...and many others.
 #'
