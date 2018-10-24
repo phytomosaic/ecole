@@ -49,7 +49,7 @@ This package contains functions and utilities for analyses
      \code{\link{clean_text}}
 
     Datasets:\cr
-    \code{\link{smoky}}
+    \code{\link{smoky}}, \code{\link{braun}}
 
     ...and many others.
 }

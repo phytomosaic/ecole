@@ -62,6 +62,7 @@ plot(env$lon, env$lat, col=colvec(s[,1]), main='NMS1 scores')
 \references{
 Braun, E. L. 1950. Deciduous Forests of Eastern North America.
     Hafner, New York.
+
 Ricklefs, R. E. 2018. Emma Lucy Brauns forest plots in eastern
     North America. Ecology 99(2):504.
 }
