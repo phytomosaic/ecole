@@ -7,7 +7,7 @@
 plot_joy(m, w = NULL, scaled = TRUE, excl = 0, fcol = "#00000080",
   lcol = "#000000", lwid = 1, xinc = 0, xexp = 0.2,
   yinc = ncol(m), yexp = 1.2, ypad = 1, pts = NULL, labcex = 0.5,
-  na.rm = TRUE, ...)
+  ...)
 }
 \arguments{
 \item{m}{matrix or data.frame, where each column vector will have
@@ -41,8 +41,6 @@ abundances)}
 
 \item{labcex}{expansion factor for y-axis text labels}
 
-\item{na.rm}{logical, remove NA for density calculation?}
-
 \item{...}{further arguments passed to plot function}
 }
 \value{
@@ -54,11 +52,18 @@ Plot small multiples of many overlapping density distributions,
 }
 \details{
 Plots one density polygon for each column in the data.frame or
-matrix, resulting in potentially overlapping small multiples.
-Polygons can be scaled vertically to their maximum, or else allowed
-to vary freely.  Setting \code{yexp = 1}, \code{ypad = 1} and
-\code{scaled = T} gives scaled polygons that fill each row with no
-overlap.
+    matrix, resulting in potentially overlapping small multiples.
+    Polygons can be scaled vertically to their maximum, or else
+    allowed to vary freely.  Setting \code{yexp = 1},
+    \code{ypad = 1} and \code{scaled = T} gives scaled polygons
+    that fill each row with no overlap.
+
+NA values are omitted prior to density calculations, and other
+    special values may also be omitted by, for example,
+    \code{excl = 0} or \code{excl = c(0,1,2)}.
+
+Weights can be useful for species abundance-weighted density
+    estimation.
 }
 \examples{
 # synthetic example

@@ -35,8 +35,6 @@
 #'
 #' @param labcex expansion factor for y-axis text labels
 #'
-#' @param na.rm  logical, remove NA for density calculation?
-#'
 #' @param ...    further arguments passed to plot function
 #'
 #' @return
@@ -44,11 +42,18 @@
 #'
 #' @details
 #' Plots one density polygon for each column in the data.frame or
-#' matrix, resulting in potentially overlapping small multiples.
-#' Polygons can be scaled vertically to their maximum, or else allowed
-#' to vary freely.  Setting \code{yexp = 1}, \code{ypad = 1} and
-#' \code{scaled = T} gives scaled polygons that fill each row with no
-#' overlap.
+#'     matrix, resulting in potentially overlapping small multiples.
+#'     Polygons can be scaled vertically to their maximum, or else
+#'     allowed to vary freely.  Setting \code{yexp = 1},
+#'     \code{ypad = 1} and \code{scaled = T} gives scaled polygons
+#'     that fill each row with no overlap.
+#'
+#' NA values are omitted prior to density calculations, and other
+#'     special values may also be omitted by, for example,
+#'     \code{excl = 0} or \code{excl = c(0,1,2)}.
+#'
+#' Weights can be useful for species abundance-weighted density
+#'     estimation.
 #'
 #' @examples
 #' # synthetic example
@@ -76,13 +81,12 @@
 #'
 #' @export
 #' @rdname plot_joy
-`plot_joy` <- function (m, w=NULL, scaled = TRUE, excl = 0,
-                        fcol = '#00000080', lcol = '#000000',
-                        lwid = 1, xinc = 0, xexp = 0.2,
-                        yinc = ncol(m), yexp = 1.2, ypad = 1,
-                        pts = NULL, labcex = 0.5, na.rm=TRUE, ...) {
+`plot_joy` <- function (
+     m, w = NULL, scaled = TRUE, excl = 0, fcol = '#00000080',
+     lcol = '#000000', lwid = 1, xinc = 0, xexp = 0.2, yinc = ncol(m),
+     yexp = 1.2, ypad = 1, pts = NULL, labcex = 0.5, ...) {
      hasw <- !is.null(w)
-     if (hasw){
+     if (hasw) {
           w <- as.matrix(w)
           if (!identical(dim(m), dim(w))) {
                stop('weights and data of unequal dimensions')
@@ -91,7 +95,7 @@
      m    <- as.matrix(m)
      nm   <- dimnames(m)[[2]]
      nspp <- dim(m)[2]
-     xrng <- range(m[!(m %in% excl)], na.rm = na.rm)
+     xrng <- range(m[!(m %in% excl)], na.rm = TRUE)
      xmin <- xrng[1] - (diff(xrng) * xexp)
      xmax <- xrng[2] + (diff(xrng) * xexp)
      ht   <- nspp * ypad
@@ -101,20 +105,21 @@
           xaxs = 'i', yaxs = 'i', bty = 'l', yaxt = 'n', ylab = '',
           ...)
      for (j in nspp:1) {
-          x  <- m[, j]
-          if (hasw){
+          x <- m[, j]
+          if (hasw) {
                wx <- w[, j][!(x %in% excl)]
                wx <- wx/sum(wx)
           } else {
                wx <- NULL
           }
-          x  <-  x[!(x %in% excl)]
+          x <- x[!(x %in% excl)]
+          x <- x[!is.na(x)]
           if (length(unique(x)) == 1) {
                fuzz <- diff(xrng) * 0.01
-               x  <- c(x - fuzz, x, x, x, x + fuzz)
+               x <- c(x - fuzz, x, x, x, x + fuzz)
                wx <- NULL
           }
-          d <- stats::density(x, weights = wx, na.rm=na.rm)
+          d <- stats::density(x, weights = wx)
           if (scaled)
                d$y <- d$y/(max(d$y))
           gx <- (j - 1) * (max(x) - min(x)) * xinc
@@ -124,9 +129,9 @@
           lines(d$x + gx, yexp * d$y + gy, col = lcol, lwd = lwid)
           lines(c(xmin, xmax), rep(zero, 2))
           if (!is.null(pts)) {
-               points(pts[j], zero, pch = 16, col = 'black', cex=0.5)
+               points(pts[j], zero, pch = 16, col = 'black', cex = 0.5)
           }
           mtext(nm[j], side = 2, line = 0.5, outer = F, at = zero,
-                padj = 0, cex = labcex, las=1)
+                padj = 0, cex = labcex, las = 1)
      }
 }
