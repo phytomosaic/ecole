@@ -7,7 +7,7 @@
 plot_joy(m, w = NULL, scaled = TRUE, excl = 0, fcol = "#00000080",
   lcol = "#000000", lwid = 1, xinc = 0, xexp = 0.2,
   yinc = ncol(m), yexp = 1.2, ypad = 1, pts = NULL, labcex = 0.5,
-  ...)
+  na.rm = TRUE, ...)
 }
 \arguments{
 \item{m}{matrix or data.frame, where each column vector will have
@@ -40,6 +40,8 @@ abundances)}
 \item{pts}{optional vector of points to plot onto each row}
 
 \item{labcex}{expansion factor for y-axis text labels}
+
+\item{na.rm}{logical, remove NA for density calculation?}
 
 \item{...}{further arguments passed to plot function}
 }

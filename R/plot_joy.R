@@ -35,6 +35,8 @@
 #'
 #' @param labcex expansion factor for y-axis text labels
 #'
+#' @param na.rm  logical, remove NA for density calculation?
+#'
 #' @param ...    further arguments passed to plot function
 #'
 #' @return
@@ -78,7 +80,7 @@
                         fcol = '#00000080', lcol = '#000000',
                         lwid = 1, xinc = 0, xexp = 0.2,
                         yinc = ncol(m), yexp = 1.2, ypad = 1,
-                        pts = NULL, labcex = 0.5, ...) {
+                        pts = NULL, labcex = 0.5, na.rm=TRUE, ...) {
      hasw <- !is.null(w)
      if (hasw){
           w <- as.matrix(w)
@@ -89,7 +91,7 @@
      m    <- as.matrix(m)
      nm   <- dimnames(m)[[2]]
      nspp <- dim(m)[2]
-     xrng <- range(m[!(m %in% excl)], na.rm = T)
+     xrng <- range(m[!(m %in% excl)], na.rm = na.rm)
      xmin <- xrng[1] - (diff(xrng) * xexp)
      xmax <- xrng[2] + (diff(xrng) * xexp)
      ht   <- nspp * ypad
@@ -112,7 +114,7 @@
                x  <- c(x - fuzz, x, x, x, x + fuzz)
                wx <- NULL
           }
-          d <- stats::density(x, weights = wx)
+          d <- stats::density(x, weights = wx, na.rm=na.rm)
           if (scaled)
                d$y <- d$y/(max(d$y))
           gx <- (j - 1) * (max(x) - min(x)) * xinc
