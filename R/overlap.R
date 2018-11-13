@@ -9,7 +9,7 @@
 #'     length than \code{a}
 #'
 #' @param buff  multiplier for buffer at tail ends, expressed as
-#'     proportion of total data range; default is 0.1
+#'     proportion of total data range; default is 0.05
 #'
 #' @param ... further arguments passed to additional methods
 #'
@@ -32,31 +32,33 @@
 #' \url{https://stats.stackexchange.com/questions/97596/}
 #'
 #' @export
-`overlap` <- function(a, b, buff=0.1, ...){
-
-     if(buff>0.1){
-          warning('Buffer is >10% of data range, suggest decreasing')
+`overlap` <- function (a, b, buff = 0.05, na.rm=TRUE, ...) {
+     if (buff > 0.05) {
+          warning('buffer is >5% of data range, suggest decreasing')
      }
-
      # define limits of a common grid, w buffer so tails aren't cut
-     bf <- diff(range(c(a, b), ...)) * buff
-     lower <- min(c(a, b), ...) - bf
-     upper <- max(c(a, b), ...) + bf
-
-     # estimate kernel densities
-     da <- density(a, from=lower, to=upper, ...)
-     db <- density(b, from=lower, to=upper, ...)
-     d  <- data.frame(x=da$x, a=da$y, b=db$y)
-
-     # calculate intersection of densities
+     fuzz <- xrng * 0.005
+     bf   <- xrng * buff
+     lower <- min(c(a, b), na.rm=na.rm) - bf
+     upper <- max(c(a, b), na.rm=na.rm) + bf
+     # augment singletons that would prevent density estimation
+     if (length(unique(na.omit(a))) == 1) {
+          a <- c(a - fuzz, a, a + fuzz)
+     }
+     if (length(unique(na.omit(b))) == 1) {
+          b <- c(b - fuzz, b, b + fuzz)
+     }
+     # estimate kernel densities A and B
+     da  <- density(a, from = lower, to = upper, na.rm=na.rm, ...)
+     db  <- density(b, from = lower, to = upper, na.rm=na.rm, ...)
+     d   <- data.frame(x = da$x, a = da$y, b = db$y)
+     # estimate intersection of A,B
      d$w <- pmin(d$a, d$b)
-
      # integrate areas under curves
-     total    <- sfsmisc::integrate.xy(d$x, d$a) +
-                                   sfsmisc::integrate.xy(d$x, d$b)
-     intersxn <- sfsmisc::integrate.xy(d$x, d$w)
-
+     ab  <- sfsmisc::integrate.xy(d$x, d$a) +
+          sfsmisc::integrate.xy(d$x, d$b)
+     w   <- sfsmisc::integrate.xy(d$x, d$w)
      # calc overlap coefficient (is effectively Sorenson similarity)
-     ovlp  <- 2 * intersxn / total
-     return(ovlp)
+     out <- 2 * w / ab
+     return(out)
 }

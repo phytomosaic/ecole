@@ -4,7 +4,7 @@
 \alias{overlap}
 \title{Overlap of two probability density functions}
 \usage{
-overlap(a, b, buff = 0.1, ...)
+overlap(a, b, buff = 0.05, na.rm = TRUE, ...)
 }
 \arguments{
 \item{a}{first vector of values}
@@ -13,7 +13,7 @@ overlap(a, b, buff = 0.1, ...)
 length than \code{a}}
 
 \item{buff}{multiplier for buffer at tail ends, expressed as
-proportion of total data range; default is 0.1}
+proportion of total data range; default is 0.05}
 
 \item{...}{further arguments passed to additional methods}
 }
