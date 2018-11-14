@@ -32,33 +32,28 @@
 #' \url{https://stats.stackexchange.com/questions/97596/}
 #'
 #' @export
-`overlap` <- function (a, b, buff = 0.05, na.rm=TRUE, ...) {
+`overlap` <- function (a, b, buff = 0.05, na.rm = TRUE, ...) {
      if (buff > 0.05) {
           warning('buffer is >5% of data range, suggest decreasing')
      }
-     # define limits of a common grid, w buffer so tails aren't cut
-     fuzz <- xrng * 0.005
-     bf   <- xrng * buff
-     lower <- min(c(a, b), na.rm=na.rm) - bf
-     upper <- max(c(a, b), na.rm=na.rm) + bf
-     # augment singletons that would prevent density estimation
+     rng <- diff(range(c(a, b), na.rm=na.rm))
+     fuzz <- rng * 0.005
+     bf   <- rng * buff
+     lwr  <- min(c(a, b), na.rm = na.rm) - bf
+     upr  <- max(c(a, b), na.rm = na.rm) + bf
      if (length(unique(na.omit(a))) == 1) {
           a <- c(a - fuzz, a, a + fuzz)
      }
      if (length(unique(na.omit(b))) == 1) {
           b <- c(b - fuzz, b, b + fuzz)
      }
-     # estimate kernel densities A and B
-     da  <- density(a, from = lower, to = upper, na.rm=na.rm, ...)
-     db  <- density(b, from = lower, to = upper, na.rm=na.rm, ...)
-     d   <- data.frame(x = da$x, a = da$y, b = db$y)
-     # estimate intersection of A,B
+     da <- density(a, from = lwr, to = upr, na.rm = na.rm, ...)
+     db <- density(b, from = lwr, to = upr, na.rm = na.rm, ...)
+     d  <- data.frame(x = da$x, a = da$y, b = db$y)
      d$w <- pmin(d$a, d$b)
-     # integrate areas under curves
-     ab  <- sfsmisc::integrate.xy(d$x, d$a) +
-          sfsmisc::integrate.xy(d$x, d$b)
-     w   <- sfsmisc::integrate.xy(d$x, d$w)
-     # calc overlap coefficient (is effectively Sorenson similarity)
-     out <- 2 * w / ab
+     ab <- sfsmisc::integrate.xy(d$x, d$a) + sfsmisc::integrate.xy(d$x,
+                                                                   d$b)
+     w <- sfsmisc::integrate.xy(d$x, d$w)
+     out <- 2 * w/ab
      return(out)
 }
