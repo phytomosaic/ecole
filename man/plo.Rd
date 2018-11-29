@@ -13,7 +13,10 @@ plo(x, y = NULL, col = "#00000020", cex = 0.5, pch = 16, ...)
 
 \item{cex}{numeric vector for scaling point size.}
 
-\item{...}{further arguments passed to \code{graphics::plot.default}}
+\item{pch}{a vector of plotting characters or symbols: see
+\code{\link[graphics]{points}}.}
+
+\item{...}{further arguments passed to \code{\link[graphics]{plot}}.}
 }
 \value{
 A plot object.

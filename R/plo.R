@@ -14,10 +14,11 @@
 #' numeric vector for scaling point size.
 #'
 #' @param pch
-#' a vector of plotting characters or symbols: see \code{points.
+#' a vector of plotting characters or symbols: see
+#'     \code{\link[graphics]{points}}.
 #'
 #' @param ...
-#' further arguments passed to \code{graphics::plot.default}
+#' further arguments passed to \code{\link[graphics]{plot}}.
 #'
 #' @return
 #' A plot object.
