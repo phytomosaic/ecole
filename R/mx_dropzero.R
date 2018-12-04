@@ -7,6 +7,9 @@
 #'
 #' @param method either one of \code{'col'} or \code{'row'}
 #'
+#' @param silent logical, do not report number of rows or columns
+#'     dropped?
+#'
 #' @param ... further arguments passed to other methods
 #'
 #' @return
@@ -32,7 +35,7 @@
 #' @export
 #' @rdname mx_dropzero
 ### drop zero-sum rows or zero-sum columns in matrix data
-`mx_dropzero` <- function(x, method='col', ...){
+`mx_dropzero` <- function(x, method='col', silent=TRUE, ...){
      method <- match.arg(method, c('col','row'))
      `f` <- function(x) sum(x, na.rm=TRUE)
      switch(method,
@@ -46,6 +49,8 @@
             }
      )
      delta <- (dim(x) - dim(out))[[margin]]
-     cat(delta, paste0(method,'s removed\n'))
+     if (!silent){
+          message(delta, paste0(method,'s removed'))
+     }
      return(out)
 }

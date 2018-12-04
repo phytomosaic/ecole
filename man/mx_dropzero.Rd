@@ -4,12 +4,15 @@
 \alias{mx_dropzero}
 \title{Drop zero-sum rows or columns}
 \usage{
-mx_dropzero(x, method = "col", ...)
+mx_dropzero(x, method = "col", silent = TRUE, ...)
 }
 \arguments{
 \item{x}{array of species data, where rows = SUs and cols = species}
 
 \item{method}{either one of \code{'col'} or \code{'row'}}
+
+\item{silent}{logical, do not report number of rows or columns
+dropped?}
 
 \item{...}{further arguments passed to other methods}
 }
