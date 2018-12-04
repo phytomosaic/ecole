@@ -54,6 +54,9 @@
 #' @export
 #' @rdname describe
 `describe` <- function(x, na.rm=TRUE, digits=2, type=1, ...) {
+     if (!is.numeric(x)){
+          return(NULL)
+     }
      m   <- mean(x, na.rm=na.rm)
      s   <- stats::sd(x, na.rm=na.rm) # unbiased: sample sd divisor is n-1
      v   <- stats::var(x, na.rm=na.rm)
