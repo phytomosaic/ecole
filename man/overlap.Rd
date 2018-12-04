@@ -15,6 +15,9 @@ length than \code{a}}
 \item{buff}{multiplier for buffer at tail ends, expressed as
 proportion of total data range; default is 0.05}
 
+\item{na.rm}{logical, remove NA values? Default is
+\code{na.rm = TRUE}.}
+
 \item{...}{further arguments passed to additional methods}
 }
 \value{

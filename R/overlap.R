@@ -8,6 +8,9 @@
 #' @param b  second vector of values, potentially of different
 #'     length than \code{a}
 #'
+#' @param na.rm logical, remove NA values? Default is
+#'     \code{na.rm = TRUE}.
+#'
 #' @param buff  multiplier for buffer at tail ends, expressed as
 #'     proportion of total data range; default is 0.05
 #'
