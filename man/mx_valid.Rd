@@ -4,10 +4,14 @@
 \alias{mx_valid}
 \title{Test matrix validity}
 \usage{
-mx_valid(x, ...)
+mx_valid(x, checkconnect = FALSE, ...)
 }
 \arguments{
 \item{x}{array of species data, where rows = SUs and cols = species}
+
+\item{checkconnect}{logical, check whether data are connected,
+using \code{\link[vegan]{distconnected}}?  Default \code{FALSE}
+saves time and memory.}
 
 \item{...}{further arguments passed to other methods}
 }
@@ -21,8 +25,10 @@ Affirm whether a species abundance matrix is valid (no NAs, no
 \details{
 Often useful before further analysis such as calculating certain
 dissimilarity measures or during rejection sampling of simulated
-data.  Data are strictly 'connected' when all sample units share
-the same species pool (no disconnected species pools).
+data.  Data are strictly `connected` when all sample units share
+the same species pool (no disconnected species pools), checked
+using \code{\link[vegan]{distconnected}} and Bray-Curtis
+dissimilarities.
 }
 \examples{
 # species abundance data
