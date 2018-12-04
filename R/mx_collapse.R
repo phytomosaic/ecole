@@ -46,8 +46,8 @@
 #' @rdname mx_collapse
 `mx_collapse` <- function(x, c1, c2, method='max', ...){
      if(!is.character(c(c1, c2))) stop('check column names')
-     if( !all( c(c1, c2) %in% dimnames(x)[[2]] )  ){
-          warning('\nnames not present, returning original matrix\n')
+     if( !all(c(c1, c2) %in% dimnames(x)[[2]])){
+          warning('names not present, returning original matrix\n')
           return(x)
      }
      method <- match.arg(method, c('max','min','mean'))
