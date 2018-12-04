@@ -77,7 +77,8 @@
      }
      op <- par(mfrow=c(1,1), mar=c(0,2.5*xexp,5*yexp,0)+.3,
                oma=c(0,0,0,0), font=2)
-     image(1:ncol(x), 1:nrow(x), t(x), col=col, axes=F, ...)
+     image(1:ncol(x), 1:nrow(x), t(x), col=col, axes=F, xlab='',
+           ylab='', ...)
      axis(3, at=1:ncol(x), labels=colnames(x), las=3, tick=F,
           cex.axis=labcex)
      axis(2, at=1:nrow(x), labels=rownames(x), las=1,
