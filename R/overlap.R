@@ -3,33 +3,33 @@
 #' Calculate overlap of two probability density functions as their
 #'     intersection.  Can compare two 'niche' distributions.
 #'
-#' @param a  first vector of values
+#' @param a  first vector of values.
 #'
 #' @param b  second vector of values, potentially of different
-#'     length than \code{a}
+#'     length than \code{a}.
+#'
+#' @param buff  multiplier for buffer at tail ends, expressed as
+#'     proportion of total data range; default is 0.05.
 #'
 #' @param na.rm logical, remove NA values? Default is
 #'     \code{na.rm = TRUE}.
 #'
-#' @param buff  multiplier for buffer at tail ends, expressed as
-#'     proportion of total data range; default is 0.05
+#' @param ... further arguments passed to additional methods.
 #'
-#' @param ... further arguments passed to additional methods
-#'
-#' @return Numeric value for coefficient of overlap
+#' @return Numeric value for coefficient of overlap.
 #'
 #' @details Overlap is calculated as two times the area under the
-#'     intersection, divided by total area under both curves
+#'     intersection, divided by total area under both curves.
 #'
 #' @examples
 #' set.seed(122)
-#' N <- 999
+#' N  <- 999
 #' x1 <- rnorm(N)
 #' x2 <- rnorm(N+99, 2) # lengths allowed to differ
 #' plot(density(x1, from=-5, to=5), xlab='x', main='', las=1, bty='l')
 #' lines(density(x2, from=-5, to=5), lty=2)
 #' overlap(x1,x2)
-#' text(1, .1, round(overlap(x1,x2),2))
+#' text(1, 0.1, round(overlap(x1,x2),2))
 #'
 #' @seealso
 #' \url{https://stats.stackexchange.com/questions/97596/}
@@ -39,7 +39,7 @@
      if (buff > 0.05) {
           warning('buffer is >5% of data range, suggest decreasing')
      }
-     rng <- diff(range(c(a, b), na.rm=na.rm))
+     rng  <- diff(range(c(a, b), na.rm=na.rm))
      fuzz <- rng * 0.005
      bf   <- rng * buff
      lwr  <- min(c(a, b), na.rm = na.rm) - bf
