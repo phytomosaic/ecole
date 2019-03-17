@@ -1,17 +1,14 @@
 Package: ecole
 Title: ecole: School of Ecology Package
-Version: 0.7-2018
-Authors@R: person("Robert", "Smith", 
-    email = "smithr2@oregonstate.edu", role = c("aut", "cre"))
-Description: School of ecology package for teaching ecological tasks, 
-    algorithms and model fitting.
+Version: 0.7-2019
+Authors@R: person("Robert", "Smith", email = "smithr2@oregonstate.edu", role = c("aut", "cre"))
+Description: School of ecology package for teaching ecological tasks, algorithms and model fitting.
 Depends: 
-      R (>= 3.5.0),
-      vegan (>= 2.5-1)
+      R (>= 3.5.0)
 License: CC BY-NC-ND 4.0
 Encoding: UTF-8
 LazyData: true
-Date: 2018-10-24
+Date: 2019-03-17
 Author: 'Robert J Smith' <smithr2@oregonstate.edu>
 Creator: 'Robert J Smith' <smithr2@oregonstate.edu>
 Maintainer: 'Robert J Smith' <smithr2@oregonstate.edu>
@@ -20,9 +17,10 @@ Imports:
       graphics,
       e1071,
       sfsmisc,
+      vegan (>= 2.5-1),
       viridis,
       viridisLite
-Citation: Smith, Robert J. 2018. ecole: School of Ecology Package.
+Citation: Smith, Robert J. 2019. ecole: School of Ecology Package.
     Unpublished R package in development.
 URL: https://github.com/phytomosaic/ecole
 RoxygenNote: 6.1.0
