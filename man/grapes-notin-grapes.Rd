@@ -21,7 +21,7 @@ Returns a logical vector indicating if there is NOT a match for its
      left operand.
 }
 \details{
-Inverse of the commonly used \code{\link[base]{\%in\%}}.
+Inverse of the commonly used \code{\link[base]{match}}.
 }
 \examples{
 a <- 1:5
@@ -30,5 +30,5 @@ a \%notin\% b
 
 }
 \seealso{
-\code{\link[base]{\%in\%}}.
+\code{\link[base]{match}}.
 }

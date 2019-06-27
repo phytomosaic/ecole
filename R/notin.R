@@ -16,14 +16,14 @@
 #'      values are TRUE or FALSE and never NA.
 #'
 #' @details
-#' Inverse of the commonly used \code{\link[base]{\%in\%}}.
+#' Inverse of the commonly used \code{\link[base]{match}}.
 #'
 #' @examples
 #' a <- 1:5
 #' b <- 4:9
 #' a %notin% b
 #'
-#' @seealso \code{\link[base]{\%in\%}}.
+#' @seealso \code{\link[base]{match}}.
 #'
 #' @export
 `%notin%` <- function(x, y) { !(x %in% y) }
