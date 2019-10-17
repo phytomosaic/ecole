@@ -1,8 +1,8 @@
-#' @title Plotting locally-weighted regression line
+#' @title Plotting locally-weighted or linear regression line
 #'
 #' @description
-#' Fit a polynomial surface determined by a numerical predictor using
-#'     local fitting.
+#' Fit a linear, or else locally-fitted polynomial surface determined
+#'    by a numerical predictor.
 #'
 #' @param x,y
 #' vectors of x- and y-axis values.
@@ -27,6 +27,9 @@
 #' character string, determines type of box drawn around plot: see
 #'     \code{\link[graphics]{par}}.
 #'
+#' @param xlab,ylab
+#' character strings for axis labels.
+#'
 #' @param ...
 #' further arguments passed to functions.
 #'
@@ -48,16 +51,40 @@
 #'
 #' @seealso \code{\link[stats]{loess}}
 #'
+#' @aliases plot_loess
+#' @aliases plot_lm
+#'
 #' @rdname plot_loess
 #' @export
 `plot_loess` <- function(x, y, col='#00000040', lcol='#FF0000BF',
-                         cex=0.8, pch=16, las=1, bty='L', ...){
-     ow <- getOption('warn')
-     options(warn = -1)
-     plot(x=x, y=y, col=col, pch=pch, las=las, bty=bty, cex=cex, ...)
-     f    <- stats::loess(y ~ x, ...)
-     fhat <- predict(f)
-     o    <- order(x)
-     lines(x[o], fhat[o], col=lcol, lwd=2)
-     options(warn = ow)
+                         cex=0.8, pch=16, las=1, bty='L',
+                         xlab = NULL, ylab = NULL, ...) {
+        ow <- getOption('warn')
+        options(warn = -1)
+        if(is.null(xlab)) xlab <- deparse(substitute(x))
+        if(is.null(ylab)) ylab <- deparse(substitute(y))
+        plot(x = x, y = y, col = col, pch = pch, las = las, bty = bty,
+             cex = cex, xlab = xlab, ylab = ylab, ...)
+        f    <- stats::loess(y ~ x, ...)
+        fhat <- predict(f)
+        o    <- order(x)
+        lines(x[o], fhat[o], col=lcol, lwd=2)
+        options(warn = ow)
+}
+#' @rdname plot_loess
+#' @export
+`plot_lm` <- function (x, y, col = '#00000040', lcol = '#FF0000BF',
+                       cex = 0.8, pch = 16, las = 1, bty = 'L',
+                       xlab = NULL, ylab = NULL, ...) {
+        ow <- getOption('warn')
+        options(warn = -1)
+        if(is.null(xlab)) xlab <- deparse(substitute(x))
+        if(is.null(ylab)) ylab <- deparse(substitute(y))
+        plot(x = x, y = y, col = col, pch = pch, las = las, bty = bty,
+             cex = cex, xlab = xlab, ylab = ylab, ...)
+        f    <- stats::lm(y ~ x, ...)
+        fhat <- predict(f)
+        o    <- order(x)
+        lines(x[o], fhat[o], col = lcol, lwd = 2)
+        options(warn = ow)
 }

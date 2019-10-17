@@ -2,10 +2,14 @@
 % Please edit documentation in R/plot_loess.R
 \name{plot_loess}
 \alias{plot_loess}
-\title{Plotting locally-weighted regression line}
+\alias{plot_lm}
+\title{Plotting locally-weighted or linear regression line}
 \usage{
 plot_loess(x, y, col = "#00000040", lcol = "#FF0000BF", cex = 0.8,
-  pch = 16, las = 1, bty = "L", ...)
+  pch = 16, las = 1, bty = "L", xlab = NULL, ylab = NULL, ...)
+
+plot_lm(x, y, col = "#00000040", lcol = "#FF0000BF", cex = 0.8,
+  pch = 16, las = 1, bty = "L", xlab = NULL, ylab = NULL, ...)
 }
 \arguments{
 \item{x, y}{vectors of x- and y-axis values.}
@@ -24,14 +28,16 @@ plot_loess(x, y, col = "#00000040", lcol = "#FF0000BF", cex = 0.8,
 \item{bty}{character string, determines type of box drawn around plot: see
 \code{\link[graphics]{par}}.}
 
+\item{xlab, ylab}{character strings for axis labels.}
+
 \item{...}{further arguments passed to functions.}
 }
 \value{
 A plot object.
 }
 \description{
-Fit a polynomial surface determined by a numerical predictor using
-    local fitting.
+Fit a linear, or else locally-fitted polynomial surface determined
+   by a numerical predictor.
 }
 \details{
 Useful default settings for a scatterplot with locally-weighted
