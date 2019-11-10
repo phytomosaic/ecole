@@ -4,7 +4,7 @@
 \alias{plo}
 \title{Simple scatterplot with useful defaults}
 \usage{
-plo(x, y = NULL, col = "#00000020", cex = 0.5, pch = 16, ...)
+plo(x, y = NULL, col = NULL, cex = 0.7, pch = 16, ...)
 }
 \arguments{
 \item{x, y}{vectors of x- and y-axis values.}
@@ -32,8 +32,11 @@ Useful default settings for a simple scatterplot, closed circles
 }
 \examples{
 set.seed(23)
-x <- runif(9999)
-y <- rnorm(9999)
-plo(x, y, las=2, bty='l')
+n <- 50
+plo(runif(n), rnorm(n))
+n <- 500
+plo(runif(n), rnorm(n))
+n <- 5000
+plo(runif(n), rnorm(n))
 
 }

@@ -30,12 +30,23 @@
 #'
 #' @examples
 #' set.seed(23)
-#' x <- runif(9999)
-#' y <- rnorm(9999)
-#' plo(x, y, las=2, bty='l')
+#' n <- 50
+#' plo(runif(n), rnorm(n))
+#' n <- 500
+#' plo(runif(n), rnorm(n))
+#' n <- 5000
+#' plo(runif(n), rnorm(n))
 #'
 #' @rdname plo
 #' @export
-`plo` <- function(x, y=NULL, col='#00000020', cex=0.5, pch=16, ...){
-     plot(x=x, y=y, col=col, cex=cex, pch=pch, ...)
+`plo` <- function(x, y=NULL, col=NULL, cex=0.7, pch=16, ...){
+     n <- NROW(as.matrix(x))
+     `num2hex` <- function(a) {
+          hex <- unlist(strsplit("0123456789ABCDEF",split=""))
+          return(paste(hex[(a-a%%16)/16+1],hex[a%%16+1],sep=""))
+     }
+     alfa <- if (n > 5000) 0.10 else (4-log10(n)) / 4
+     if (is.null(col)) col <- paste0('#000000', num2hex(alfa * 255))
+     plot(x=x, y=y, col=col, cex=cex, pch=pch, bty='L', las=1,
+          mgp=c(2.3,0.7,0), tcl=-0.20, ...)
 }
