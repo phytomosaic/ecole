@@ -4,6 +4,12 @@
 #'
 #' @param x  vector or array of values to transform
 #'
+#' @param from,to standardizes from low to high values; defaults from
+#'      0 to 1.
+#'
+#' @param na.rm logical. Should missing values (including NaN) be
+#'      removed?
+#'
 #' @param ... further arguments passed to other methods
 #'
 #' @return
@@ -70,11 +76,9 @@
 }
 #' @export
 #' @rdname transforms
-`standardize` <- function(x, ...){
-     wasVector <- is.vector(x)     # takes and returns a vector
-     x <- as.matrix(x)             # convert to matrix
-     x <- (x - min(x, ...)) / (max(x, ...) - min(x, ...))# standardize
-     if (wasVector)                # return a vector
-          x <- as.vector(x)
-     x
+`standardize` <- function (x, from = 0, to = 1, na.rm = TRUE, ...) {
+        r <- range(x, na.rm = na.rm)
+        x <- (x - r[1]) / diff(r)
+        x <- x * diff(c(from, to)) + from
+        x
 }

@@ -10,12 +10,18 @@ asin_sqrt(x, ...)
 
 genlogtrans(x, ...)
 
-standardize(x, ...)
+standardize(x, from = 0, to = 1, na.rm = TRUE, ...)
 }
 \arguments{
 \item{x}{vector or array of values to transform}
 
 \item{...}{further arguments passed to other methods}
+
+\item{from, to}{standardizes from low to high values; defaults from
+0 to 1.}
+
+\item{na.rm}{logical. Should missing values (including NaN) be
+removed?}
 }
 \value{
 Values on the modified scale.
