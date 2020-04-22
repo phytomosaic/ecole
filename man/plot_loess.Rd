@@ -5,11 +5,33 @@
 \alias{plot_lm}
 \title{Plotting locally-weighted or linear regression line}
 \usage{
-plot_loess(x, y, col = "#00000040", lcol = "#FF0000BF", cex = 0.8,
-  pch = 16, las = 1, bty = "L", xlab = NULL, ylab = NULL, ...)
+plot_loess(
+  x,
+  y,
+  col = "#00000040",
+  lcol = "#FF0000BF",
+  cex = 0.8,
+  pch = 16,
+  las = 1,
+  bty = "L",
+  xlab = NULL,
+  ylab = NULL,
+  ...
+)
 
-plot_lm(x, y, col = "#00000040", lcol = "#FF0000BF", cex = 0.8,
-  pch = 16, las = 1, bty = "L", xlab = NULL, ylab = NULL, ...)
+plot_lm(
+  x,
+  y,
+  col = "#00000040",
+  lcol = "#FF0000BF",
+  cex = 0.8,
+  pch = 16,
+  las = 1,
+  bty = "L",
+  xlab = NULL,
+  ylab = NULL,
+  ...
+)
 }
 \arguments{
 \item{x, y}{vectors of x- and y-axis values.}

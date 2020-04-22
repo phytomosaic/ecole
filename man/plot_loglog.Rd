@@ -4,8 +4,18 @@
 \alias{plot_loglog}
 \title{Log-log scatterplot}
 \usage{
-plot_loglog(x, y, xlim = c(1, 1000), ylim = c(1, 1000), xlog = TRUE,
-  ylog = TRUE, xbase = 10, ybase = 10, grdcol = "#00000020", ...)
+plot_loglog(
+  x,
+  y,
+  xlim = c(1, 1000),
+  ylim = c(1, 1000),
+  xlog = TRUE,
+  ylog = TRUE,
+  xbase = 10,
+  ybase = 10,
+  grdcol = "#00000020",
+  ...
+)
 }
 \arguments{
 \item{x, y}{vectors of x- and y-axis values}

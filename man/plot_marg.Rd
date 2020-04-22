@@ -4,8 +4,7 @@
 \alias{plot_marg}
 \title{Scatterplot with marginals}
 \usage{
-plot_marg(d, x, y, over, xlab, ylab, ovlab, marg = "dens", alpha = 1,
-  ...)
+plot_marg(d, x, y, over, xlab, ylab, ovlab, marg = "dens", alpha = 1, ...)
 }
 \arguments{
 \item{d}{array of data, where rows = SUs and cols = variables of interest}

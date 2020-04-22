@@ -4,10 +4,23 @@
 \alias{plot_joy}
 \title{Joy plots}
 \usage{
-plot_joy(m, w = NULL, scaled = TRUE, excl = 0, fcol = "#00000080",
-  lcol = "#000000", lwid = 1, xinc = 0, xexp = 0.2,
-  yinc = ncol(m), yexp = 1.2, ypad = 1, pts = NULL, labcex = 0.5,
-  ...)
+plot_joy(
+  m,
+  w = NULL,
+  scaled = TRUE,
+  excl = 0,
+  fcol = "#00000080",
+  lcol = "#000000",
+  lwid = 1,
+  xinc = 0,
+  xexp = 0.2,
+  yinc = ncol(m),
+  yexp = 1.2,
+  ypad = 1,
+  pts = NULL,
+  labcex = 0.5,
+  ...
+)
 }
 \arguments{
 \item{m}{matrix or data.frame, where each column vector will have

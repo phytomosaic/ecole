@@ -4,8 +4,15 @@
 \alias{prep_climatena}
 \title{Prepare data for ClimateNA}
 \usage{
-prep_climatena(ID1, ID2 = NA, lat, long, el = NA,
-  file = "./to_climatena.csv", ...)
+prep_climatena(
+  ID1,
+  ID2 = NA,
+  lat,
+  long,
+  el = NA,
+  file = "./to_climatena.csv",
+  ...
+)
 }
 \arguments{
 \item{ID1}{vector of primary identifier values (required)}

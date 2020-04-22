@@ -5,11 +5,9 @@
 \alias{surfcol}
 \title{Color utilities}
 \usage{
-colvec(x, n = 99, alpha = 0.6, begin = 0.2, end = 0.9, dir = 1,
-  pal, ...)
+colvec(x, n = 99, alpha = 0.6, begin = 0.2, end = 0.9, dir = 1, pal, ...)
 
-surfcol(x, ngrid, alpha = 0.6, begin = 0.2, end = 0.9, dir = 1,
-  pal, ...)
+surfcol(x, ngrid, alpha = 0.6, begin = 0.2, end = 0.9, dir = 1, pal, ...)
 }
 \arguments{
 \item{x}{vector of values to evaluate}

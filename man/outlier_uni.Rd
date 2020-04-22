@@ -39,6 +39,7 @@ davidrroberts.wordpress.com/2015/08/26/r-code-outlier-function/
 \seealso{
 \code{\link{outlier_multi}} for multivariate analog.
 
-Other outlier functions: \code{\link{outlier_multi}}
+Other outlier functions: 
+\code{\link{outlier_multi}()}
 }
 \concept{outlier functions}

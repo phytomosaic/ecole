@@ -4,9 +4,11 @@
 \name{smoky}
 \alias{smoky}
 \title{Whittaker's Great Smoky Mountains Vegetation Data (USA)}
-\format{A list of 2 data.frames:\cr
+\format{
+A list of 2 data.frames:\cr
     - \code{spe} 12 observations of 41 woody plant species,\cr
-    - \code{env} 12 observations of 7 environmental variables.}
+    - \code{env} 12 observations of 7 environmental variables.
+}
 \source{
 Table 3 in Whittaker (1956).
 }

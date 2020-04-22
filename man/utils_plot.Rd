@@ -16,7 +16,7 @@ add_text(x, y, labels, bold = FALSE, ...)
 \item{panels}{number of panels (1,2,4) to plot.}
 
 \item{pty}{a character specifying the type of plot region to be
-used; "s" generates a square plotting region and "m" generates
+used; 's' generates a square plotting region and 'm' generates
 the maximal plotting region.}
 
 \item{...}{further arguments passed to other methods (i.e.,
@@ -37,7 +37,7 @@ the maximal plotting region.}
     `add_text` adds text to the plotting area.
 }
 \description{
-Set "neat" graphical parameters suitable for publication, and also
+Set 'neat' graphical parameters suitable for publication, and also
     label panels on multi-panel figures.
 }
 \examples{

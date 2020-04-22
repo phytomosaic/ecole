@@ -4,8 +4,17 @@
 \alias{plot_heatmap}
 \title{Heatmap of species abundance matrix}
 \usage{
-plot_heatmap(x, xord = "none", yord = "none", logbase = FALSE,
-  labcex = 0.7, col, xexp = 1, yexp = 1, ...)
+plot_heatmap(
+  x,
+  xord = "none",
+  yord = "none",
+  logbase = FALSE,
+  labcex = 0.7,
+  col,
+  xexp = 1,
+  yexp = 1,
+  ...
+)
 }
 \arguments{
 \item{x}{array of species data, where rows = SUs and cols = species}

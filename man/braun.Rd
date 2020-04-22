@@ -4,9 +4,11 @@
 \name{braun}
 \alias{braun}
 \title{Emma Lucy Braun forest plots in eastern North America}
-\format{A list of 2 data.frames:\cr
+\format{
+A list of 2 data.frames:\cr
     - \code{spe} 347 observations of 122 woody plant species,\cr
-    - \code{env} 347 observations of 33 environmental variables.}
+    - \code{env} 347 observations of 33 environmental variables.
+}
 \source{
 Ricklefs (2018).
 }
