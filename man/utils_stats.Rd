@@ -7,6 +7,7 @@
 \alias{cv}
 \alias{rmse}
 \alias{mae}
+\alias{zscr}
 \title{Summary statistics utilities}
 \usage{
 geom_mean(x, na.rm = TRUE, zero.rm = FALSE, ...)
@@ -20,30 +21,34 @@ cv(x, na.rm = TRUE, ...)
 rmse(x, y, na.rm = TRUE, ...)
 
 mae(x, y, stdz = FALSE, na.rm = TRUE, ...)
+
+zscr(x, robust = TRUE, na.rm = TRUE, ...)
 }
 \arguments{
 \item{x}{vector of values to evaluate}
 
-\item{na.rm}{logical indicating whether NA values in \code{x}
-should be removed before proceeding}
+\item{na.rm}{logical, should NA values in \code{x} be removed
+before calculating?}
 
-\item{zero.rm}{logical indicating whether zeros in \code{x} should
-be removed before calculating harmonic or geometric means}
+\item{zero.rm}{logical, should zeros in \code{x} be removed before
+calculating harmonic or geometric means?}
 
 \item{...}{further arguments passed to other methods}
 
 \item{y}{vector of 'predicted' values to compare against \code{x}}
 
 \item{stdz}{logical, standardize output by range of \code{x}?}
+
+\item{robust}{logical, should robust z-scores be calculated?}
 }
 \value{
-Numeric value.
+Numeric values.
 }
 \description{
 Vectorized summary statistics, including geometric mean, harmonic
 mean, sample standard error (SE), coefficient of variation (CV),
-root mean square error (RMSE),  mean absolute error (MAE), and
-sensitivity.
+root mean square error (RMSE), mean absolute error (MAE),
+sensitivity, and robust z-scores.
 }
 \details{
 For vectors including at least one zero, results of
@@ -56,6 +61,9 @@ denominator to correct for small-sample bias.
 \code{rmse} is one way to assess prediction accuracy.
 
 \code{mae} gives a measure of sensitivity when \code{stdz=TRUE}.
+
+\code{zcsr} gives robust z-scores based on median (not mean) and
+median absolute deviation (not standard deviation).
 
 These functions return NA when NAs present and \code{na.rm=TRUE}.
 }
@@ -94,6 +102,11 @@ mae(xx, yy, stdz=FALSE)       # 10.69236
 # range-standardized mean absolute error (aka sensitivity)
 mae(xx, yy, stdz=TRUE)        # 0.1370815
 mae(yy, xx, stdz=TRUE)        # 0.135684 -- order matters!
+
+# robust z-scores not so influenced by extreme values
+x <- c(-99, -9, 0, 9, 99)
+plot(zscr(x, robust=FALSE), zscr(x, robust=TRUE), asp=1)
+abline(0,1)
 
 }
 \seealso{

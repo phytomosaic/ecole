@@ -3,25 +3,27 @@
 #' @description
 #' Vectorized summary statistics, including geometric mean, harmonic
 #' mean, sample standard error (SE), coefficient of variation (CV),
-#' root mean square error (RMSE),  mean absolute error (MAE), and
-#' sensitivity.
+#' root mean square error (RMSE), mean absolute error (MAE),
+#' sensitivity, and robust z-scores.
 #'
 #' @param x vector of values to evaluate
 #'
 #' @param y vector of 'predicted' values to compare against \code{x}
 #'
-#' @param na.rm logical indicating whether NA values in \code{x}
-#' should be removed before proceeding
+#' @param na.rm logical, should NA values in \code{x} be removed
+#' before calculating?
 #'
-#' @param zero.rm logical indicating whether zeros in \code{x} should
-#' be removed before calculating harmonic or geometric means
+#' @param zero.rm logical, should zeros in \code{x} be removed before
+#' calculating harmonic or geometric means?
 #'
 #' @param stdz logical, standardize output by range of \code{x}?
+#'
+#' @param robust logical, should robust z-scores be calculated?
 #'
 #' @param ... further arguments passed to other methods
 #'
 #' @return
-#' Numeric value.
+#' Numeric values.
 #'
 #' @details
 #' For vectors including at least one zero, results of
@@ -34,6 +36,9 @@
 #' \code{rmse} is one way to assess prediction accuracy.
 #'
 #' \code{mae} gives a measure of sensitivity when \code{stdz=TRUE}.
+#'
+#' \code{zcsr} gives robust z-scores based on median (not mean) and
+#' median absolute deviation (not standard deviation).
 #'
 #' These functions return NA when NAs present and \code{na.rm=TRUE}.
 #'
@@ -72,6 +77,11 @@
 #' # range-standardized mean absolute error (aka sensitivity)
 #' mae(xx, yy, stdz=TRUE)        # 0.1370815
 #' mae(yy, xx, stdz=TRUE)        # 0.135684 -- order matters!
+#'
+#' # robust z-scores not so influenced by extreme values
+#' x <- c(-99, -9, 0, 9, 99)
+#' plot(zscr(x, robust=FALSE), zscr(x, robust=TRUE), asp=1)
+#' abline(0,1)
 #'
 #' @seealso \code{\link[stats]{sd}}
 #'
@@ -114,4 +124,16 @@
 `mae` <- function(x, y, stdz=FALSE, na.rm=TRUE, ...){
      if(stdz) denom <- diff(range(x, na.rm = na.rm)) else denom <- 1
      mean(abs(x - y), na.rm = na.rm) / denom
+}
+#' @export
+#' @rdname utils_stats
+`zscr` <- function(x, robust = TRUE, na.rm = TRUE, ...) {
+     if (robust) {
+          center <- median(x, na.rm = na.rm)
+          spread <- mad(x, center=center, na.rm = na.rm)
+     } else {
+          center <- mean(x, na.rm = na.rm)
+          spread <- sd(x, na.rm = na.rm)
+     }
+     (x - center) / spread
 }
