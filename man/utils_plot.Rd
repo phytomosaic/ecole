@@ -2,29 +2,27 @@
 % Please edit documentation in R/utils_plot.R
 \name{set_par}
 \alias{set_par}
+\alias{set_par_mercury}
 \alias{add_label}
 \alias{add_text}
 \title{Plotting utilities}
 \usage{
-set_par(panels = 1, pty = "s", ...)
+set_par(panels = NULL, CEX = 1, ...)
 
-add_label(char = "a", bold = FALSE, ...)
+set_par_mercury(panels = NULL, CEX = 1, ...)
 
-add_text(x, y, labels, bold = FALSE, ...)
+add_label(char = "a", ...)
+
+add_text(x, y, labels, ...)
 }
 \arguments{
-\item{panels}{number of panels (1,2,4) to plot.}
+\item{panels}{number of panels (e.g., 1,2,4,9) to plot.}
 
-\item{pty}{a character specifying the type of plot region to be
-used; 's' generates a square plotting region and 'm' generates
-the maximal plotting region.}
+\item{CEX}{character expansion factor (default = 1).}
 
-\item{...}{further arguments passed to other methods (i.e.,
-\code{\link[graphics]{par}})}
+\item{...}{further arguments passed to \code{\link[graphics]{par}}}
 
 \item{char}{alphabetic character to add as panel label.}
-
-\item{bold}{logical, should panel label be bold?}
 
 \item{x}{numeric, \emph{relative} horizontal position}
 
@@ -33,27 +31,52 @@ the maximal plotting region.}
 \item{labels}{character vector of text to plot}
 }
 \value{
-`set_par` sets graphical parameters; `add_label` adds panel label;
-    `add_text` adds text to the plotting area.
+`set_par` sets graphical parameters, and `set_par_mercury` does so
+    in a retro style; `add_label` adds a panel label to plot
+    margins; `add_text` adds text to the plotting area.
 }
 \description{
 Set 'neat' graphical parameters suitable for publication, and also
     label panels on multi-panel figures.
 }
 \examples{
-N  <- 20
-op <- set_par(4, pch=16)
-plot(1:N, N:1)
-add_label('a')
-plot(sin(1:N), cos(N:1))
-add_label('b')
-plot(1:N, 1:N+rnorm(N,0,1), xlim=c(0,2*N), xlab='x', ylab='f(x)')
-add_label('c')
+### standard usage
+N  <- 99
+op <- set_par()
 plot(1:N, 1:N+rnorm(N,0,5), ylim=c(0,2*N), xlab='x', ylab='f(x)')
-add_label('d')
 add_text(.1, .9, '+item1')
 add_text(.5, .5, '+item2')
-add_text(.9, .1, '+item3') # extends beyond plot area
 par(op)
 
+### is today 1963 ??
+x <- runif(99)
+y <- sin(6 * pi * x) + rnorm(99, sd=0.1)
+op <- set_par_mercury()
+plot(x, y, cex=0.7, asp=0.25, ylab='f(x)')
+add_text(.1, .9, 'SINUSOIDAL', cex=0.9)
+par(op)
+
+### Project Mercury space missions
+###  data: https://www.nature.com/articles/s41526-018-0040-5/tables/3
+d <- strsplit(c(
+        'MR-3	5/5/1961	0.2577778	0.08444444	0	A.B. Shepard',
+        'MR-4	7/21/1961	0.2602778	0.08333333	0	V.I. Grissom',
+        'MA-6	2/20/1962	4.923056	4.633333	3	J.H. Glenn',
+        'MA-7	5/24/1962	4.934722	4.65	3	M.S. Carpenter',
+        'MA-8	10/3/1962	9.219722	8.939444	6	W.M. Schirra',
+        'MA-9	5/15/1963	34.33028	34.05833	22	L.G. Cooper'), "\t")
+
+d <- data.frame(do.call(rbind, d), stringsAsFactors=F)
+dimnames(d)[[2]] <- c('mission','date','duration',
+                      'weightless_hr','orbits','pilot')
+d$date <- as.Date(d$date, format="\%m/\%d/\%Y")
+op <- set_par_mercury(3, cex.axis=0.9, mar=c(4,4,2,1))
+plot(d$date, d$orbits, ylim=c(-0.1,25), ylab='Earth orbits',
+     xlab='Date', cex=0.7)
+plot(d$date, d$duration, ylim=c(-0.1,35),  ylab='Duration (h)',
+     xlab='Date', cex=0.7)
+plot(d$date, d$weightless_hr, ylim=c(-0.1,35),
+     ylab='Duration weightless (h)', xlab='Date', cex=0.7)
+mtext('Project Mercury missions', side=3, line=2, cex=1.5, at=-3900)
+par(op)
 }
