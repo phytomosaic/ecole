@@ -11,7 +11,7 @@ set_par(panels = NULL, CEX = 1, ...)
 
 set_par_mercury(panels = NULL, CEX = 1, ...)
 
-add_label(char = "a", ...)
+add_label(labels, ...)
 
 add_text(x, y, labels, ...)
 }
@@ -22,18 +22,16 @@ add_text(x, y, labels, ...)
 
 \item{...}{further arguments passed to \code{\link[graphics]{par}}}
 
-\item{char}{alphabetic character to add as panel label.}
+\item{labels}{character vector of text to plot}
 
 \item{x}{numeric, \emph{relative} horizontal position}
 
 \item{y}{numeric, \emph{relative} vertical position}
-
-\item{labels}{character vector of text to plot}
 }
 \value{
 `set_par` sets graphical parameters, and `set_par_mercury` does so
-    in a retro style; `add_label` adds a panel label to plot
-    margins; `add_text` adds text to the plotting area.
+    in a retro style; `add_label` adds a panel label to upper
+    margin; `add_text` adds text to the plotting area.
 }
 \description{
 Set 'neat' graphical parameters suitable for publication, and also
@@ -54,6 +52,7 @@ y <- sin(6 * pi * x) + rnorm(99, sd=0.1)
 op <- set_par_mercury()
 plot(x, y, cex=0.7, asp=0.25, ylab='f(x)')
 add_text(.1, .9, 'SINUSOIDAL', cex=0.9)
+add_label('A')
 par(op)
 
 ### Project Mercury space missions
@@ -79,4 +78,6 @@ plot(d$date, d$weightless_hr, ylim=c(-0.1,35),
      ylab='Duration weightless (h)', xlab='Date', cex=0.7)
 mtext('Project Mercury missions', side=3, line=2, cex=1.5, at=-3900)
 par(op)
+
+
 }
