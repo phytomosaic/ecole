@@ -3,6 +3,8 @@
 \name{plot_loess}
 \alias{plot_loess}
 \alias{plot_lm}
+\alias{plot_kernel}
+\alias{plot_spline}
 \title{Plotting locally-weighted or linear regression line}
 \usage{
 plot_loess(
@@ -12,10 +14,9 @@ plot_loess(
   lcol = "#FF0000BF",
   cex = 0.8,
   pch = 16,
-  las = 1,
-  bty = "L",
   xlab = NULL,
   ylab = NULL,
+  args.func = list(),
   ...
 )
 
@@ -26,10 +27,35 @@ plot_lm(
   lcol = "#FF0000BF",
   cex = 0.8,
   pch = 16,
-  las = 1,
-  bty = "L",
   xlab = NULL,
   ylab = NULL,
+  args.func = list(),
+  ...
+)
+
+plot_kernel(
+  x,
+  y,
+  col = "#00000040",
+  lcol = "#FF0000BF",
+  cex = 0.8,
+  pch = 16,
+  xlab = NULL,
+  ylab = NULL,
+  args.func = list(),
+  ...
+)
+
+plot_spline(
+  x,
+  y,
+  col = "#00000040",
+  lcol = "#FF0000BF",
+  cex = 0.8,
+  pch = 16,
+  xlab = NULL,
+  ylab = NULL,
+  args.func = list(),
   ...
 )
 }
@@ -45,36 +71,38 @@ plot_lm(
 \item{pch}{a vector of plotting characters or symbols: see
 \code{\link[graphics]{points}}.}
 
-\item{las}{numeric, style of axis labels: see \code{\link[graphics]{par}}.}
-
-\item{bty}{character string, determines type of box drawn around plot: see
-\code{\link[graphics]{par}}.}
-
 \item{xlab, ylab}{character strings for axis labels.}
 
-\item{...}{further arguments passed to functions.}
+\item{args.func}{further arguments passed to the regression function.}
+
+\item{...}{further arguments passed to \code{plot}.}
 }
 \value{
 A plot object.
 }
 \description{
-Fit a linear, or else locally-fitted polynomial surface determined
-   by a numerical predictor.
+Plot a linear, local-polynomial, kernel, or cubic smoothing spline
+    regression line.
 }
 \details{
-Useful default settings for a scatterplot with locally-weighted
-    regression line.
+Plots a scatterplot with a (possibly locally-weighted) regression
+    line, useful for quick exploratory analysis.
 }
 \examples{
 set.seed(23)
-x <- sin(1:55/pi)
-y <- rnorm(55, 0, 0.45)+x
-set_par(3)
-plot_loess(x, y, span=0.10, main='Span = 0.10')
-plot_loess(x, y, span=0.20, main='Span = 0.20')
-plot_loess(x, y, span=0.40, main='Span = 0.40')
+n <- 55
+x <- sin(1:n/pi)
+y <- runif(n, 0, 0.75) + x
+x[12] <- NA  # handles NA
+set_par(4)
+plot_lm(x, y, main='Linear')
+plot_loess(x, y,  args.func=list(span=0.2), main='Loess')
+plot_kernel(x, y, args.func=list(bandwidth=0.2), main='Kernel')
+plot_spline(x, y, args.func=list(df=11), main='Spline')
 
 }
 \seealso{
-\code{\link[stats]{loess}}
+\code{\link[stats]{lm}}, \code{\link[stats]{loess}},
+   \code{\link[stats]{smooth.spline}}, and
+   \code{\link[stats]{ksmooth}} for the underlying functions.
 }

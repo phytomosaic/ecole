@@ -26,7 +26,7 @@ This package contains functions and utilities for analyses
 
     Plots:\cr
     \code{\link{plot_heatmap}}, \code{\link{plot_joy}},
-    \code{\link{plot_loglog}}, \code{\link{plot_marg}},
+    \code{\link{plot_loess}}, \code{\link{plot_marg}},
     \code{\link{plot_ortho}}, \code{utils_*}
 
     Plot utilities:\cr

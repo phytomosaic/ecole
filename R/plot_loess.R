@@ -1,8 +1,8 @@
 #' @title Plotting locally-weighted or linear regression line
 #'
 #' @description
-#' Fit a linear, or else locally-fitted polynomial surface determined
-#'    by a numerical predictor.
+#' Plot a linear, local-polynomial, kernel, or cubic smoothing spline
+#'     regression line.
 #'
 #' @param x,y
 #' vectors of x- and y-axis values.
@@ -20,71 +20,111 @@
 #' a vector of plotting characters or symbols: see
 #'     \code{\link[graphics]{points}}.
 #'
-#' @param las
-#' numeric, style of axis labels: see \code{\link[graphics]{par}}.
-#'
-#' @param bty
-#' character string, determines type of box drawn around plot: see
-#'     \code{\link[graphics]{par}}.
 #'
 #' @param xlab,ylab
 #' character strings for axis labels.
 #'
+#' @param args.func
+#' further arguments passed to the regression function.
+#'
 #' @param ...
-#' further arguments passed to functions.
+#' further arguments passed to \code{plot}.
 #'
 #' @return
 #' A plot object.
 #'
 #' @details
-#' Useful default settings for a scatterplot with locally-weighted
-#'     regression line.
+#' Plots a scatterplot with a (possibly locally-weighted) regression
+#'     line, useful for quick exploratory analysis.
 #'
 #' @examples
 #' set.seed(23)
-#' x <- sin(1:55/pi)
-#' y <- rnorm(55, 0, 0.45)+x
-#' set_par(3)
-#' plot_loess(x, y, span=0.10, main='Span = 0.10')
-#' plot_loess(x, y, span=0.20, main='Span = 0.20')
-#' plot_loess(x, y, span=0.40, main='Span = 0.40')
+#' n <- 55
+#' x <- sin(1:n/pi)
+#' y <- runif(n, 0, 0.75) + x
+#' x[12] <- NA  # handles NA
+#' set_par(4)
+#' plot_lm(x, y, main='Linear')
+#' plot_loess(x, y,  args.func=list(span=0.2), main='Loess')
+#' plot_kernel(x, y, args.func=list(bandwidth=0.2), main='Kernel')
+#' plot_spline(x, y, args.func=list(df=11), main='Spline')
 #'
-#' @seealso \code{\link[stats]{loess}}
+#' @seealso \code{\link[stats]{lm}}, \code{\link[stats]{loess}},
+#'    \code{\link[stats]{smooth.spline}}, and
+#'    \code{\link[stats]{ksmooth}} for the underlying functions.
 #'
 #' @aliases plot_loess
 #' @aliases plot_lm
+#' @aliases plot_kernel
+#' @aliases plot_spline
 #'
 #' @rdname plot_loess
 #' @export
-`plot_loess` <- function(x, y, col='#00000040', lcol='#FF0000BF',
-                         cex=0.8, pch=16, las=1, bty='L',
-                         xlab = NULL, ylab = NULL, ...) {
-        ow <- getOption('warn')
-        options(warn = -1)
-        if(is.null(xlab)) xlab <- deparse(substitute(x))
-        if(is.null(ylab)) ylab <- deparse(substitute(y))
-        plot(x = x, y = y, col = col, pch = pch, las = las, bty = bty,
+plot_loess <- function (x, y, col = '#00000040', lcol = '#FF0000BF',
+                        cex = 0.8, pch = 16, xlab = NULL, ylab = NULL,
+                        args.func = list(), ...) {
+        if (is.null(xlab))
+                xlab <- deparse(substitute(x))
+        if (is.null(ylab))
+                ylab <- deparse(substitute(y))
+        plot(x = x, y = y, col = col, pch = pch,
              cex = cex, xlab = xlab, ylab = ylab, ...)
-        f    <- stats::loess(y ~ x, ...)
-        fhat <- predict(f)
-        o    <- order(x)
-        lines(x[o], fhat[o], col=lcol, lwd=2)
-        options(warn = ow)
+        f <- do.call(stats::loess,
+                     c(list(formula = y ~ x), args.func))
+        rng  <- range(x, na.rm=T)
+        xs   <- seq(rng[1],rng[2],len=100)
+        fhat <- predict(f, data.frame(x=xs))
+        lines(xs, fhat, col = lcol, lwd = 2)
 }
 #' @rdname plot_loess
 #' @export
-`plot_lm` <- function (x, y, col = '#00000040', lcol = '#FF0000BF',
-                       cex = 0.8, pch = 16, las = 1, bty = 'L',
-                       xlab = NULL, ylab = NULL, ...) {
-        ow <- getOption('warn')
-        options(warn = -1)
-        if(is.null(xlab)) xlab <- deparse(substitute(x))
-        if(is.null(ylab)) ylab <- deparse(substitute(y))
-        plot(x = x, y = y, col = col, pch = pch, las = las, bty = bty,
+plot_lm <- function (x, y, col = '#00000040', lcol = '#FF0000BF',
+                     cex = 0.8, pch = 16, xlab = NULL, ylab = NULL,
+                     args.func = list(), ...) {
+        if (is.null(xlab))
+                xlab <- deparse(substitute(x))
+        if (is.null(ylab))
+                ylab <- deparse(substitute(y))
+        plot(x = x, y = y, col = col, pch = pch,
              cex = cex, xlab = xlab, ylab = ylab, ...)
-        f    <- stats::lm(y ~ x, ...)
-        fhat <- predict(f)
-        o    <- order(x)
-        lines(x[o], fhat[o], col = lcol, lwd = 2)
-        options(warn = ow)
+        f <- stats::lm(y ~ x, ...)
+        abline(f, col = lcol, lwd = 2)
+}
+#' @rdname plot_loess
+#' @export
+plot_kernel <- function (x, y, col = '#00000040', lcol = '#FF0000BF',
+                         cex = 0.8, pch = 16, xlab = NULL, ylab = NULL,
+                         args.func = list(), ...) {
+        if (is.null(xlab))
+                xlab <- deparse(substitute(x))
+        if (is.null(ylab))
+                ylab <- deparse(substitute(y))
+        plot(x = x, y = y, col = col, pch = pch,
+             cex = cex, xlab = xlab, ylab = ylab, ...)
+        if(!('bandwidth' %in% names(args.func))) {
+                args.func <- c(bandwidth=diff(range(x,na.rm=T))/0.10,
+                               args.func)
+        }
+        isna <- is.na(x) | is.na(y)
+        f <- do.call(stats::ksmooth,
+                     c(list(x[!isna], y[!isna], kernel='normal'),
+                       args.func))
+        lines(f, col = lcol, lwd = 2)
+}
+#' @rdname plot_loess
+#' @export
+plot_spline <- function (x, y, col = '#00000040', lcol = '#FF0000BF',
+                         cex = 0.8, pch = 16, xlab = NULL, ylab = NULL,
+                         args.func = list(), ...) {
+        if (is.null(xlab))
+                xlab <- deparse(substitute(x))
+        if (is.null(ylab))
+                ylab <- deparse(substitute(y))
+        plot(x = x, y = y, col = col, pch = pch,
+             cex = cex, xlab = xlab, ylab = ylab, ...)
+        isna <- is.na(x) | is.na(y)
+        f <- do.call(stats::smooth.spline,
+                     c(list(x[!isna], y[!isna], keep.data=F),
+                       args.func))
+        lines(f, col = lcol, lwd = 2)
 }
