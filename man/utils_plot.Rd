@@ -38,7 +38,7 @@ Set 'neat' graphical parameters suitable for publication, and also
     label panels on multi-panel figures.
 }
 \examples{
-### standard usage
+# standard usage
 N  <- 99
 op <- set_par()
 plot(1:N, 1:N+rnorm(N,0,5), ylim=c(0,2*N), xlab='x', ylab='f(x)')
@@ -46,17 +46,16 @@ add_text(.1, .9, '+item1')
 add_text(.5, .5, '+item2')
 par(op)
 
-### is today 1963 ??
+# is today 1963 ??
 x <- runif(99)
 y <- sin(6 * pi * x) + rnorm(99, sd=0.1)
-op <- set_par_mercury()
+\dontrun{op <- set_par_mercury()}
 plot(x, y, cex=0.7, asp=0.25, ylab='f(x)')
 add_text(.1, .9, 'SINUSOIDAL', cex=0.9)
 add_label('A')
-par(op)
 
-### Project Mercury space missions
-###  data: https://www.nature.com/articles/s41526-018-0040-5/tables/3
+# Project Mercury space missions
+#  see: https://www.nature.com/articles/s41526-018-0040-5/tables/3
 d <- strsplit(c(
         'MR-3	5/5/1961	0.2577778	0.08444444	0	A.B. Shepard',
         'MR-4	7/21/1961	0.2602778	0.08333333	0	V.I. Grissom',
@@ -64,12 +63,11 @@ d <- strsplit(c(
         'MA-7	5/24/1962	4.934722	4.65	3	M.S. Carpenter',
         'MA-8	10/3/1962	9.219722	8.939444	6	W.M. Schirra',
         'MA-9	5/15/1963	34.33028	34.05833	22	L.G. Cooper'), "\t")
-
-d <- data.frame(do.call(rbind, d), stringsAsFactors=F)
+d <- data.frame(do.call(rbind, d), stringsAsFactors=FALSE)
 dimnames(d)[[2]] <- c('mission','date','duration',
                       'weightless_hr','orbits','pilot')
 d$date <- as.Date(d$date, format="\%m/\%d/\%Y")
-op <- set_par_mercury(3, cex.axis=0.9, mar=c(4,4,2,1))
+\dontrun{op <- set_par_mercury(3, cex.axis=0.9, mar=c(4,4,2,1))}
 plot(d$date, d$orbits, ylim=c(-0.1,25), ylab='Earth orbits',
      xlab='Date', cex=0.7)
 plot(d$date, d$duration, ylim=c(-0.1,35),  ylab='Duration (h)',
@@ -77,7 +75,5 @@ plot(d$date, d$duration, ylim=c(-0.1,35),  ylab='Duration (h)',
 plot(d$date, d$weightless_hr, ylim=c(-0.1,35),
      ylab='Duration weightless (h)', xlab='Date', cex=0.7)
 mtext('Project Mercury missions', side=3, line=2, cex=1.5, at=-3900)
-par(op)
-
 
 }

@@ -7,11 +7,11 @@ Depends: R (>= 3.5.0), vegan (>= 2.5-1)
 License: CC BY-NC-ND 4.0
 Encoding: UTF-8
 LazyData: true
-Date: 2019-03-17
+Date: 2020-07-01
 Author: 'Robert J Smith' <smithr2@oregonstate.edu>
 Creator: 'Robert J Smith' <smithr2@oregonstate.edu>
 Maintainer: 'Robert J Smith' <smithr2@oregonstate.edu>
-Imports: stats, graphics, e1071, sfsmisc, viridis, viridisLite
+Imports: stats, graphics, e1071, sfsmisc, viridis, viridisLite, extrafont
 Citation: Smith, Robert J. 2019. ecole: School of Ecology Package. Unpublished R package in development.
 URL: https://github.com/phytomosaic/ecole
 RoxygenNote: 7.1.0
