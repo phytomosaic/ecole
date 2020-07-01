@@ -100,7 +100,7 @@
 #' @rdname utils_plot
 `set_par_mercury` <- function(panels=NULL, CEX=1.0, ...) {
      # if font not installed, then revert to `set_par()`
-     extrafont::loadfonts('all', quiet=TRUE)
+     extrafont::loadfonts('win', quiet=TRUE)
      if (!('Routed Gothic' %in% extrafont::fonttable()$FamilyName)) {
           a <- c(as.list(environment()), list(...))
           do.call(ecole::set_par, a)
