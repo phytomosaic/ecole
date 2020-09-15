@@ -26,7 +26,7 @@
 #'  in \code{\link[graphics]{persp}}
 #'
 #' @return
-#' Vector or matrix of color values
+#' Vector or matrix of color values.
 #'
 #' @examples
 #' # generate data
