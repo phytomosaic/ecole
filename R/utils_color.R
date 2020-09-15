@@ -39,10 +39,10 @@
 #' f     <- surfcol(z, ngrid=ngrid, alpha=0.8)
 #' persp(x, y, z, col=f, phi=30, theta=-30)
 #'
-#' # color points by numeric value
+#' # color points by numeric values
 #' plot(x, y[1:30], col=colvec(x), pch=16)
 #'
-#' # color points by factor value
+#' # color points by factor values
 #' trmt <- gl(3, 10, labels = c('Q', 'R', 'S'))
 #' plot(x, y[1:30], col=colvec(rev(trmt)), pch=16)
 #'
