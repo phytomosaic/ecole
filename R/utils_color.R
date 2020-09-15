@@ -40,8 +40,7 @@
 #'
 #' @export
 #' @rdname utils_color
-`colvec` <- function(x, n=99, alpha=0.6, begin=0.2, end=0.9, dir=1,
-                     pal, ...) {
+`colvec` <- function(x, n=99, alpha=0.9, begin=0.1, end=0.85, dir=1, pal, ...) {
      if(is.factor(x)){
           n <- nlevels(x)
      }
@@ -53,8 +52,8 @@
 }
 #' @export
 #' @rdname utils_color
-`surfcol` <- function(x, ngrid, alpha=0.6, begin=0.2, end=0.9, dir=1,
-                      pal, ...){
+`surfcol` <- function(x, ngrid, alpha=0.9, begin=0.1, end=0.85, dir=1, pal,
+                      ...) {
      if(missing(pal)){
           pal <- viridis::inferno(n=ngrid, alpha=alpha, begin=begin,
                                   end=end, direction=dir)
