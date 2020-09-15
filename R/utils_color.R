@@ -36,7 +36,7 @@
 #'
 #' # color surface of perspective plot by 'z' value
 #' ngrid <- prod(dim(z))
-#' f <- surfcol(z, ngrid=ngrid, alpha=0.8)
+#' f     <- surfcol(z, ngrid=ngrid, alpha=0.8)
 #' persp(x, y, z, col=f, phi=30, theta=-30)
 #'
 #' # color points by numeric value
