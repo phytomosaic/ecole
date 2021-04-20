@@ -14,4 +14,4 @@ Maintainer: 'Robert J Smith' <smithr2@oregonstate.edu>
 Imports: stats, graphics, e1071, sfsmisc, viridis, viridisLite, extrafont
 Citation: Smith, Robert J. 2019. ecole: School of Ecology Package. Unpublished R package in development.
 URL: https://github.com/phytomosaic/ecole
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1

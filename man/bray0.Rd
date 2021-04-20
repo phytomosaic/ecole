@@ -59,9 +59,9 @@ x <- matrix(c(0,0,1,1,0,1,0,0,10,10,0,0,
 d0 <- vegan::vegdist(x, 'bray')
 d1 <- bray0(x)
 s  <- 2:12
-# cf. 'Bâ€“C dissimilarity' in Table 1:
+# cf. 'B–C dissimilarity' in Table 1:
 as.matrix(d0)[cbind(s,s-1)]
-# cf. 'Zero-adjusted Bâ€“C' in Table 1:
+# cf. 'Zero-adjusted B–C' in Table 1:
 as.matrix(d1)[cbind(s,s-1)]
 # NMS ordinations using each dissimilarity matrix
 #     cf. Fig. 1 in Clarke et al. (2006)

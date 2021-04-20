@@ -5,9 +5,9 @@
 \alias{surfcol}
 \title{Color utilities}
 \usage{
-colvec(x, n = 99, alpha = 0.6, begin = 0.2, end = 0.9, dir = 1, pal, ...)
+colvec(x, n = 99, alpha = 0.9, begin = 0.1, end = 0.85, dir = 1, pal, ...)
 
-surfcol(x, ngrid, alpha = 0.6, begin = 0.2, end = 0.9, dir = 1, pal, ...)
+surfcol(x, ngrid, alpha = 0.9, begin = 0.1, end = 0.85, dir = 1, pal, ...)
 }
 \arguments{
 \item{x}{vector of values to evaluate}
@@ -46,13 +46,13 @@ z <- outer(x, y, function(a, b) a*b^2)
 
 # color surface of perspective plot by 'z' value
 ngrid <- prod(dim(z))
-f <- surfcol(z, ngrid=ngrid, alpha=0.8)
+f     <- surfcol(z, ngrid=ngrid, alpha=0.8)
 persp(x, y, z, col=f, phi=30, theta=-30)
 
-# color points by numeric value
+# color points by numeric values
 plot(x, y[1:30], col=colvec(x), pch=16)
 
-# color points by factor value
+# color points by factor values
 trmt <- gl(3, 10, labels = c('Q', 'R', 'S'))
 plot(x, y[1:30], col=colvec(rev(trmt)), pch=16)
 

@@ -14,11 +14,13 @@ plot_lm(
   y,
   col = "#00000040",
   lcol = "#FF0000BF",
+  ci.col = "#ffd800",
   cex = 0.8,
   pch = 16,
   xlab = NULL,
   ylab = NULL,
   args.func = list(),
+  interval = c("none", "confidence", "prediction"),
   ...
 )
 
@@ -94,6 +96,8 @@ plot_gam(
 
 \item{lcol}{vector of line colors.}
 
+\item{ci.col}{confidence interval color.}
+
 \item{cex}{numeric vector for scaling point size.}
 
 \item{pch}{a vector of plotting characters or symbols: see
@@ -102,6 +106,8 @@ plot_gam(
 \item{xlab, ylab}{character strings for axis labels.}
 
 \item{args.func}{further arguments passed to the regression function.}
+
+\item{interval}{type of interval calculation, for linear model only.}
 
 \item{...}{further arguments passed to \code{plot}.}
 }
@@ -123,7 +129,7 @@ x <- sin(1:n/pi)
 y <- runif(n, 0, 0.75) + x
 x[12] <- NA  # handles NA
 set_par(6)
-plot_lm(x, y, main='Linear')
+plot_lm(x, y, main='Linear', interval='confidence')
 plot_ortho(x, y, main='Orthogonal') # not identical to linear!
 plot_loess(x, y,  args.func=list(span=0.2), main='Loess')
 plot_kernel(x, y, args.func=list(bandwidth=0.2), main='Kernel')

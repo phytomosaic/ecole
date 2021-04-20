@@ -13,6 +13,9 @@
 #' @param lcol
 #' vector of line colors.
 #'
+#' @param ci.col
+#' confidence interval color.
+#'
 #' @param cex
 #' numeric vector for scaling point size.
 #'
@@ -25,6 +28,9 @@
 #'
 #' @param args.func
 #' further arguments passed to the regression function.
+#'
+#' @param interval
+#' type of interval calculation, for linear model only.
 #'
 #' @param ...
 #' further arguments passed to \code{plot}.
@@ -43,7 +49,7 @@
 #' y <- runif(n, 0, 0.75) + x
 #' x[12] <- NA  # handles NA
 #' set_par(6)
-#' plot_lm(x, y, main='Linear')
+#' plot_lm(x, y, main='Linear', interval='confidence')
 #' plot_ortho(x, y, main='Orthogonal') # not identical to linear!
 #' plot_loess(x, y,  args.func=list(span=0.2), main='Loess')
 #' plot_kernel(x, y, args.func=list(bandwidth=0.2), main='Kernel')
@@ -67,8 +73,9 @@
 #' @rdname plot_lm
 #' @export
 `plot_lm` <- function (x, y, col = '#00000040', lcol = '#FF0000BF',
-                       cex = 0.8, pch = 16, xlab = NULL, ylab = NULL,
-                       args.func = list(), ...) {
+                       ci.col = '#ffd800', cex = 0.8, pch = 16, xlab = NULL,
+                       ylab = NULL, args.func = list(),
+                       interval = c('none', 'confidence', 'prediction'), ...) {
         if (is.null(xlab))
                 xlab <- deparse(substitute(x))
         if (is.null(ylab))
@@ -76,6 +83,18 @@
         plot(x = x, y = y, col = col, pch = pch,
              cex = cex, xlab = xlab, ylab = ylab, ...)
         f <- do.call(stats::lm, c(list(formula = y ~ x), args.func))
+        if (length(interval) > 1) interval <- interval[1]
+        if (interval %in% c('confidence','prediction')) {
+                xrng <- range(x, na.rm=TRUE)
+                xpad <- diff(xrng) * 0.05
+                s    <- data.frame(seq(xrng[1] - xpad, xrng[2] + xpad, len=499))
+                dimnames(s)[[2]] <- deparse(substitute(x))
+                p    <- predict(f, newdata=s, interval=interval)
+                lines(s[,1], p[,2], col=paste0(ci.col,'DD'), lwd=2)
+                lines(s[,1], p[,3], col=paste0(ci.col,'DD'), lwd=2)
+                polygon(c(s[,1],rev(s[,1])), c(p[,2],rev(p[,3])),
+                        col=paste0(ci.col,'70'), border=NA)
+        }
         abline(f, col = lcol, lwd = 2)
 }
 #' @rdname plot_lm
