@@ -5,27 +5,20 @@
 \alias{surfcol}
 \title{Color utilities}
 \usage{
-colvec(x, n = 99, alpha = 0.9, begin = 0.1, end = 0.85, dir = 1, pal, ...)
+colvec(x, n = 99, pal, zeroctr = FALSE, ...)
 
-surfcol(x, ngrid, alpha = 0.9, begin = 0.1, end = 0.85, dir = 1, pal, ...)
+surfcol(x, ngrid, pal, ...)
 }
 \arguments{
 \item{x}{vector of values to evaluate}
 
 \item{n}{number of unique colors to be used in the palette}
 
-\item{alpha}{alpha transparency in [0,1]}
-
-\item{begin}{hue in [0,1] at which the viridis colormap begins}
-
-\item{end}{hue in [0,1] at which the viridis colormap ends}
-
-\item{dir}{order of colors in the scale; if 1, the default, colors
-are ordered from darkest to lightest; if -1, the order of colors
-is reversed}
-
 \item{pal}{optional specification for a color palette; defaults to
 \code{viridis::inferno} palette if missing}
+
+\item{zeroctr}{logical, should the color scale diverge to be symmetrical
+around zero?}
 
 \item{...}{further arguments passed to other methods}
 
@@ -50,10 +43,19 @@ f     <- surfcol(z, ngrid=ngrid, alpha=0.8)
 persp(x, y, z, col=f, phi=30, theta=-30)
 
 # color points by numeric values
-plot(x, y[1:30], col=colvec(x), pch=16)
+plot(x, y[1:30], col=colvec(x))
 
 # color points by factor values
 trmt <- gl(3, 10, labels = c('Q', 'R', 'S'))
-plot(x, y[1:30], col=colvec(rev(trmt)), pch=16)
+plot(x, y[1:30], col=colvec(rev(trmt)))
+
+# divergent colors centered on zero
+set.seed(21)
+x <- (rbeta(99, 0.5, 1) - 0.15) * 100
+par(mfrow=c(1,3))
+plot(x, col=colvec(x))
+plot(x, col=colvec(x, zeroctr=TRUE))
+plot(x, col=colvec(pseudo_log(x), zeroctr=TRUE))
+par(mfrow=c(1,1))
 
 }
