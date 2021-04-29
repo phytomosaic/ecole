@@ -3,6 +3,7 @@
 \name{asin_sqrt}
 \alias{asin_sqrt}
 \alias{genlogtrans}
+\alias{pseudo_log}
 \alias{standardize}
 \title{Transforms}
 \usage{
@@ -10,12 +11,16 @@ asin_sqrt(x, ...)
 
 genlogtrans(x, ...)
 
+pseudo_log(x, sigma = 1)
+
 standardize(x, from = 0, to = 1, na.rm = TRUE, ...)
 }
 \arguments{
-\item{x}{vector or array of values to transform}
+\item{x}{vector or array of values to transform.}
 
-\item{...}{further arguments passed to other methods}
+\item{...}{further arguments passed to other methods.}
+
+\item{sigma}{numeric, curvature scale factor for pseudo-log transform.}
 
 \item{from, to}{standardizes from low to high values; defaults from
 0 to 1.}
@@ -36,23 +41,29 @@ data to 0-1 scale if any original values were outside this range.
 Follows pg. 69 of McCune & Grace (2002).
 
 \code{genlogtrans} = Generalized log-transform:\cr
-Log transform that properly handles zeros and very small values.
-Preserves original order of magnitudes while accounting for values
-= 0 and << 1. Follows pg. 69 of McCune & Grace (2002).
+Log transform for non-negative values, preserves original order of magnitudes
+while properly handling values = 0 and << 1.  Follows pg. 69 of McCune &
+Grace (2002).
+
+\code{pseudo_log} = Pseudo-logarithmic transform:\cr
+Log-like transformation for positive and negative values. Useful for color
+scales.  Change `sigma` to vary curvature/linearity around zero.
 
 \code{standardize} = Range standardize:\cr
 Standardizes data to 0-1 scale based on min/max values.
 }
 \examples{
 set.seed(21)
-x  <- rnorm(99, 50, 20)
-x1 <- asin_sqrt(x)
-x2 <- genlogtrans(x)
-x3 <- standardize(x)
-par(mfrow=c(1,3))
+x  <- (rbeta(99, 0.5, 1) - 0.15) * 100
+x1 <- asin_sqrt(x)    # forces 0-1 scale
+x2 <- genlogtrans(x)  # only for non-negative values, negative become NaN
+x3 <- pseudo_log(x)   # handles positive and negative values
+x4 <- standardize(x)  # forces 0-1 scale
+par(mfrow=c(2,2))
 plot(x, x1)
 plot(x, x2)
 plot(x, x3)
+plot(x, x4)
 par(mfrow=c(1,1))
 
 }
