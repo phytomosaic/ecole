@@ -85,9 +85,10 @@
 #'
 #' @export
 #' @rdname bray0
+#' @import vegan
 `bray0` <- function(x, ...){
      x   <- as.matrix(x)
-     val <- min(x[x!=0], ...)           # smallest non-zero value
+     val <- min(x[x!=0], na.rm=TRUE)    # smallest non-zero value
      x   <- cbind(x, rep(val, nrow(x))) # add pseudo-species
-     return(vegan::vegdist(x, method='bray'))
+     return(vegan::vegdist(x, method='bray', ...))
 }
