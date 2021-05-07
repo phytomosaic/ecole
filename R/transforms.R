@@ -30,7 +30,7 @@
 #'
 #' \code{pseudo_log} = Pseudo-logarithmic transform:\cr
 #' Log-like transformation for positive and negative values. Useful for color
-#' scales.  Change `sigma` to vary curvature/linearity around zero.
+#' scales.  Change \code{sigma} to vary curvature/linearity around zero.
 #'
 #' \code{standardize} = Range standardize:\cr
 #' Standardizes data to 0-1 scale based on min/max values.
