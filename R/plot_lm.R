@@ -182,6 +182,7 @@
 }
 #' @rdname plot_lm
 #' @export
+#' @import mgcv
 `plot_gam` <- function (x, y, col = '#00000040', lcol = '#FF0000BF',
                         cex = 0.8, pch = 16, xlab = NULL, ylab = NULL,
                         args.func = list(), ...) {
