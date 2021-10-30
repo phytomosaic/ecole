@@ -1,0 +1,45 @@
+#' @name bison
+#' @title National Bison Range Vegetation, Montana, USA
+#' @aliases bison
+#' @docType data
+#' @description
+#' Data from University of Montana Biological Station, Plant Ecology class,
+#'     1983, Bruce McCune.
+#'
+#' @format
+#' A list of 2 data.frames:\cr
+#'     - \code{spe} Species abundance matrix: 19 observations of 50 vascular
+#'     plant species.  Values are cover classes, 0-3.\cr
+#'     - \code{env} Environmental matrix: 19 observations of 5 environmental
+#'     variables.  Descriptions below.
+#'
+#' @details
+#' Documentation follows PC-ORD (McCune and Mefford 2017). Coding for variables
+#'     in the second matrix:
+#'
+#' smoist = percent soil moisture.\cr
+#' slope  = slope, in degrees.\cr
+#' aspect = aspect code, on 1 to 5 scale, as one of eight compass points
+#'     centered on SW (SW = 1, S and W = 2, SE and NW = 3, N and E = 4, NE = 5).\cr
+#' elev = elevation above sea level, in meters.  Correspond to five stopping
+#'     points for sampling.\cr
+#' topo = topographic position class, adapted from scales used by Whittaker and
+#'     Kessell (Kessell 1979).\cr
+#'
+#' @source
+#' The unpublished data are from Bruce McCune as communicated in PC-ORD
+#'     (McCune and Mefford 2017). Data are from University of Montana Biological
+#'     Station, Plant Ecology class, 1983.
+#'
+#' @references
+#' McCune, B., and M. J. Mefford. 2017. PC-ORD. Multivariate Analysis
+#'     of Ecological Data. Version 7. MjM Software Design, Gleneden
+#'     Beach, OR.
+#'
+#' @examples
+#' # split into two data.frames
+#' data(bison)
+#' spe <- bison$spe
+#' env <- bison$env
+#' @keywords datasets
+"bison"
