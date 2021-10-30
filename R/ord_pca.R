@@ -11,7 +11,8 @@
 #' @param ... further arguments passed to other methods
 #'
 #' @return
-#' List containing items returned by `stats::prcomp`, appended with further items:\cr
+#' List containing items returned by `stats::prcomp`, appended with further
+#'     items:\cr
 #'     - \code{eig}:  eigenvalues.\cr
 #'     - \code{varexpl}:  proportion of variance explained.\cr
 #'     - \code{cumvar}:  cumulative variance explained.\cr
@@ -32,7 +33,7 @@
 #'
 #' @examples
 #' data(smoky)
-#' pc <- pca(smoky$env)                        # PCA with randomization
+#' pc <- ord_pca(smoky$env)                    # PCA with randomization
 #' plot(pc$x, type='n', asp=1) ; text(pc$x, cex=0.7)  # plot first two axes
 #' head(pc$tab)                                # better format than `summary()`
 #' pc$stopping                                 # number of dimensions
@@ -41,8 +42,8 @@
 #' @seealso \code{\link[stats]{prcomp}}
 #'
 #' @export
-#' @rdname pca
-`pca` <- function(x, B = 999, ...) {
+#' @rdname ord_pca
+`ord_pca` <- function(x, B = 999, ...) {
         n      <- NROW(x)
         pc     <- stats::prcomp(x, center=TRUE, scale.=TRUE)
         pc$eig <- pc$sdev ^ 2
@@ -62,16 +63,19 @@
                 Lambda <- Fstat <- matrix(1e-6, B, m)
                 rescum <- cumsum(sort(pc$eig, decreasing=FALSE))[1:(m-1)]
                 Lambda[1,]       <- pc$eig
-                Fstat[1,1:(m-1)] <- pc$eig[1:(m-1)] / sort(rescum, decreasing=TRUE)
+                Fstat[1,1:(m-1)] <- pc$eig[1:(m-1)] / sort(rescum,
+                                                           decreasing=TRUE)
                 for (b in 1:(B-1)) {
                         if(b %% 10 == 0) {cat(paste0(floor(b/B*100), "%... "))}
-                        rndeig <- stats::prcomp(matperm(x), center=TRUE, scale.=TRUE)$sdev^2
+                        rndeig <- stats::prcomp(matperm(x),
+                                                center=TRUE, scale.=TRUE)$sdev^2
                         if (length(rndeig) < m) {
                                 rndeig <- c(rndeig, rep(1e-6, m - length(rndeig)))
                         }
                         rescum <- cumsum(sort(rndeig, decreasing=FALSE))[1:(m-1)]
                         Lambda[b+1, ] <- rndeig
-                        Fstat[b+1, 1:(m-1)] <- rndeig[1:(m-1)] / sort(rescum, decreasing=TRUE)
+                        Fstat[b+1, 1:(m-1)] <-
+                                rndeig[1:(m-1)] / sort(rescum, decreasing=TRUE)
                 }
                 `calc_pval` <- function(v) { (sum(v >= v[1])) / (length(v)) }
                 tab <- data.frame(
