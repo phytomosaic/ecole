@@ -14,7 +14,7 @@ abundances or presence/absence.}
 
 \item{blk}{vector, describing block membership (optional).}
 
-\item{cond_probs}{logical, should conditional probabilities be calculated for
+\item{cond_probs}{logical, should conditional probabilities be calculated
 when blocked structure exists? Default `TRUE`.}
 
 \item{...}{further arguments currently ignored.}
@@ -48,11 +48,11 @@ Unblocked version follows Dufrene and Legendre (1997).  Blocked indicator
 }
 \examples{
 data(braun)
-spe <- braun$spe[-1,]                         # force even number
+spe <- braun$spe[-1,]                 # force an even number
 
 # no group structure exists, so lets pretend we have revisit data
-blk <- factor(rep(1:(NROW(spe)/2), times=2))  # 173 sites 'visited' twice
-grp <- factor(rep(c(1,2), ea=NROW(spe)/2))    # 'visits' 1 or 2 for each site
+blk <- rep(1:(NROW(spe)/2), times=2)  # 173 sites 'visited' twice
+grp <- rep(c(1,2), ea=NROW(spe)/2)    # 'visits' 1 or 2 for each site
 
 # unblocked
 iv  <- indval(spe, grp)
@@ -83,5 +83,5 @@ McCune, B., and M. J. Mefford. 2017. PC-ORD. Multivariate Analysis
     Beach, OR.
 }
 \seealso{
-\code{\link[labdsv]{indval}} or \code{\link[indicspecies]{strassoc}}
+\code{\link[labdsv]{labdsv::indval}} or \code{\link[indicspecies]{indicspecies::strassoc}}
 }

@@ -13,7 +13,7 @@
 #'
 #' @param blk vector, describing block membership (optional).
 #'
-#' @param cond_probs logical, should conditional probabilities be calculated for
+#' @param cond_probs logical, should conditional probabilities be calculated
 #'    when blocked structure exists? Default `TRUE`.
 #'
 #' @param ... further arguments currently ignored.
@@ -50,11 +50,11 @@
 #'
 #' @examples
 #' data(braun)
-#' spe <- braun$spe[-1,]                         # force even number
+#' spe <- braun$spe[-1,]                 # force an even number
 #'
 #' # no group structure exists, so lets pretend we have revisit data
-#' blk <- factor(rep(1:(NROW(spe)/2), times=2))  # 173 sites 'visited' twice
-#' grp <- factor(rep(c(1,2), ea=NROW(spe)/2))    # 'visits' 1 or 2 for each site
+#' blk <- rep(1:(NROW(spe)/2), times=2)  # 173 sites 'visited' twice
+#' grp <- rep(c(1,2), ea=NROW(spe)/2)    # 'visits' 1 or 2 for each site
 #'
 #' # unblocked
 #' iv  <- indval(spe, grp)
@@ -74,16 +74,18 @@
 #' a <- data.frame(ivb$cond_probs)
 #' plot(a$prloss, a$prgain, col=ecole::colvec(ivb$IVmax_dir), pch=16)
 #'
-#' @seealso \code{\link[labdsv]{indval}} or \code{\link[indicspecies]{strassoc}}
+#' @seealso \code{\link[labdsv]{labdsv::indval}} or \code{\link[indicspecies]{indicspecies::strassoc}}
 #'
 #' @export
 #' @rdname indval
 `indval` <- function(spe, grp, blk = NULL, cond_probs = TRUE, ...) {
-    # *blocked and unblocked* Dufrene and Legendre's IndVal,
-    #    along with *Bayes conditional probabilities* of gain/loss/stasis
+    # blocked and unblocked Dufrene and Legendre's IndVal,
+    #    along with Bayes conditional probabilities of gain/loss/stasis
     #      Rob Smith, phytomosaic@gmail.com, 05 Nov 2021
     #       GNU General Public License, Version 3.0
-    IVzmax <- pr <- NA # setup
+    pr  <- NA
+    grp <- as.factor(grp)
+    if (!is.null(blk)) blk <- as.factor(blk)
     # compute conditional transition probabilities, using Bayes rule
     if (!is.null(blk) & cond_probs) {
         # function for Bayes rule
@@ -138,46 +140,9 @@
         pr <- t(sapply(1:NCOL(pa), function(j) bayes(v1 = pa[ii,j], v2 = pa[ff,j])))
         rownames(pr) <- colnames(pa)
     }
-    # # TO DELETE: conditional transition probabilities, accounting for blocks
-    # if (!is.null(blk) & cond_probs) {
-    #   pa <- (spe > 0) * 1  # force binary presence/absence
-    #   pr <- matrix(NA,     # initialize cond probs
-    #                nrow = NCOL(spe), ncol=4,
-    #                dimnames=list(colnames(spe),
-    #                              c('gain','stasis0','stasis1','loss')))
-    #   ct <- matrix(NA,     # initialize transition counts
-    #                nrow = length(unique(blk)),
-    #                ncol = NCOL(spe),
-    #                dimnames=list(unique(blk), colnames(spe)))
-    #   for (j in 1:NCOL(spe)) {
-    #     ii  <- 1:length(unique(blk)) # row index for *initial* visits
-    #     p0  <- sum(pa[ii,j] == 0)    # p(x|0) = marginal prob of initial abs
-    #     p1  <- sum(pa[ii,j] == 1)    # p(x|1) = marginal prob of initial pres
-    #     for (b in unique(blk)) {
-    #       i     <- blk == b      # row index for blocks
-    #       stopifnot(sum(i) == 2) # guarantee only 2 obsvns per block
-    #       z     <- pa[i, j]      # presence/absence pair
-    #       k <- which(c(          # which conditional transition?
-    #         z[2] == 1 & z[1] == 0, # ( 1 | 0 ) = gain
-    #         z[2] == 0 & z[1] == 0, # ( 0 | 0 ) = stasis0
-    #         z[2] == 1 & z[1] == 1, # ( 1 | 1 ) = stasis1
-    #         z[2] == 0 & z[1] == 1  # ( 0 | 1 ) = loss
-    #       ))
-    #       ct[b,j] <- k
-    #     } # end block loop
-    #     pr[j,1] <- sum(ct[,j] == 1) # ( 1 | 0 ) = gain
-    #     pr[j,2] <- sum(ct[,j] == 2) # ( 0 | 0 ) = stasis0
-    #     pr[j,3] <- sum(ct[,j] == 3) # ( 1 | 1 ) = stasis1
-    #     pr[j,4] <- sum(ct[,j] == 4) # ( 0 | 1 ) = loss
-    #     pr[j,1] <- pr[j,1] / p0
-    #     pr[j,2] <- pr[j,2] / p0
-    #     pr[j,3] <- pr[j,3] / p1
-    #     pr[j,4] <- pr[j,4] / p1
-    #     pr[is.nan(pr)] <- 0L    # correct any zero-division
-    #   } # end species loop
-    # } # end conditional probs by block
-    if (!is.null(blk)) { # if blocked, then relativize *within* blocks
-        for (j in 1:NCOL(spe)) {  # begin BLOCKED IndVal
+    # if blocked, then relativize *within* blocks
+    if (!is.null(blk)) {
+        for (j in 1:NCOL(spe)) {
             for (b in unique(blk)) {
                 i     <- blk == b     # row index for blocks
                 z     <- spe[i, j]    # raw abundances
@@ -201,60 +166,21 @@
     s        <- NCOL(spe) * alpha           # num signif expected at random
     s        <- data.frame(alpha=as.character(alpha), species_expected = s)
     rownames(s) <- NULL
-    IVmax_dir <- IVmax # signed IndVal: POS 'increasers', NEG 'decreasers'
-    IVmax_dir[maxgrp == 1] <- IVmax_dir[maxgrp == 1] * (-1) # signed IndVal
+    IVmax_dir   <- NA
+    if (!is.null(blk)) {
+        cat('report that blk is NOT null.................')
+        IVmax_dir <- IVmax # signed IndVal: POS 'increasers', NEG 'decreasers'
+        IVmax_dir[maxgrp == 1] <- IVmax_dir[maxgrp == 1] * (-1) # signed IndVal
+    }
     # TODO: permutations....
     return(list(cond_probs = pr,
-                A     = t(A),
-                B     = t(B),
-                IV    = t(IV),
-                IVmax           = IVmax,
-                IVmax_dir       = IVmax_dir,
-                maxgrp          = maxgrp,
-                sumIVmax        = sumIVmax,
-                sig_expected    = s,
-                pval            = NA))
+                A          = t(A),
+                B          = t(B),
+                IV         = t(IV),
+                IVmax      = IVmax,
+                IVmax_dir  = IVmax_dir,
+                maxgrp     = maxgrp,
+                sumIVmax   = sumIVmax,
+                sig_expected = s,
+                pval       = NA))
 }
-
-# ### TO DELETE: Dufrene and Legendre's IndVal, *blocked and unblocked*
-# `indval` <- function(spe, grp, blk = NULL, ...) {
-#         ### TODO: check that this can handle *unbalanced* group sizes...
-#         if (!is.null(blk)) { # if blocked, then relativize *within* blocks
-#                 for (j in 1:NCOL(spe)) {
-#                         for (b in unique(blk)) {
-#                                 i     <- blk == b     # row index for blocks
-#                                 z     <- spe[i, j]    # raw abundances
-#                                 zsum  <- sum(z)       # sum abundances
-#                                 spe[i, j] <- if (zsum == 0) z else z / zsum  # relativize
-#                         }
-#                 }
-#         }
-#         # proceed as usual
-#         A_num <- apply(spe, 2, function(j) tapply(j, grp, mean)) # mean abu per grp
-#         A_den <- apply(A_num, 2, sum)        # sum of the mean abu across all grps
-#         A     <- sweep(A_num, 2, A_den, '/') # A = rel abu per grp = specificity
-#         B_num <- apply(spe>0, 2, function(j) tapply(j, grp, sum)) # occ per grp
-#         B_den <- c(table(grp))                # total count of SUs per grp
-#         B     <- sweep(B_num, 1, B_den, '/') # B = rel frq per grp = fidelity
-#         IV    <- A * B                       # IV = IndVal
-#         IVmax    <- c(pmax(t(IV)[,1], t(IV)[,2])) # max IndVal
-#         maxgrp   <- apply(IV, 2, which.max)       # max group
-#         sumIVmax <- sum(IVmax)                    # sum of max IndVal across spp
-#         # number of significant indicator species expected at random:
-#         alpha    <- c(0.050, 0.010, 0.001)
-#         s        <- NCOL(spe) * alpha
-#         s        <- data.frame(alpha=as.character(alpha), species_expected = s)
-#         rownames(s) <- NULL
-#         # TODO: permutations....
-#         # perm <- 999
-#         # res <- replicate(perms, expr = { #  permute sites
-#         #   tmp   <- spe[sample.int(NROW(spe), replace=FALSE),]
-#         #   max(rel_frq(tmp, grp) * rel_abu(tmp, grp))
-#         # })
-#         # pval <- (1 + (res >= max(IV))) / (1 + perm)
-#         return(list(A=t(A), B=t(B), IV=t(IV), IVmax=IVmax,
-#                     maxgrp=maxgrp, sumIVmax=sumIVmax, sig_expected=s,
-#                     pval=NA))
-# }
-
-####    END    ####
