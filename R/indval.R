@@ -83,21 +83,34 @@
     #    along with Bayes conditional probabilities of gain/loss/stasis
     #      Rob Smith, phytomosaic@gmail.com, 05 Nov 2021
     #       GNU General Public License, Version 3.0
-    pr  <- NA
-    grp <- as.factor(grp)
-    if (!is.null(blk)) blk <- as.factor(blk)
+    pr      <- NA
+    grp     <- as.factor(grp)
+    has_blk <- !is.null(blk)
+    if (has_blk) blk <- as.factor(blk)
     # compute conditional transition probabilities, using Bayes rule
-    if (!is.null(blk) & cond_probs) {
+    if (has_blk & cond_probs) {
         # function for Bayes rule
         `bayes` <- function(v1, v2) {
-            # table of joint and marginal probabilities
-            tab <- table(v1,v2)
-            # correction if either visit had ALL presences or ALL absences
-            dn <- dimnames(tab)
-            if (all(dn[[1]] == '0')) tab <- rbind(tab, '1'=c(0,0))
-            if (all(dn[[1]] == '1')) tab <- rbind('0'=c(0,0), tab)
-            if (all(dn[[2]] == '0')) tab <- cbind(tab, '1'=c(0,0))
-            if (all(dn[[2]] == '1')) tab <- cbind('0'=c(0,0), tab)
+            tab <- table(v1,v2)  # table of joint and marginal probabilities
+            dn  <- dimnames(tab)
+            # correct for uncommon cases: single condition in *both* visits
+            if(length(unlist(dn)) == 2) {
+                if (all(unlist(dn) == '0')) { # all stasis0
+                    tab <- matrix(c(tab,0,0,0), nrow=2, ncol=2,
+                                  dimnames = list(v1=c(0,1), v2=c(0,1)))
+                }
+                if (all(unlist(dn) == '1')) { # all stasis1
+                    tab <- matrix(c(0,0,0,tab), nrow=2, ncol=2,
+                                  dimnames = list(v1=c(0,1), v2=c(0,1)))
+                }
+            }
+            # correct for uncommon cases: single condition in *either* visit
+            if(length(unlist(dn)) == 3) {
+                if (all(dn[[1]] == '0')) tab <- rbind(tab, '1'=c(0,0))
+                if (all(dn[[1]] == '1')) tab <- rbind('0'=c(0,0), tab)
+                if (all(dn[[2]] == '0')) tab <- cbind(tab, '1'=c(0,0))
+                if (all(dn[[2]] == '1')) tab <- cbind('0'=c(0,0), tab)
+            }
             # proceed
             tx  <- addmargins(tab) # joint and marginal *counts*
             tot <- tx[3,3]         # marginal grand total
@@ -137,11 +150,12 @@
         ii <- grp == levels(grp)[1] # index *initial* visits
         ff <- grp == levels(grp)[2] # index *final* visits
         pa <- (spe > 0) * 1         # force binary presence/absence
-        pr <- t(sapply(1:NCOL(pa), function(j) bayes(v1 = pa[ii,j], v2 = pa[ff,j])))
+        pr <- t(sapply(1:NCOL(pa), function(j)
+            bayes(v1 = pa[ii,j], v2 = pa[ff,j])))
         rownames(pr) <- colnames(pa)
     }
     # if blocked, then relativize *within* blocks
-    if (!is.null(blk)) {
+    if (has_blk) {
         for (j in 1:NCOL(spe)) {
             for (b in unique(blk)) {
                 i     <- blk == b     # row index for blocks
@@ -167,13 +181,12 @@
     s        <- data.frame(alpha=as.character(alpha), species_expected = s)
     rownames(s) <- NULL
     IVmax_dir   <- NA
-    if (!is.null(blk)) {
-        cat('report that blk is NOT null.................')
+    if (has_blk) {
         IVmax_dir <- IVmax # signed IndVal: POS 'increasers', NEG 'decreasers'
         IVmax_dir[maxgrp == 1] <- IVmax_dir[maxgrp == 1] * (-1) # signed IndVal
     }
     # TODO: permutations....
-    return(list(cond_probs = pr,
+    out <- list(cond_probs = pr,
                 A          = t(A),
                 B          = t(B),
                 IV         = t(IV),
@@ -182,5 +195,7 @@
                 maxgrp     = maxgrp,
                 sumIVmax   = sumIVmax,
                 sig_expected = s,
-                pval       = NA))
+                pval       = NA)
+    attr(out, 'is_blocked_indval') <- has_blk
+    return(out)
 }
