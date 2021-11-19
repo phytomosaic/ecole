@@ -11,7 +11,7 @@ asin_sqrt(x, ...)
 
 genlogtrans(x, ...)
 
-pseudo_log(x, sigma = 1)
+pseudo_log(x, sigma = 1, backtransform = FALSE)
 
 standardize(x, from = 0, to = 1, na.rm = TRUE, ...)
 }
@@ -22,11 +22,12 @@ standardize(x, from = 0, to = 1, na.rm = TRUE, ...)
 
 \item{sigma}{numeric, curvature scale factor for pseudo-log transform.}
 
-\item{from, to}{standardizes from low to high values; defaults from
-0 to 1.}
+\item{backtransform}{logical, perform pseudo-log backward transformation?
+Default `backtransform = FALSE` gives the forward transformation.}
 
-\item{na.rm}{logical. Should missing values (including NaN) be
-removed?}
+\item{from, to}{standardizes from low to high values; default is from 0 to 1.}
+
+\item{na.rm}{logical, should missing values (including `NaN`) be removed?}
 }
 \value{
 Values on the modified scale.

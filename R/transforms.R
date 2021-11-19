@@ -4,13 +4,14 @@
 #'
 #' @param x  vector or array of values to transform.
 #'
-#' @param from,to standardizes from low to high values; defaults from
-#'      0 to 1.
+#' @param from,to standardizes from low to high values; default is from 0 to 1.
 #'
-#' @param na.rm logical. Should missing values (including NaN) be
-#'      removed?
+#' @param na.rm logical, should missing values (including `NaN`) be removed?
 #'
 #' @param sigma numeric, curvature scale factor for pseudo-log transform.
+#'
+#' @param backtransform logical, perform pseudo-log backward transformation?
+#'     Default `backtransform = FALSE` gives the forward transformation.
 #'
 #' @param ... further arguments passed to other methods.
 #'
@@ -84,12 +85,15 @@
 }
 #' @export
 #' @rdname transforms
-`pseudo_log` <- function (x, sigma = 1) {
-        wasVector <- is.vector(x)         # takes and returns a vector
-        x <- as.matrix(x)                 # convert to matrix
-        x <- asinh(x / (sigma * 2)) / log(10)  # transformation
-        # 2 * sigma * sinh(x * log(10))   # back-transformation antidote
-        if (wasVector)                    # return a vector
+`pseudo_log` <- function (x, sigma = 1, backtransform = FALSE) {
+        wasVector <- is.vector(x)             # takes and returns a vector
+        x <- as.matrix(x)                     # convert to matrix
+        if(isTRUE(backtransform)) {
+                x <- 2 * sigma * sinh(x * log(10))  # back-transformation antidote
+        } else {
+                x <- asinh(x / sigma / 2) / log(10) # transformation
+        }
+        if (wasVector)                        # return a vector
                 x <- as.vector(x)
         x
 }
