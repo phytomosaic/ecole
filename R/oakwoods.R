@@ -9,7 +9,9 @@
 #' @format A list of 5 data.frames:
 #'
 #' - \code{spe} species abundance matrix: 47 observations of 103 vascular
-#'     plant species. Abundances were relativized by species maximum.
+#'     plant species.  Abundances were relativized by species maximum.  This is
+#'     a subset of all species, where all singletons and doubletons were removed
+#'     from the `raw` matrix below.
 #'
 #' - \code{env} environmental matrix: 47 observations of 30 environmental
 #'     variables. Environmental variables, described in detail below, include
@@ -18,12 +20,13 @@
 #'     species richness, groups derived from cluster analysis, and community
 #'     types as originally designated by Thilenius.
 #'
-#' - \code{tra} traits matrix: 189 vascular plant species by 6 traits. The
-#'     traits are simply growth forms and are scored as binary 0/1 (no/yes).
+#' - \code{tra} traits matrix: 103 vascular plant species scored for each of 6
+#'     traits. The traits are simply growth forms and are scored as binary 0/1
+#'     (no/yes).
 #'
 #' - \code{xy} spatial matrix: 47 observations of 2 spatial coordinates.
 #'
-#' - \code{raw} raw species abundances: 47 observations of 103 vascular plant
+#' - \code{raw} raw species abundances: 47 observations of 189 vascular plant
 #'     species. The raw species abundances are before any modifications. The
 #'     values are basal areas (ft^2^/acre) for trees and percentage cover for
 #'     lower strata, based on 60, 0.2 m^2^ quadrats/stand. “Trace” was
