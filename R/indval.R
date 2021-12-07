@@ -74,7 +74,7 @@
 #' a <- data.frame(ivb$cond_probs)
 #' plot(a$prloss, a$prgain, col=ecole::colvec(ivb$IVmax_dir), pch=16)
 #'
-#' @seealso \code{\link[labdsv]{labdsv::indval}} or \code{\link[indicspecies]{indicspecies::strassoc}}
+#' @seealso \code{labdsv::indval} or \code{indicspecies::strassoc}
 #'
 #' @export
 #' @rdname indval

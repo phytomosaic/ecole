@@ -83,5 +83,5 @@ McCune, B., and M. J. Mefford. 2017. PC-ORD. Multivariate Analysis
     Beach, OR.
 }
 \seealso{
-\code{\link[labdsv]{labdsv::indval}} or \code{\link[indicspecies]{indicspecies::strassoc}}
+\code{labdsv::indval} or \code{indicspecies::strassoc}
 }
