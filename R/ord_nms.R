@@ -56,7 +56,6 @@
     try      <- p$try
     nrand    <- p$nrand
     maxit    <- p$maxit
-    stepdown <- TRUE # force stepdown dimensionality, for now
     cat('---------------------------------------------------\n')
     cat('-----------   Autopilot NMS now working   ---------\n')
     cat('---------------------------------------------------\n\n')
@@ -109,7 +108,7 @@
         num/den
     })
     ### plotting
-    try({
+    `f` <- function(stress) {
         x    <- stress
         ymin <- min(x, na.rm=TRUE) - 0.05
         ymax <- max(x, na.rm=TRUE) + 0.02
@@ -122,11 +121,12 @@
         text(1:3, ymin, paste0('pval = ', round(pval, 4)), cex=0.75)
         legend('topright', leg=c('Randomized','Real'), bty='n', bg=NA,
                border=NA, fill=c('#00000050','#DF536B'), cex=0.75)
-    }, silent=T)
+    }
+    try(f, silent=TRUE)
     ### apply final selected model
-    is_sig  <- if (nrand > 0) pval <= 0.05 else TRUE
+    is_sig     <- if (nrand > 0) pval <= 0.05 else TRUE
     is_improve <- c(TRUE, abs(diff(real_stress)) > 0.05)
-    k_final <- which(is_improve & is_sig)[-1]
+    k_final    <- which(is_improve & is_sig)[-1]
     m_final <- vegan::metaMDS(D, k=k_final, try=try, maxit=maxit, trace=0, ...)
     m_final$pval               <- pval
     m_final$stress_real_vs_rnd <- stress
@@ -148,7 +148,7 @@
     }
     cat('proportion of no-share sample units:', round(noshare(x),3), '\n')
     print(m_final)
-    cat(paste0('time elapsed: ', Sys.time()-time_start), '\n')
+    cat(paste0('time elapsed: ', Sys.time() - time_start), '\n')
     cat(paste0('finished at: ', Sys.time()), '\n')
     return(m_final)
 }
