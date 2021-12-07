@@ -159,6 +159,7 @@
 `screeplot_nms` <- function(object, ...) {
     stopifnot(inherits(object, 'ord_nms'))
     x    <- as.matrix(object$stress_real_vs_rnd)
+    nc   <- NCOL(x)
     pval <- object$pval
     ymin <- min(x, na.rm=TRUE) - 0.05
     ymax <- max(x, na.rm=TRUE) + 0.02
@@ -168,7 +169,7 @@
             main='Randomization vs Observed Stress', ...)
     points(x[1,], pch=16, col=2)
     lines(x[1,], lty=1, col=2)
-    text(1:3, ymin, paste0('pval = ', round(pval, 4)), cex=0.75)
+    text(1:nc, ymin, paste0('pval = ', round(pval, 4)), cex=0.75)
     legend('topright', leg=c('Randomized','Real'), bty='n', bg=NA, border=NA,
            fill=c('#00000050','#DF536B'), cex=0.75)
 }
