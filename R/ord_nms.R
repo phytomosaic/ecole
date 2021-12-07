@@ -34,7 +34,6 @@
 #' @examples
 #' data(smoky)
 #' m <- ord_nms(smoky$spe, 'quick')
-#' # screeplot(m)
 #'
 #' @seealso \code{\link[vegan]{metaMDS}}
 #'
@@ -156,8 +155,8 @@
         'minutes\n')
     return(m_final)
 }
-### screeplot method, shows real vs randomized stress per dimension
-`screeplot.ord_nms` <- function(object, ...) {
+### unexported helper
+`screeplot_nms` <- function(object, ...) {
     stopifnot(inherits(object, 'ord_nms'))
     x    <- as.matrix(object$stress_real_vs_rnd)
     pval <- object$pval

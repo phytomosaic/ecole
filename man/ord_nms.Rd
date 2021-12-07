@@ -36,7 +36,6 @@ NMS with stopping rules for dimensionality based on PC-ORD
 \examples{
 data(smoky)
 m <- ord_nms(smoky$spe, 'quick')
-# screeplot(m)
 
 }
 \references{
