@@ -47,7 +47,7 @@
     if (inherits(x, 'dist')) stop('`x` must not be `dist` object')
     D   <- vegan::vegdist(x, method=method)
     opt <- c('quick-and-dirty', 'medium', 'slow-and-thorough')
-    i   <- pmatch(autopilot,opt)[1]
+    i   <- pmatch(autopilot, opt)[1]
     p   <- data.frame(dims     = c(3, 4, 6),
                       try      = c(10, 50, 250),
                       nrand    = c(19, 49, 249),
@@ -127,6 +127,7 @@
     is_sig     <- if (nrand > 0) pval <= 0.05 else TRUE
     is_improve <- c(TRUE, abs(diff(real_stress)) > 0.05)
     k_final    <- which(is_improve & is_sig)[-1]
+    if(length(k_final) == 0L) { k_final <- 1 }
     m_final <- vegan::metaMDS(D, k=k_final, try=try, maxit=maxit, trace=0, ...)
     m_final$pval               <- pval
     m_final$stress_real_vs_rnd <- stress
@@ -148,8 +149,13 @@
     }
     cat('proportion of no-share sample units:', round(noshare(x),3), '\n')
     print(m_final)
-    cat(paste0('time elapsed: ', Sys.time() - time_start), '\n')
-    cat(paste0('finished at: ', Sys.time()), '\n')
+    cat(paste0('end time:   ',   time_end <- Sys.time()), '\n')
+    cat('time elapsed: ',
+        round(as.numeric(difftime(time1 = time_end,
+                                  time2 = time_start, units = 'mins')), 3),
+        'minutes\n')
+    # cat(paste0('time elapsed: ', Sys.time() - time_start), '\n')
+    # cat(paste0('finished at: ', Sys.time()), '\n')
     return(m_final)
 }
 ### screeplot method, shows real vs randomized stress per dimension
