@@ -115,7 +115,7 @@
         par(bty='l', las=1, pty='s')
         boxplot(x[-1,], ylim=c(ymin, ymax), boxwex=0.2, staplewex=0.1, lty=1,
                 outcex=NA, xlab='Dimensions', ylab='Stress',
-                main='Randomization vs Observed Stress', ...)
+                main='Randomization vs Observed Stress')
         points(x[1,], pch=16, col=2)
         lines(x[1,], lty=1, col=2)
         text(1:3, ymin, paste0('pval = ', round(pval, 4)), cex=0.75)
@@ -126,8 +126,8 @@
     ### apply final selected model
     is_sig     <- if (nrand > 0) pval <= 0.05 else TRUE
     is_improve <- c(TRUE, abs(diff(real_stress)) > 0.05)
-    k_final    <- which(is_improve & is_sig)[-1]
-    if(length(k_final) == 0L) { k_final <- 1 }
+    k_final    <- which(is_improve & is_sig)[-1][1]
+    if(is.na(k_final)) { k_final <- 1 }
     m_final <- vegan::metaMDS(D, k=k_final, try=try, maxit=maxit, trace=0, ...)
     m_final$pval               <- pval
     m_final$stress_real_vs_rnd <- stress
@@ -154,8 +154,6 @@
         round(as.numeric(difftime(time1 = time_end,
                                   time2 = time_start, units = 'mins')), 3),
         'minutes\n')
-    # cat(paste0('time elapsed: ', Sys.time() - time_start), '\n')
-    # cat(paste0('finished at: ', Sys.time()), '\n')
     return(m_final)
 }
 ### screeplot method, shows real vs randomized stress per dimension
