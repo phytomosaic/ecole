@@ -135,7 +135,9 @@
     cat('\n\n---------------------------------------------------\n')
     cat('-------------- Autopilot NMS results --------------\n')
     cat('---------------------------------------------------\n\n')
-    cat('final selected dimensionality:', m_final$ndim, '\n')
+    cat('Measures of fit for final model:\n')
+    print(data.frame('...........' = fitstats_nms(m_final)))
+    cat('\nfinal selected dimensionality:', m_final$ndim, '\n')
     cat('improvement, by dimension:', abs(c(1,diff(real_stress))), '\n')
     cat('permutational p-values, by dimension:', pval, '\n')
     tab <- table(D)
@@ -172,4 +174,41 @@
     text(1:nc, ymin, paste0('pval = ', round(pval, 4)), cex=0.75)
     legend('topright', leg=c('Randomized','Real'), bty='n', bg=NA, border=NA,
            fill=c('#00000050','#DF536B'), cex=0.75)
+}
+### unexported helper
+`fitstats_nms` <- function (object) {
+    # setup
+    x  <- object$diss
+    y  <- object$dist
+    yf <- object$dhat
+    # R2n, nonmetric fit
+    rstress <- 1 - object$stress^2
+    # R2l, linear fit (monotonic fit)
+    ralscal <- 0
+    if (object$iregn > 1) {
+        if (object$iregn == 3) {
+            k <- seq(object$istart[2], object$ndis)
+            ralscal <- cor(y[k], yf[k])^2
+        }
+        else {
+            ralscal <- cor(y, yf)^2
+        }
+    }
+    if (object$iregn != 2) {
+        ist <- c(object$istart, object$ndis + 1)
+        if (object$iregn == 3)
+            object$ngrp <- 1
+        for (j in 1:object$ngrp) {
+            k <- seq(ist[j], ist[j + 1] - 1)
+            ralscal <- ralscal + cor(y[k], yf[k])^2
+        }
+    }
+    ralscal <- ifelse(object$iregn == 3, ralscal/2, ralscal/object$ngrp)
+    # R2m, metric fit AKA variance explained
+    rmetric <- cor(x,y) ^ 2
+    # output
+    out <- c('Non-metric fit, R2n' = rstress,
+             'Linear fit, R2l' = ralscal,
+             'Metric fit, R2m' = rmetric)
+    return(out)
 }
