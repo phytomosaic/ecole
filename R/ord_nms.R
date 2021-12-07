@@ -33,9 +33,8 @@
 #'
 #' @examples
 #' data(smoky)
-#' m   <- ord_nms(smoky$spe, 'quick')
-#' # m   <- ord_nms(smoky$spe, 'medium', parallel=10)
-#' # m   <- ord_nms(smoky$spe, 'slow', parallel=10)
+#' m <- ord_nms(smoky$spe, 'quick')
+#' # screeplot(m)
 #'
 #' @seealso \code{\link[vegan]{metaMDS}}
 #'
@@ -46,7 +45,7 @@
                       method = 'bray', ...) {
     ### setup
     if (inherits(x, 'dist')) stop('`x` must not be `dist` object')
-    D   <- vegdist(x, method=method)
+    D   <- vegan::vegdist(x, method=method)
     opt <- c('quick-and-dirty', 'medium', 'slow-and-thorough')
     i   <- pmatch(autopilot,opt)[1]
     p   <- data.frame(dims     = c(3, 4, 6),
@@ -67,15 +66,13 @@
     cat('number of runs with real data:', try, '\n')
     cat('number of runs with randomized data:', nrand, '\n')
     cat('maximum iterations per run:', maxit, '\n')
-
     ### real data runs
     real_stress <- sapply(1:k, function(kk) {
         cat('real data:', kk, 'of', k, 'dimensions... ')
-        m  <- metaMDS(D, k=kk, try=try, maxit=maxit, trace=0, ...)
+        m  <- vegan::metaMDS(D, k=kk, try=try, maxit=maxit, trace=0, ...)
         cat('stress =', m$stress, '\n')
         m$stress
     })
-
     #### shuffle within columns, then get dissimilarity matrix
     `perm` <- function(x) {
         x     <- as.matrix(x)
@@ -90,21 +87,19 @@
             if(any(empty)) cat('permutation',itr,'had empty rows\n')
         }
         rownames(p) <- rownames(x)
-        return(vegdist(p, method = attributes(D)$method))
+        return(vegan::vegdist(p, method = attributes(D)$method))
     }
-
     ### randomization data runs (TODO: permit parallel processing)
     cat('randomization: ')
     rnd_stress <- sapply(1:nrand, function(rand) {
         cat(rand, 'of', nrand, '...  ')
         stress <- sapply(1:k, function(kk) {
-            m  <- metaMDS(perm(x), k=kk, try=1, trymax=1,
-                          maxit=maxit, trace=0, ...)
+            m  <- vegan::metaMDS(perm(x), k=kk, try=1, trymax=1,
+                                 maxit=maxit, trace=0, ...)
             m$stress
         })
         return(stress)
     })
-
     ### randomization pvalues
     stress           <- rbind(real_stress, t(rnd_stress))
     rownames(stress) <- c('real',paste0('rnd_',1:nrand))
@@ -113,32 +108,36 @@
         den  <- length(x[-1]) + 1
         num/den
     })
-    try({  ### TODO: ensure safe failure if plotting device not available
+    ### plotting
+    try({
+        x    <- stress
+        ymin <- min(x, na.rm=TRUE) - 0.05
+        ymax <- max(x, na.rm=TRUE) + 0.02
         par(bty='l', las=1, pty='s')
-        boxplot(stress[-1,], ylim=c(min(stress)-0.05, max(stress)+0.02),
-                boxwex=0.2, staplewex=0.1, lty=1, outcex=NA,
-                xlab='Dimensions', ylab='Stress',
-                main=paste0('Randomization vs Observed Stress'))
-        points(stress[1,], pch=16)
-        lines(stress[1,], col=1, lty=2)
-        text(1:3, min(stress)-0.05, round(pval,4))
+        boxplot(x[-1,], ylim=c(ymin, ymax), boxwex=0.2, staplewex=0.1, lty=1,
+                outcex=NA, xlab='Dimensions', ylab='Stress',
+                main='Randomization vs Observed Stress', ...)
+        points(x[1,], pch=16, col=2)
+        lines(x[1,], lty=1, col=2)
+        text(1:3, ymin, paste0('pval = ', round(pval, 4)), cex=0.75)
+        legend('topright', leg=c('Randomized','Real'), bty='n', bg=NA,
+               border=NA, fill=c('#00000050','#DF536B'), cex=0.75)
     }, silent=T)
-
     ### apply final selected model
-    is_sig     <- if (nrand > 0) pval <= 0.05 else TRUE
+    is_sig  <- if (nrand > 0) pval <= 0.05 else TRUE
     is_improve <- c(TRUE, abs(diff(real_stress)) > 0.05)
-    k_final    <- which(is_improve & is_sig)[-1]
-    m_final    <- metaMDS(D, k=k_final, try=try, maxit=maxit, trace=0, ...)
+    k_final <- which(is_improve & is_sig)[-1]
+    m_final <- vegan::metaMDS(D, k=k_final, try=try, maxit=maxit, trace=0, ...)
     m_final$pval               <- pval
     m_final$stress_real_vs_rnd <- stress
-
+    class(m_final)  <- c('ord_nms', class(m_final))
     ### print results
-    cat('---------------------------------------------------\n')
+    cat('\n\n---------------------------------------------------\n')
     cat('-------------- Autopilot NMS results --------------\n')
     cat('---------------------------------------------------\n\n')
     cat('final selected dimensionality:', m_final$ndim, '\n')
     cat('improvement, by dimension:', abs(c(1,diff(real_stress))), '\n')
-    cat('permutational p-values,  by dimension:', pval, '\n')
+    cat('permutational p-values, by dimension:', pval, '\n')
     tab <- table(D)
     cat('number of tie blocks in dissimilarity matrix:', sum(tab > 1), '\n')
     cat('number of elements involved in ties:', sum(tab[tab > 1]), '\n')
@@ -152,4 +151,21 @@
     cat(paste0('time elapsed: ', Sys.time()-time_start), '\n')
     cat(paste0('finished at: ', Sys.time()), '\n')
     return(m_final)
+}
+### screeplot method, shows real vs randomized stress per dimension
+`screeplot.ord_nms` <- function(object, ...) {
+    stopifnot(inherits(object, 'ord_nms'))
+    x    <- as.matrix(object$stress_real_vs_rnd)
+    pval <- object$pval
+    ymin <- min(x, na.rm=TRUE) - 0.05
+    ymax <- max(x, na.rm=TRUE) + 0.02
+    par(bty='l', las=1, pty='s')
+    boxplot(x[-1,], ylim=c(ymin, ymax), boxwex=0.2, staplewex=0.1, lty=1,
+            outcex=NA, xlab='Dimensions', ylab='Stress',
+            main='Randomization vs Observed Stress', ...)
+    points(x[1,], pch=16, col=2)
+    lines(x[1,], lty=1, col=2)
+    text(1:3, ymin, paste0('pval = ', round(pval, 4)), cex=0.75)
+    legend('topright', leg=c('Randomized','Real'), bty='n', bg=NA, border=NA,
+           fill=c('#00000050','#DF536B'), cex=0.75)
 }
