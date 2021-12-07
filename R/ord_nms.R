@@ -122,7 +122,7 @@
         legend('topright', leg=c('Randomized','Real'), bty='n', bg=NA,
                border=NA, fill=c('#00000050','#DF536B'), cex=0.75)
     }
-    try(f, silent=TRUE)
+    try(f(stress), silent=TRUE)
     ### apply final selected model
     is_sig     <- if (nrand > 0) pval <= 0.05 else TRUE
     is_improve <- c(TRUE, abs(diff(real_stress)) > 0.05)
