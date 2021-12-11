@@ -8,7 +8,7 @@ ord_bc(
   x,
   method = "bray",
   endpoint = c("var.reg", "BC.original", "PC_ORD.original"),
-  get.resid.dist = FALSE,
+  ends = c(NA, NA),
   ...
 )
 }
@@ -25,31 +25,33 @@ sum of distances from other sites, and the second endpoint has the highest
 distance from the first endpoint. `'var.reg'` is the variance regression
 method now default in PC-ORD (McCune and Mefford 2017).}
 
-\item{get.resid.dist}{logical, return the residual distance matrices?}
+\item{ends}{Numeric, index two sample units as endpoints on first axis.}
 
 \item{...}{further arguments not currently passed to other functions.}
 }
 \value{
-List containing items:\cr - \code{DistResid}:  residual distance
-matrices (if requested).\cr - \code{SSresid}:  sums-of-squares of residual
-distances per axis.\cr - \code{varexplained}:  variance explained per
-axis.\cr - \code{endpoints}:  endpoint sample units per axis.\cr -
-\code{scores}:  ordination scores.\cr
+List containing items:\cr
+- \code{SSresid}:  sums-of-squares of residual distances per axis.\cr
+- \code{varexplained}:  variance explained per axis.\cr
+- \code{endpoints}:  endpoint sample units per axis.\cr
+- \code{scores}:  ordination scores.\cr
 }
 \description{
 Bray-Curtis ordination.
 }
 \details{
-Bray-Curtis ordination.
+Bray-Curtis ordination. See references.
 }
 \examples{
 data(smoky, package='ecole')
 spe <- smoky$spe
 o1 <- ord_bc(spe, method='bray', endpoint='BC.original')
-o2 <- ord_bc(vegdist(spe),       endpoint='BC.original')
+o2 <- ord_bc(spe, method='bray', endpoint='BC.original', ends=c(1,12))
 ecole::set_par(2)
-plot(scores(o1), col=viridis::inferno(14))
-plot(scores(o2), col=viridis::inferno(14)) # should be identical
+plot(scores(o1), type='n')
+text(scores(o1))
+plot(scores(o2), type='n')
+text(scores(o2))
 
 }
 \references{

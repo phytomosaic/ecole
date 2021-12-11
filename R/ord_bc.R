@@ -14,17 +14,17 @@
 #'   distance from the first endpoint. `'var.reg'` is the variance regression
 #'   method now default in PC-ORD (McCune and Mefford 2017).
 #'
-#' @param get.resid.dist logical, return the residual distance matrices?
+#' @param ends Numeric, index two sample units as endpoints on first axis.
 #'
 #' @param ... further arguments not currently passed to other functions.
 #'
-#' @return List containing items:\cr - \code{DistResid}:  residual distance
-#' matrices (if requested).\cr - \code{SSresid}:  sums-of-squares of residual
-#' distances per axis.\cr - \code{varexplained}:  variance explained per
-#' axis.\cr - \code{endpoints}:  endpoint sample units per axis.\cr -
-#' \code{scores}:  ordination scores.\cr
+#' @return List containing items:\cr
+#' - \code{SSresid}:  sums-of-squares of residual distances per axis.\cr
+#' - \code{varexplained}:  variance explained per axis.\cr
+#' - \code{endpoints}:  endpoint sample units per axis.\cr
+#' - \code{scores}:  ordination scores.\cr
 #'
-#' @details Bray-Curtis ordination.
+#' @details Bray-Curtis ordination. See references.
 #'
 #' @references
 #'
@@ -46,17 +46,21 @@
 #' data(smoky, package='ecole')
 #' spe <- smoky$spe
 #' o1 <- ord_bc(spe, method='bray', endpoint='BC.original')
-#' o2 <- ord_bc(vegdist(spe),       endpoint='BC.original')
+#' o2 <- ord_bc(spe, method='bray', endpoint='BC.original', ends=c(1,12))
 #' ecole::set_par(2)
-#' plot(scores(o1), col=viridis::inferno(14))
-#' plot(scores(o2), col=viridis::inferno(14)) # should be identical
+#' plot(scores(o1), type='n')
+#' text(scores(o1))
+#' plot(scores(o2), type='n')
+#' text(scores(o2))
 #'
 #' @export
 #' @rdname ord_bc
 `ord_bc` <- function(x,
                      method = 'bray',
                      endpoint = c('var.reg', 'BC.original', 'PC_ORD.original'),
-                     get.resid.dist = FALSE, ...) {
+                     ends = c(NA,NA),
+                     # get.resid.dist = FALSE,
+                     ...) {
     # Original author: Ken Aho, https://sites.google.com/a/isu.edu/aho/
     # tarball:  https://drive.google.com/file/d/0B65xY-gnYYGramVGcURnZGIyZGM/
     # Modified: Rob Smith, modified from `plant.ecol::polar.ord()`
@@ -68,8 +72,8 @@
         diss  <- vegan::vegdist(x, method)
     }
     rn    <- attr(diss, 'Labels')
-    nc    <- attr(diss, 'Size')
-    if(nc > 250) {
+    nr    <- attr(diss, 'Size')
+    if(nr > 250) {
         cat('  current implementation version works best for n < 500;\n',
             '    e.g., n = 500 takes ~10 minutes!')
         x <- c(20, 50, 100, 150, 200, 250)            # n SUs
@@ -87,15 +91,15 @@
              log10(450), log10(60*5), col='#FF000020', border=NA)
     }
     D     <- as.matrix(as.dist(diss, upper = TRUE, diag = TRUE))
-    n     <- (nc^2 - nc) / 2 # num of elements, same as `length(diss)`
+    n     <- (nr^2 - nr) / 2 # num of elements, same as `length(diss)`
     SStot <- sum(diss ^ 2)
-    `allpairs` <- function(n = nc) {
+    `allpairs` <- function(n = nr) {
         m <- matrix(1:n, ncol=n, nrow=n)
         list(first = t(m)[lower.tri(m)], second = m[lower.tri(m)])
     }
-    pw <- allpairs(nc)
+    pw <- allpairs(nr)
     `getDmat` <- function(umat) {
-        Dmat <- matrix(0, ncol = nc, nrow = nc)
+        Dmat <- matrix(0, ncol = nr, nrow = nr)
         for (i in 1:nrow(mat1)) {
             Dmat[umat[, 1][i], ][umat[, 2][i]] <- umat[, 3][i]
             Dmat[umat[, 2][i], ][umat[, 1][i]] <- umat[, 3][i]
@@ -113,8 +117,8 @@
                 A <- as.numeric(endp[1])
                 B <- as.numeric(endp[2])
             }
-            C     <- seq(1:nc)
-            C     <- C[seq(1:nc) != B & seq(1:nc) != A]
+            C     <- seq(1:nr)
+            C     <- C[seq(1:nr) != B & seq(1:nr) != A]
             res   <- list()
             res$A <- A
             res$B <- B
@@ -141,8 +145,8 @@
                     B <- as.numeric(endp[2])
                 }
             }
-            C     <- seq(1:nc)
-            C     <- C[seq(1:nc) != B & seq(1:nc) != A]
+            C     <- seq(1:nr)
+            C     <- C[seq(1:nr) != B & seq(1:nr) != A]
             res   <- list()
             res$A <- A
             res$B <- B
@@ -177,49 +181,58 @@
         }
     }
     `getscores` <- function(pw, D.AB, A, B, C, dim = 1) {
-        scores1 <- matrix(ncol = 1, nrow = nc)
-        for (i in 2:(nc - 1)) {
-            scores1[1] <- 0
-            scores1[nc] <- D.AB
+        scr <- matrix(ncol = 1, nrow = nr)
+        for (i in 2:(nr - 1)) {
+            scr[1] <- 0
+            scr[nr] <- D.AB
             if      (C[i-1] > A & C[i-1] > B) {
-                scores1[i] <-
+                scr[i] <-
                     (D.AB^2 +
                          (pw[,3][pw[,1] == A & pw[,2] == C[i-1]]^2) -
                          (pw[,3][pw[,1] == B & pw[,2] == C[i-1]]^2)) / (2*D.AB)
             }
             else if (C[i-1] < A & C[i-1] > B) {
-                scores1[i] <-
+                scr[i] <-
                     (D.AB^2 +
                          (pw[,3][pw[,2] == A & pw[,1] == C[i-1]])^2 -
                          (pw[,3][pw[,1] == B & pw[,2] == C[i-1]]^2)) / (2*D.AB)
             }
             else if (C[i-1] < A & C[i-1] < B) {
-                scores1[i] <-
+                scr[i] <-
                     (D.AB^2 +
                          (pw[,3][pw[,2] == A & pw[,1] == C[i-1]])^2 -
                          (pw[,3][pw[,2] == B & pw[,1] == C[i-1]]^2)) / (2*D.AB)
             }
             else if (C[i-1] > A & C[i-1] < B) {
-                scores1[i] <-
+                scr[i] <-
                     (D.AB^2 +
                          (pw[,3][pw[,1] == A & pw[,2] == C[i-1]])^2 -
                          (pw[,3][pw[,2] == B & pw[,1] == C[i-1]]^2)) / (2*D.AB)
             }
         }
         sites   <- c(A, C, B)
-        scores1 <- as.matrix(scores1[order(sites), ])
-        colnames(scores1) <- paste('Dim', dim, 'scores')
-        scores1
+        scr <- as.matrix(scr[order(sites), ])
+        colnames(scr) <- paste('Dim', dim, 'scores')
+        scr
     }
     Dist1 <- matrix(ncol = 1, nrow = n)
     for (i in 1:n) {
         Dist1[i] <- D[pw$second[i], (pw$first[i])]
     }
     mat1 <- cbind(pw$first, pw$second, Dist1)
-    ep1  <- getendp(mat1, RD = D, dim = 1)
-    A    <- ep1$A
-    B    <- ep1$B
-    C    <- ep1$C
+    ### allow Axis 1 to have subjective endpoints
+    if(all(!is.na(ends)) & length(ends) == 2 & is.numeric(ends)) {
+        A    <- ends[1]
+        B    <- ends[2]
+        s    <- 1:nr
+        C    <- s[!(s %in% ends)]
+    } else {
+        ep1  <- getendp(mat1, RD = D, dim = 1)
+        A    <- ep1$A
+        B    <- ep1$B
+        C    <- ep1$C
+    }
+    ### resume
     if (A < B) {
         D.AB <- mat1[, 3][mat1[, 1] == A & mat1[, 2] == B]
     }
@@ -280,12 +293,12 @@
         data = c(sum(Dist2.1[,3]^2), sum(Dist3.2[,3]^2), sum(Dist4.2^2)),
         ncol = 1, nrow = 3,
         dimnames = list(c('Dim1','Dim2','Dim3'), c('SS residuals')))
-    if (isTRUE(get.resid.dist)) {
-        res$DistResid <- list(
-            orig.dist = as.dist(D),
-            axis2     = as.dist(getDmat(Dist2.1)),
-            axis3     = as.dist(getDmat(Dist3.2)))
-    }
+    # if (isTRUE(get.resid.dist)) {
+    #     res$DistResid <- list(
+    #         orig.dist = as.dist(D),
+    #         axis2     = as.dist(getDmat(Dist2.1)),
+    #         axis3     = as.dist(getDmat(Dist3.2)))
+    # }
     res$varexplained <- matrix(
         data = 100 * (1 - (res$SSresid / SStot)),
         ncol = 1, nrow = 3,
@@ -296,10 +309,9 @@
         dimnames = list(c('Dim1', 'Dim2', 'Dim3'), c('Endpt1', 'Endpt2'))))
     res$scores    <- matrix(
         data = cbind(scores1, scores2, scores3),
-        ncol = 3, nrow = nc,
+        ncol = 3, nrow = nr,
         dimnames = list(rn, c('Dim1', 'Dim2', 'Dim3')))
     res
 }
-
 
 ####    END    ####
