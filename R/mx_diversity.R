@@ -8,7 +8,7 @@
 #' @param ... further arguments passed to other methods
 #'
 #' @return
-#' Dataframe with 8 numeric values: \itemize{
+#' `mx_diversity` returns a data.frame with 8 numeric values: \itemize{
 #'   \item gamma = count of species in entire matrix
 #'   \item alpha = average count of species per SU
 #'   \item beta  = Whittaker's beta diversity = [(gamma/alpha) - 1]
@@ -21,9 +21,18 @@
 #'   \item N     = number of SUs
 #'   }
 #'
+#' `mx_profile` appends further items: \itemize{
+#'   \item cv_rowtotals = coefficient of variation within rows
+#'   \item cv_coltotals = coefficient of variation within columns
+#'   \item mean_colskewness  = mean of skewness within columns
+#'   \item min_nonzeroval = minimum nonzero value
+#'   \item min_nonzeroval = maximum nonzero value
+#'   }
+#'
 #' @details
-#' Calculates eight measures of diversity in the matrix. For an
-#'     example applied to many simulated datasets, see Smith (2017).
+#' Calculates eight measures of diversity in the matrix, and five row and column
+#'     statistics. For an example applied to many simulated datasets, see Smith
+#'     (2017).
 #'
 #' @examples
 #' # species abundance data
@@ -33,6 +42,8 @@
 #' colnames(spe) <- c('Acer rubrum','Acer saccharum','Acer negundo')
 #' spe
 #' mx_diversity(spe)
+#' mx_profile(spe)
+#'
 #'
 #' @references
 #' McCune, B., and J. B. Grace. 2002. Analysis of Ecological
@@ -76,7 +87,7 @@
      }
 
      # halfchanges (pg 31 McCune & Grace 2002)
-     `hc` <- function(x, method='bray', na.rm=T, ...){
+     `hc` <- function(x, method='bray', na.rm=TRUE, ...){
           D     <- vegan::vegdist(x=x, method=method, na.rm=na.rm)
           Dbar  <- mean(D, na.rm=na.rm)
           betaD <- log( 1 - Dbar ) / log(0.5)
@@ -98,4 +109,22 @@
      out <- apply(out, 1, round, 2)
      colnames(out) <- 'mx_div'
      out
+}
+#' @export
+#' @rdname mx_diversity
+`mx_profile` <- function(x, ...) {
+        `skwnss` <- function(a) {
+                n <- length(a <- na.omit(a))
+                a <- a - mean(a)
+                sqrt(n) * sum(a^3)/(sum(a^2)^(3/2)) * sqrt(n*(n-1))/(n-2)
+        }
+        out <- rbind(
+                mx_diversity(x, na.rm=TRUE, ...),
+                cv_rowtotals     = ecole::cv(rowSums(x, na.rm=TRUE)),
+                cv_coltotals     = ecole::cv(colSums(x, na.rm=TRUE)),
+                mean_colskewness = mean(apply(x, 2, skwnss), na.rm=TRUE),
+                min_nonzeroval   = min(x[x != 0], na.rm=TRUE),
+                max_nonzeroval   = max(x[x != 0], na.rm=TRUE)
+        )
+        round(out, digits=2)
 }

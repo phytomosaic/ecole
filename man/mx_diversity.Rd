@@ -2,9 +2,12 @@
 % Please edit documentation in R/mx_diversity.R
 \name{mx_diversity}
 \alias{mx_diversity}
+\alias{mx_profile}
 \title{Diversity of a species matrix}
 \usage{
 mx_diversity(x, ...)
+
+mx_profile(x, ...)
 }
 \arguments{
 \item{x}{array of species data, where rows = SUs and cols = species}
@@ -12,7 +15,7 @@ mx_diversity(x, ...)
 \item{...}{further arguments passed to other methods}
 }
 \value{
-Dataframe with 8 numeric values: \itemize{
+`mx_diversity` returns a data.frame with 8 numeric values: \itemize{
   \item gamma = count of species in entire matrix
   \item alpha = average count of species per SU
   \item beta  = Whittaker's beta diversity = [(gamma/alpha) - 1]
@@ -24,14 +27,23 @@ Dataframe with 8 numeric values: \itemize{
   \item propnoshare = proportion of no-share SU pairs
   \item N     = number of SUs
   }
+
+`mx_profile` appends further items: \itemize{
+  \item cv_rowtotals = coefficient of variation within rows
+  \item cv_coltotals = coefficient of variation within columns
+  \item mean_colskewness  = mean of skewness within columns
+  \item min_nonzeroval = minimum nonzero value
+  \item min_nonzeroval = maximum nonzero value
+  }
 }
 \description{
 Calculate diversity properties of a species abundance matrix:
     Gamma, Alpha, Beta, Halfchanges, Dust Bunny Index, others.
 }
 \details{
-Calculates eight measures of diversity in the matrix. For an
-    example applied to many simulated datasets, see Smith (2017).
+Calculates eight measures of diversity in the matrix, and five row and column
+    statistics. For an example applied to many simulated datasets, see Smith
+    (2017).
 }
 \examples{
 # species abundance data
@@ -41,6 +53,8 @@ spe[spe < 0] <- 0
 colnames(spe) <- c('Acer rubrum','Acer saccharum','Acer negundo')
 spe
 mx_diversity(spe)
+mx_profile(spe)
+
 
 }
 \references{
