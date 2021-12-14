@@ -1,6 +1,6 @@
-#' @title Describe
+#' @title Descriptive summary statistics
 #'
-#' @description Descriptive summary statistics.
+#' @description Descriptive summary statistics for .
 #'
 #' @param x  vector of values to be summarized.
 #'
@@ -29,15 +29,18 @@
 #'   \item max = maximum value
 #'   }\cr
 #'
+#' For \code{mx_describe}, a list of two items showing row and column
+#'   summaries, each containing the above items.
+#'
 #' @details
 #' Summary statistics applied to a vector or rows/columns of a matrix. For
-#' skewness and kurtosis: \itemize{
-#'   \item NEG kurtosis = flat distribution (platykurtic)
-#'   \item POS kurtosis = peaked distribution (leptokurtic)
-#'   \item ZERO kurtosis ~ the normal distribution (mesokurtic)
-#'   \item NEG skewness indicates mean < median (left-skewed)
-#'   \item POS skewness indicates mean > median (right-skewed)
-#'   }
+#'   skewness and kurtosis: \itemize{
+#'     \item NEG kurtosis = flat distribution (platykurtic)
+#'     \item POS kurtosis = peaked distribution (leptokurtic)
+#'     \item ZERO kurtosis ~ the normal distribution (mesokurtic)
+#'     \item NEG skewness indicates mean < median (left-skewed)
+#'     \item POS skewness indicates mean > median (right-skewed)
+#'     }
 #'
 #' @examples
 #' x <- c(rnorm(99, 0.1), NA)
