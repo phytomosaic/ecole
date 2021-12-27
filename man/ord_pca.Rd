@@ -29,9 +29,10 @@ List containing items returned by `stats::prcomp`, appended with further
 Principal components analysis with randomization test for stopping rules.
 }
 \details{
-PCA with stopping rules based on RndLambda, RndF, or broken-stick (Peres-Neto
-   et al. 2005).  The current implementation hard-codes the cross-products
-   matrix as a correlation matrix (i.e., data are scaled and centered).
+PCA with stopping rules based on RndLambda, RndF, AvgRnd, or broken-stick
+   (Peres-Neto et al. 2005).  The current implementation hard-codes the
+   cross-products matrix as a correlation matrix (i.e., data are scaled and
+   centered).
 }
 \examples{
 data(smoky)

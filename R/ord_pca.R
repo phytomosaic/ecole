@@ -22,9 +22,10 @@
 #'         stopping rules.
 #'
 #' @details
-#' PCA with stopping rules based on RndLambda, RndF, or broken-stick (Peres-Neto
-#'    et al. 2005).  The current implementation hard-codes the cross-products
-#'    matrix as a correlation matrix (i.e., data are scaled and centered).
+#' PCA with stopping rules based on RndLambda, RndF, AvgRnd, or broken-stick
+#'    (Peres-Neto et al. 2005).  The current implementation hard-codes the
+#'    cross-products matrix as a correlation matrix (i.e., data are scaled and
+#'    centered).
 #'
 #' @references
 #' Peres-Neto, P.R., D.A. Jackson, and K.M. Somers. 2005. How many principal
@@ -94,12 +95,14 @@
                 return(tab)
         }
         pc$tab      <- randomize_pca(x)
-        bs          <- rev(cumsum(1/(m:1)) / m)
-        keep_bs     <- which(pc$varexpl - bs < 0.000001)[1] - 1
         keep_rndlam <- which(pc$tab$p_RndLambda > 0.05)[1] - 1
         keep_rndf   <- which(pc$tab$p_RndF > 0.05)[1] - 1
+        keep_avgrnd <- which(pc$tab$Eigenvalue < pc$tab$MeanRndEig)[1] - 1
+        bs          <- rev(cumsum(1/(m:1)) / m)
+        keep_bs     <- which(pc$varexpl - bs < 0.000001)[1] - 1
         pc$stopping <- rbind(`Rnd-Lambda`   = keep_rndlam,
                              `Rnd-F`        = keep_rndf,
+                             `Avg-Rnd`      = keep_avgrnd,
                              `broken-stick` = keep_bs)
         colnames(pc$stopping) <- 'Number of dimensions'
         cat('\n')
