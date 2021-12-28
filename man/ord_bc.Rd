@@ -7,7 +7,7 @@
 ord_bc(
   x,
   method = "bray",
-  endpoint = c("var.reg", "BC.original", "PC_ORD.original"),
+  endmethod = c("var_reg", "BC_orig", "PCORD_orig"),
   ends = c(NA, NA),
   ...
 )
@@ -18,22 +18,23 @@ or traits values.}
 
 \item{method}{dissimilarity index, passed to `vegan::vegdist`.}
 
-\item{endpoint}{Endpoint selection method. `'BC.original'` is Bray-Curtis
-original of selecting most-distant SUs.  `'PC_ORD.original'` is the
-deprecated method from PC-ORD, whereby the first endpoint has the highest
-sum of distances from other sites, and the second endpoint has the highest
-distance from the first endpoint. `'var.reg'` is the variance regression
-method now default in PC-ORD (McCune and Mefford 2017).}
+\item{endmethod}{Endpoint selection method. `'var_reg'` is the variance
+regression method now default in PC-ORD (McCune and Mefford 2017).
+`'BC_orig'` is Bray-Curtis original method of selecting most-distant SUs.
+`'PCORD_orig'` is the deprecated method from PC-ORD, whereby the first
+endpoint has the greatest sum of distances from other sites, and the
+second endpoint has the greatest distance from the first endpoint.}
 
-\item{ends}{Numeric, index two sample units as endpoints on first axis.}
+\item{ends}{Numeric, index two sample units as endpoints on first axis
+(optional). Endpoints in higher dimensions then selected by `endmethod`.}
 
 \item{...}{further arguments not currently passed to other functions.}
 }
 \value{
 List containing items:\cr
-- \code{SSresid}:  sums-of-squares of residual distances per axis.\cr
-- \code{varexplained}:  variance explained per axis.\cr
-- \code{endpoints}:  endpoint sample units per axis.\cr
+- \code{sumtab}:  summary table containing for each axis: sums-of-squares of
+      residual distances, percent variance explained, and sample units
+      selected as endpoints.\cr
 - \code{scores}:  ordination scores.\cr
 }
 \description{
@@ -45,8 +46,8 @@ Bray-Curtis ordination. See references.
 \examples{
 data(smoky, package='ecole')
 spe <- smoky$spe
-o1 <- ord_bc(spe, method='bray', endpoint='BC.original')
-o2 <- ord_bc(spe, method='bray', endpoint='BC.original', ends=c(1,12))
+o1 <- ord_bc(spe, method='bray', endmethod='BC_orig')
+o2 <- ord_bc(spe, method='bray', endmethod='BC_orig', ends=c(1,12))
 ecole::set_par(2)
 plot(scores(o1), type='n')
 text(scores(o1))
