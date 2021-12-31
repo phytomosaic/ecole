@@ -11,6 +11,9 @@
 #'
 #' @param method dissimilarity index, passed to `vegan::vegdist`.
 #'
+#' @param parallel number of cores to use in parallel processing.  Set `NULL` to
+#'     avoid parallel processing.
+#'
 #' @param ... further arguments passed to `vegan::metaMDS`.
 #'
 #' @return
@@ -32,16 +35,21 @@
 #'     Beach, OR.
 #'
 #' @examples
+#' \dontrun{
 #' data(smoky)
-#' m <- ord_nms(smoky$spe, 'quick')
-#'
+#' m1 <- ord_nms(smoky$spe, 'quick')
+#' m2 <- ord_nms(smoky$spe, 'medium')
+#' m3 <- ord_nms(smoky$spe, 'slow')
+#' }
 #' @seealso \code{\link[vegan]{metaMDS}}
 #'
 #' @export
 #' @rdname ord_nms
 `ord_nms` <- function(x,
                       autopilot = c('quick', 'medium', 'slow'),
-                      method = 'bray', ...) {
+                      method = 'bray',
+                      parallel = parallel::detectCores() - 1,
+                      ...) {
     ### setup
     if (inherits(x, 'dist')) stop('`x` must not be `dist` object')
     D   <- vegan::vegdist(x, method=method)
@@ -87,17 +95,53 @@
         rownames(p) <- rownames(x)
         return(vegan::vegdist(p, method = attributes(D)$method))
     }
-    ### randomization data runs (TODO: permit parallel processing)
-    cat('randomization: ')
-    rnd_stress <- sapply(1:nrand, function(rand) {
-        cat(rand, 'of', nrand, '...  ')
-        stress <- sapply(1:k, function(kk) {
-            m  <- vegan::metaMDS(perm(x), k=kk, try=1, trymax=1,
-                                 maxit=maxit, trace=0, ...)
-            m$stress
-        })
-        return(stress)
-    })
+    # ### randomization data runs (TODO: permit parallel processing)
+    # cat('randomization: ')
+    # rnd_stress <- sapply(1:nrand, function(rand) {
+    #     cat(rand, 'of', nrand, '...  ')
+    #     stress <- sapply(1:k, function(kk) {
+    #         m  <- vegan::metaMDS(perm(x), k=kk, try=1, trymax=1,
+    #                              maxit=maxit, trace=0, ...)
+    #         m$stress
+    #     })
+    #     return(stress)
+    # })
+    ### randomization data runs (enables parallel processing)
+    cat('beginning randomizations...\n ')
+    `f` <- function (nrand, parallel, ...) {
+        if (is.null(parallel)) { parallel <- 1 }
+        hasClus     <- inherits(parallel, 'cluster')
+        isParal     <- hasClus || parallel > 1
+        isMulticore <- .Platform$OS.type == 'unix' && !hasClus
+        if (isParal && !isMulticore && !hasClus) {
+            parallel <- parallel::makeCluster(parallel)
+            parallel::clusterEvalQ(parallel, library(vegan))
+        }
+        nclus <- ifelse(hasClus, length(parallel), parallel)
+        `g` <- function(...) {
+            sapply(1:k, function(kk) {
+                vegan::monoMDS(perm(x), k=kk, maxit=maxit, ...)$stress
+            })
+        }
+        if (isParal) {
+            if (isMulticore) {
+                s <- simplify2array(
+                    parallel::mclapply(1:nrand, function(i) g(), mc.cores = nclus)
+                )
+            } else {
+                s <- simplify2array(
+                    parallel::parLapply(parallel, 1:nrand, function(i) g() )
+                )
+            }
+        } else {
+            s <- sapply(1:nrand, function(i) g())
+        }
+        if (isParal && !isMulticore && !hasClus) {
+            parallel::stopCluster(parallel)
+        }
+        return(s)
+    }
+    rnd_stress <- f(nrand=nrand, parallel=parallel)
     ### randomization pvalues
     stress           <- rbind(real_stress, t(rnd_stress))
     rownames(stress) <- c('real',paste0('rnd_',1:nrand))

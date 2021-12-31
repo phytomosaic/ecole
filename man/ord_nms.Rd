@@ -4,7 +4,13 @@
 \alias{ord_nms}
 \title{NMS with randomization test and stepdown dimensionality selection}
 \usage{
-ord_nms(x, autopilot = c("quick", "medium", "slow"), method = "bray", ...)
+ord_nms(
+  x,
+  autopilot = c("quick", "medium", "slow"),
+  method = "bray",
+  parallel = parallel::detectCores() - 1,
+  ...
+)
 }
 \arguments{
 \item{x}{array, where rows = SUs and cols = variables such as
@@ -13,6 +19,9 @@ environmental or traits values.}
 \item{autopilot}{character, one of three possible thoroughness options.}
 
 \item{method}{dissimilarity index, passed to `vegan::vegdist`.}
+
+\item{parallel}{number of cores to use in parallel processing.  Set `NULL` to
+avoid parallel processing.}
 
 \item{...}{further arguments passed to `vegan::metaMDS`.}
 }
@@ -34,9 +43,12 @@ NMS with stopping rules for dimensionality based on PC-ORD
     processing where possible.
 }
 \examples{
+\dontrun{
 data(smoky)
-m <- ord_nms(smoky$spe, 'quick')
-
+m1 <- ord_nms(smoky$spe, 'quick')
+m2 <- ord_nms(smoky$spe, 'medium')
+m3 <- ord_nms(smoky$spe, 'slow')
+}
 }
 \references{
 McCune, B., and M. J. Mefford. 2017. PC-ORD. Multivariate Analysis
